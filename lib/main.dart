@@ -31,21 +31,22 @@ class IngredientsPage extends StatelessWidget {
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.lemon),
+              icon: Icon(Icons.store),
               label: 'Ingredients',
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.calendar_alt),
-              label: 'Planner',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.pizza_slice),
+              icon: Icon(Icons.restaurant_menu),
               label: 'Recipes',
             ),
           ],
           showSelectedLabels: false,
           showUnselectedLabels: false,
         ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {},
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: const Center(child: Text("Yo")));
   }
 }
