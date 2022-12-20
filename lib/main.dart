@@ -29,24 +29,36 @@ class IngredientsPage extends StatelessWidget {
           title: const Text("Ingredients"),
         ),
         bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
+          currentIndex: 2,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.store),
+              icon: Icon(FontAwesome5.tasks, size: 20),
+              label: 'To-buy',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesome5.store_alt, size: 20),
               label: 'Ingredients',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.restaurant_menu),
+              icon: Icon(
+                Icons.restaurant_menu,
+              ),
               label: 'Recipes',
             ),
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesome5.calendar_alt, size: 24),
+              label: 'Planner',
+            ),
           ],
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {},
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Column(
           children: const <Widget>[
             IngredientSlider(items: {
