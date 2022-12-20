@@ -4,7 +4,6 @@ windows/
 web/
 ios/
 macos/
-pubspec.yaml
 pubspec.lock
 analysis_options.yaml
 limelight.iml
