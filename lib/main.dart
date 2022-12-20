@@ -47,6 +47,87 @@ class IngredientsPage extends StatelessWidget {
           onPressed: () {},
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: const Center(child: Text("Yo")));
+        body: Column(
+          children: <Widget>[
+            Center(
+                child: Container(
+                    color: Colors.grey,
+                    padding: const EdgeInsets.all(20.0),
+                    margin: const EdgeInsets.all(20.0),
+                    child: Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(5.0),
+                              margin: const EdgeInsets.all(10.0),
+                              child: Column(children: const <Widget>[
+                                Icon(Icons.image),
+                                Text('Lemon')
+                              ])),
+                        ),
+                        Flexible(
+                          child: Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(5.0),
+                              margin: const EdgeInsets.all(10.0),
+                              child: Column(children: const <Widget>[
+                                Icon(Icons.image),
+                                Text('Orange')
+                              ])),
+                        ),
+                        Flexible(
+                          child: Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(5.0),
+                              margin: const EdgeInsets.all(10.0),
+                              child: Column(children: const <Widget>[
+                                Icon(Icons.image),
+                                Text('Pineapple')
+                              ])),
+                        ),
+                      ],
+                    ))),
+            Center(
+                child: Container(
+                    color: Colors.grey,
+                    padding: const EdgeInsets.all(20.0),
+                    margin: const EdgeInsets.all(20.0),
+                    child: Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(5.0),
+                              margin: const EdgeInsets.all(10.0),
+                              child: Column(children: const <Widget>[
+                                Icon(Icons.image),
+                                Text('Carrot')
+                              ])),
+                        ),
+                        Flexible(
+                          child: Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(5.0),
+                              margin: const EdgeInsets.all(10.0),
+                              child: Column(children: const <Widget>[
+                                Icon(Icons.image),
+                                Text('Tomato')
+                              ])),
+                        ),
+                        Flexible(
+                          child: Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(5.0),
+                              margin: const EdgeInsets.all(10.0),
+                              child: Column(children: const <Widget>[
+                                Icon(Icons.image),
+                                Text('Eggplant')
+                              ])),
+                        ),
+                      ],
+                    ))),
+          ],
+        ));
   }
 }
