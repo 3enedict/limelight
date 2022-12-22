@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const Limelight());
@@ -24,88 +23,47 @@ class IngredientsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Ingredients"),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.grey,
-          currentIndex: 2,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.tasks, size: 20),
-              label: 'To-buy',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.store_alt, size: 20),
-              label: 'Ingredients',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.restaurant_menu,
-              ),
-              label: 'Recipes',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.calendar_alt, size: 24),
-              label: 'Planner',
-            ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFF1B2631),
+            Color(0xFF17202A),
           ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(
+            "Ingredients",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.raleway(),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(4.0),
+            child: Container(
+              color: Colors.white70,
+              height: 1.0,
+              margin: const EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 0.0),
+            ),
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {},
         ),
-        body: Column(
-          children: const <Widget>[
-            IngredientSlider(items: {
-              'banana': Icon(Icons.image),
-              'orange': Icon(Icons.image),
-              'apple': Icon(Icons.image)
-            }),
-            IngredientSlider(items: {
-              'broccoli': Icon(Icons.image),
-              'eggplant': Icon(Icons.image),
-              'carrot': Icon(Icons.image)
-            }),
-          ],
-        ));
-  }
-}
-
-class IngredientSlider extends StatelessWidget {
-  final Map<String, Icon> items;
-  const IngredientSlider({super.key, required this.items});
-
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> ingredients = [];
-
-    for (final mapEntry in items.entries) {
-      final ingredientName = mapEntry.key;
-      final ingredientIcon = mapEntry.value;
-
-      ingredients.add(Flexible(
-        child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(5.0),
-            margin: const EdgeInsets.all(10.0),
-            child: Column(
-                children: <Widget>[ingredientIcon, Text(ingredientName)])),
-      ));
-    }
-
-    return Center(
-        child: Container(
-      color: Colors.grey,
-      padding: const EdgeInsets.all(20.0),
-      margin: const EdgeInsets.all(20.0),
-      child: Row(
-        children: ingredients,
+        body: Container(
+            color: Colors.black38,
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
+            child: const Text("Veggies")),
       ),
-    ));
+    );
   }
 }
