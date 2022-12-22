@@ -27,11 +27,11 @@ class IngredientsPage extends StatelessWidget {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFF1B2631),
-            Color(0xFF17202A),
+            Color(0xFF2e2b44),
+            Color(0xFF221f31),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
         ),
       ),
       child: Scaffold(
@@ -40,7 +40,8 @@ class IngredientsPage extends StatelessWidget {
           title: Text(
             "Ingredients",
             textAlign: TextAlign.center,
-            style: GoogleFonts.raleway(),
+            style: GoogleFonts.raleway(
+                textStyle: const TextStyle(fontWeight: FontWeight.bold)),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -48,7 +49,7 @@ class IngredientsPage extends StatelessWidget {
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(4.0),
             child: Container(
-              color: Colors.white70,
+              color: Colors.white38,
               height: 1.0,
               margin: const EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 0.0),
             ),
@@ -58,11 +59,26 @@ class IngredientsPage extends StatelessWidget {
           child: const Icon(Icons.add),
           onPressed: () {},
         ),
-        body: Container(
-            color: Colors.black38,
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.all(8.0),
-            child: const Text("Veggies")),
+        body: Column(
+          children: <Widget>[
+            Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFF29263a),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black87,
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(8.0),
+              margin: const EdgeInsets.all(8.0),
+              child: const Text("Veggies"),
+            ),
+          ],
+        ),
       ),
     );
   }
