@@ -104,31 +104,22 @@ class IngredientsList extends StatelessWidget {
           decoration: const BoxDecoration(
             color: Color(0xFF2f2c43),
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black54,
-                spreadRadius: 5,
-                blurRadius: 10,
-              ),
-            ],
           ),
           padding: const EdgeInsets.all(10.0),
           margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
           alignment: Alignment.center,
-          child: GridView.builder(
+          child: GridView(
             shrinkWrap: true,
-            primary: false,
-            padding: const EdgeInsets.all(10),
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 100,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 0.9,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 3,
             ),
-            itemCount: 8,
-            itemBuilder: (context, index) {
-              return const GridTile(child: Ingredient());
-            },
+            children: const [
+              Ingredient(text: 'Lemon', icon: Icon(FontAwesome5.lemon)),
+              Ingredient(text: 'Lemon', icon: Icon(FontAwesome5.lemon)),
+              Ingredient(text: 'Lemon', icon: Icon(FontAwesome5.lemon)),
+              Ingredient(text: 'Lemon', icon: Icon(FontAwesome5.lemon)),
+            ],
           ),
         ),
       ],
@@ -137,53 +128,29 @@ class IngredientsList extends StatelessWidget {
 }
 
 class Ingredient extends StatelessWidget {
-  const Ingredient({super.key});
+  final String text;
+  final Icon icon;
+
+  const Ingredient({super.key, required this.text, required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF2f2c43),
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(
-          color: Colors.white70,
-          width: 1,
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black54,
-            spreadRadius: 2,
-            blurRadius: 5,
-          ),
-        ],
+      decoration: const BoxDecoration(
+        color: Color(0xFF3a374d),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
       ),
-      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          icon,
+          const SizedBox(width: 10),
           Expanded(
-            child: FittedBox(
-              child: ShaderMask(
-                blendMode: BlendMode.srcATop,
-                shaderCallback: (bounds) {
-                  return const LinearGradient(
-                    colors: <Color>[
-                      Color(0xFF3fa7cd),
-                      Color(0xFF45cac6),
-                    ],
-                  ).createShader(bounds);
-                },
-                child: const Icon(FontAwesome5.lemon),
-              ),
-            ),
-          ),
-          const Flexible(
-            child: FittedBox(
-              child: Text(
-                'Lime',
-                style: TextStyle(
-                  color: Colors.white70,
-                ),
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white70,
               ),
             ),
           ),
