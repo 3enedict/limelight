@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,11 +29,11 @@ class IngredientsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.black87,
-            Colors.grey[900]!,
+            Color(0xFF111111),
+            Color(0xFF333333),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -39,20 +41,6 @@ class IngredientsPage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(
-            "Ingredients",
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[50],
-              ),
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
@@ -81,9 +69,116 @@ class IngredientsPage extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white24,
           onPressed: () {},
           child: const Icon(Icons.search),
         ),
+        body: const LeafyGreensPage(),
+      ),
+    );
+  }
+}
+
+class LeafyGreensPage extends StatelessWidget {
+  const LeafyGreensPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          height: 300,
+          width: double.infinity,
+          alignment: Alignment.topCenter,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              alignment: Alignment.topCenter,
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.grey,
+                BlendMode.saturation,
+              ),
+              image: AssetImage('assets/Basil.jpg'),
+            ),
+          ),
+          child: Text(
+            '\nLeafy greens',
+            style: GoogleFonts.openSans(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        ListView(
+          children: [
+            Container(
+              height: 250,
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(50),
+                  bottom: Radius.circular(0),
+                ),
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF111111),
+                    Color(0xFF333333),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: Column(
+                children: const [
+                  LeafyGreens(),
+                  LeafyGreens(),
+                  LeafyGreens(),
+                  LeafyGreens(),
+                  LeafyGreens(),
+                  LeafyGreens(),
+                  LeafyGreens(),
+                  LeafyGreens(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class LeafyGreens extends StatelessWidget {
+  const LeafyGreens({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: Colors.white,
+      ),
+      height: 200,
+      margin: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+      child: Row(
+        children: [
+          Flexible(
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              color: Colors.black87,
+            ),
+          ),
+          Flexible(
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              color: Colors.black87,
+            ),
+          ),
+        ],
       ),
     );
   }
