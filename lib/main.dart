@@ -33,7 +33,7 @@ class IngredientsPage extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             Color(0xFF111111),
-            Color(0xFF333333),
+            Color(0xFF222222),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -87,9 +87,8 @@ class LeafyGreensPage extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: 300,
+          height: 200,
           width: double.infinity,
-          alignment: Alignment.topCenter,
           decoration: const BoxDecoration(
             image: DecorationImage(
               alignment: Alignment.topCenter,
@@ -98,16 +97,23 @@ class LeafyGreensPage extends StatelessWidget {
                 Colors.grey,
                 BlendMode.saturation,
               ),
-              image: AssetImage('assets/Basil.jpg'),
+              image: AssetImage('assets/Leafy Greeens.jpg'),
             ),
           ),
-          child: Text(
-            '\nLeafy greens',
-            style: GoogleFonts.openSans(
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30.0,
-                color: Colors.white,
+          child: Container(
+            height: 200,
+            width: double.infinity,
+            color: Colors.black26,
+            alignment: Alignment.topCenter,
+            child: Text(
+              '\nLeafy greens',
+              style: GoogleFonts.workSans(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 30,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -115,32 +121,28 @@ class LeafyGreensPage extends StatelessWidget {
         ListView(
           children: [
             Container(
-              height: 250,
+              height: 180,
             ),
             Container(
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(50),
+                  top: Radius.circular(20),
                   bottom: Radius.circular(0),
                 ),
                 gradient: LinearGradient(
                   colors: [
                     Color(0xFF111111),
-                    Color(0xFF333333),
+                    Color(0xFF222222),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
               ),
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height - 180 - 56,
+              ),
               child: Column(
                 children: const [
-                  LeafyGreens(),
-                  LeafyGreens(),
-                  LeafyGreens(),
-                  LeafyGreens(),
-                  LeafyGreens(),
-                  LeafyGreens(),
-                  LeafyGreens(),
                   LeafyGreens(),
                 ],
               ),
@@ -160,22 +162,44 @@ class LeafyGreens extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: Colors.white,
+        image: const DecorationImage(
+          alignment: Alignment.topCenter,
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.grey,
+            BlendMode.saturation,
+          ),
+          image: AssetImage('assets/Savoy Cabbage.jpg'),
+        ),
       ),
       height: 200,
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+      margin: const EdgeInsets.fromLTRB(30, 30, 30, 10),
       child: Row(
         children: [
           Flexible(
             child: Container(
               margin: const EdgeInsets.all(20),
-              color: Colors.black87,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.black45,
+              ),
+              height: 160,
+              child: Text(
+                'Cabbage',
+                style: GoogleFonts.workSans(
+                  textStyle: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
           ),
-          Flexible(
+          Expanded(
             child: Container(
               margin: const EdgeInsets.all(20),
-              color: Colors.black87,
+              color: Colors.transparent,
             ),
           ),
         ],
