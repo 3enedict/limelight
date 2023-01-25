@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
@@ -32,49 +31,14 @@ class IngredientsPage extends StatelessWidget {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
+            Color(0xFF333333),
             Color(0xFF111111),
-            Color(0xFF222222),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          selectedItemColor: Colors.white70,
-          unselectedItemColor: Colors.white30,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.leaf),
-              label: 'Leafy greens',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.carrot),
-              label: 'Vegetables',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(RpgAwesome.meat),
-              label: 'Meat & Eggs',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(FontAwesome5.fish),
-              label: 'Fish',
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white24,
-          onPressed: () {},
-          child: const Icon(Icons.search),
-        ),
-        body: const LeafyGreensPage(),
-      ),
+      child: const LeafyGreensPage(),
     );
   }
 }
@@ -84,122 +48,94 @@ class LeafyGreensPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: 200,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              alignment: Alignment.topCenter,
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                Colors.grey,
-                BlendMode.saturation,
-              ),
-              image: AssetImage('assets/Leafy Greeens.jpg'),
-            ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        selectedItemColor: Colors.white70,
+        unselectedItemColor: Colors.white30,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesome5.leaf),
+            label: 'Leafy greens',
           ),
-          child: Container(
-            height: 200,
-            width: double.infinity,
-            color: Colors.black26,
-            alignment: Alignment.topCenter,
-            child: Text(
-              '\nLeafy greens',
-              style: GoogleFonts.workSans(
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 30,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesome5.carrot),
+            label: 'Vegetables',
           ),
-        ),
-        ListView(
-          children: [
-            Container(
-              height: 180,
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
-                  bottom: Radius.circular(0),
-                ),
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF111111),
-                    Color(0xFF222222),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height - 180 - 56,
-              ),
-              child: Column(
-                children: const [
-                  LeafyGreens(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class LeafyGreens extends StatelessWidget {
-  const LeafyGreens({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        image: const DecorationImage(
-          alignment: Alignment.topCenter,
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.grey,
-            BlendMode.saturation,
+          BottomNavigationBarItem(
+            icon: Icon(RpgAwesome.meat),
+            label: 'Meats & Eggs',
           ),
-          image: AssetImage('assets/Savoy Cabbage.jpg'),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesome5.fish),
+            label: 'Fish',
+          ),
+        ],
       ),
-      height: 200,
-      margin: const EdgeInsets.fromLTRB(30, 30, 30, 10),
-      child: Row(
-        children: [
-          Flexible(
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.black45,
-              ),
-              height: 160,
-              child: Text(
-                'Cabbage',
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white24,
+        onPressed: () {},
+        child: const Icon(Icons.search),
+      ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            snap: false,
+            floating: false,
+            expandedHeight: 200.0,
+            backgroundColor: const Color(0xFF222222),
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              title: Text(
+                'Leafy greens',
                 style: GoogleFonts.workSans(
                   textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
                     color: Colors.white,
                   ),
                 ),
               ),
+              background: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(20),
+                  ),
+                  image: DecorationImage(
+                    alignment: Alignment.topCenter,
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      Colors.grey,
+                      BlendMode.saturation,
+                    ),
+                    image: AssetImage('assets/Leafy Greeens.jpg'),
+                  ),
+                ),
+                child: Container(
+                  color: Colors.black38,
+                ),
+              ),
             ),
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              color: Colors.transparent,
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  color: index.isOdd ? Colors.white38 : Colors.black12,
+                  height: 100.0,
+                  child: Center(
+                    child: Text('$index', textScaleFactor: 5),
+                  ),
+                );
+              },
+              childCount: 20,
             ),
           ),
         ],
