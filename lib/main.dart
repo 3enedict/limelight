@@ -48,6 +48,25 @@ class LeafyGreensPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var leafyGreens = [
+      'Salad',
+      'Kale',
+      'Microgreens',
+      'Cabbage',
+      'Colard greens',
+      'Spinach',
+      'Bok choy',
+      'Endive',
+      'Salad',
+      'Kale',
+      'Microgreens',
+      'Cabbage',
+      'Colard greens',
+      'Spinach',
+      'Bok choy',
+      'Endive',
+    ];
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       bottomNavigationBar: BottomNavigationBar(
@@ -125,17 +144,34 @@ class LeafyGreensPage extends StatelessWidget {
             ),
           ),
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Container(
-                  color: index.isOdd ? Colors.white38 : Colors.black12,
-                  height: 100.0,
-                  child: Center(
-                    child: Text('$index', textScaleFactor: 5),
-                  ),
-                );
-              },
-              childCount: 20,
+            delegate: SliverChildListDelegate(
+              leafyGreens
+                  .map(
+                    (name) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFF555555),
+                            Color(0xFF222222),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                      ),
+                      margin: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                      padding: const EdgeInsets.all(25),
+                      child: Text(
+                        name,
+                        style: GoogleFonts.workSans(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
         ],
