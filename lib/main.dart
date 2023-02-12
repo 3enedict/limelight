@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,111 +19,6 @@ class Limelight extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Limelight',
       home: IngredientsPage(),
-    );
-  }
-}
-
-class Ingredient extends StatelessWidget {
-  final String name;
-  final String season;
-  final String price;
-  final String cheapness;
-
-  const Ingredient({
-    super.key,
-    required this.name,
-    required this.season,
-    required this.price,
-    required this.cheapness,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF555555),
-            Color(0xFF444444),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-      ),
-      margin: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: const Color(0xFF666666),
-            ),
-            margin: const EdgeInsets.fromLTRB(0, 12, 20, 12),
-            padding: const EdgeInsets.all(10),
-            child: const Icon(
-              FontAwesome5.leaf,
-              color: Color(0xFFEEEEEE),
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: GoogleFonts.workSans(
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFEEEEEE),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    season,
-                    style: GoogleFonts.workSans(
-                      textStyle: const TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: Color(0xFFBBBBBB),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                price,
-                style: GoogleFonts.workSans(
-                  textStyle: const TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Color(0xFFEEEEEE),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 1,
-              ),
-              Text(
-                cheapness,
-                style: GoogleFonts.workSans(
-                  textStyle: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: 14 * MediaQuery.of(context).textScaleFactor * 0.8,
-                    color: const Color(0xFFBBBBBB),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
@@ -148,6 +44,142 @@ class IngredientsPage extends StatelessWidget {
   }
 }
 
+class Ingredient extends StatefulWidget {
+  final String name;
+  final String season;
+  final String price;
+  final String cheapness;
+
+  const Ingredient({
+    super.key,
+    required this.name,
+    required this.season,
+    required this.price,
+    required this.cheapness,
+  });
+
+  @override
+  _IngredientState createState() => _IngredientState();
+}
+
+class _IngredientState extends State<Ingredient> {
+  bool _enabled = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          colors: _enabled
+              ? [
+                  const Color(0xFF00b09b),
+                  const Color(0xFF96c93d),
+                ]
+              : [
+                  const Color(0xFF666666),
+                  const Color(0xFF444444),
+                ],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+      ),
+      margin: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+        ),
+        onPressed: () => setState(() => _enabled = !_enabled),
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  colors: _enabled
+                      ? [
+                          Colors.transparent,
+                          Colors.transparent,
+                        ]
+                      : [
+                          const Color(0xFF00b09b),
+                          const Color(0xFF96c93d),
+                        ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+              ),
+              margin: const EdgeInsets.fromLTRB(0, 15, 20, 15),
+              padding: const EdgeInsets.all(8),
+              child: const Icon(
+                Entypo.leaf,
+                color: Color(0xFFEEEEEE),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.name,
+                      style: GoogleFonts.workSans(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFEEEEEE),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      widget.season,
+                      style: GoogleFonts.workSans(
+                        textStyle: const TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Color(0xFFDDDDDD),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  widget.price,
+                  style: GoogleFonts.workSans(
+                    textStyle: const TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Color(0xFFEEEEEE),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 1,
+                ),
+                Text(
+                  widget.cheapness,
+                  style: GoogleFonts.workSans(
+                    textStyle: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize:
+                          14 * MediaQuery.of(context).textScaleFactor * 0.8,
+                      color: const Color(0xFFDDDDDD),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class LeafyGreensPage extends StatelessWidget {
   const LeafyGreensPage({super.key});
 
@@ -165,7 +197,7 @@ class LeafyGreensPage extends StatelessWidget {
         showUnselectedLabels: false,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(FontAwesome5.leaf),
+            icon: Icon(Entypo.leaf),
             label: 'Leafy greens',
           ),
           BottomNavigationBarItem(
@@ -187,142 +219,127 @@ class LeafyGreensPage extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.search),
       ),
-      body: Stack(
-        children: [
-          ScrollConfiguration(
-            behavior:
-                ScrollConfiguration.of(context).copyWith(scrollbars: false),
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  pinned: true,
-                  snap: false,
-                  floating: false,
-                  expandedHeight: 200.0,
-                  backgroundColor: const Color(0xFF444444),
-                  flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    title: Text(
-                      'Leafy greens',
-                      style: GoogleFonts.workSans(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.white,
-                        ),
+      body: ShaderMask(
+        shaderCallback: (bound) {
+          return const LinearGradient(
+              end: FractionalOffset.topCenter,
+              begin: FractionalOffset.bottomCenter,
+              colors: [
+                Color(0xFF111111),
+                Colors.transparent,
+              ],
+              stops: [
+                0.0,
+                0.3,
+              ]).createShader(bound);
+        },
+        blendMode: BlendMode.srcOver,
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                pinned: true,
+                snap: false,
+                floating: false,
+                expandedHeight: MediaQuery.of(context).size.height * 0.25,
+                elevation: 0,
+                backgroundColor: const Color(0xFF333333),
+                flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: Text(
+                    'Leafy greens',
+                    style: GoogleFonts.workSans(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.white,
                       ),
                     ),
-                    background: Container(
+                  ),
+                  background: Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(0),
+                        bottom: Radius.circular(20),
+                      ),
+                      image: DecorationImage(
+                        alignment: Alignment.topCenter,
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.grey,
+                          BlendMode.saturation,
+                        ),
+                        image: AssetImage('assets/Leafy Greeens.jpg'),
+                      ),
+                    ),
+                    child: Container(
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(0),
                           bottom: Radius.circular(20),
                         ),
-                        image: DecorationImage(
-                          alignment: Alignment.topCenter,
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            Colors.grey,
-                            BlendMode.saturation,
-                          ),
-                          image: AssetImage('assets/Leafy Greeens.jpg'),
-                        ),
-                      ),
-                      child: Container(
                         color: Colors.black38,
                       ),
                     ),
                   ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 100),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                        const Ingredient(
-                          name: 'Lettuce',
-                          season: 'Spring and fall',
-                          price: '\$1.00 per head',
-                          cheapness: 'Cheap',
-                        ),
-                      ],
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    const Ingredient(
+                      name: 'Lettuce',
+                      season: 'Spring and fall',
+                      price: '\$1.00 per head',
+                      cheapness: 'Really cheap',
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF111111),
-                    Color(0x00111111),
+                    const Ingredient(
+                      name: 'Kale',
+                      season: 'Fall and winter',
+                      price: '\$2.00 per lb',
+                      cheapness: 'Cheap',
+                    ),
+                    const Ingredient(
+                      name: 'Arugula',
+                      season: 'Late spring and early fall',
+                      price: '\$10.00 per lb',
+                      cheapness: 'Expensive',
+                    ),
+                    const Ingredient(
+                      name: 'Arugula',
+                      season: 'Late spring and early fall',
+                      price: '\$10.00 per lb',
+                      cheapness: 'Expensive',
+                    ),
+                    const Ingredient(
+                      name: 'Arugula',
+                      season: 'Late spring and early fall',
+                      price: '\$10.00 per lb',
+                      cheapness: 'Expensive',
+                    ),
+                    const Ingredient(
+                      name: 'Arugula',
+                      season: 'Late spring and early fall',
+                      price: '\$10.00 per lb',
+                      cheapness: 'Expensive',
+                    ),
+                    const Ingredient(
+                      name: 'Arugula',
+                      season: 'Late spring and early fall',
+                      price: '\$10.00 per lb',
+                      cheapness: 'Expensive',
+                    ),
+                    Container(
+                      color: Colors.transparent,
+                      height: MediaQuery.of(context).size.height - 100 - 80,
+                    ),
                   ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
                 ),
               ),
-              height: 150,
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
