@@ -2,5 +2,4 @@
 
 ## TODO
 
-- Setup Ingredients page
-
+Cancel shopping cart

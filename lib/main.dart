@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:fluttericon/entypo_icons.dart';
-import 'package:fluttericon/rpg_awesome_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -32,8 +30,8 @@ class IngredientsPage extends StatelessWidget {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFF333333),
-            Color(0xFF111111),
+            Color(0xFF384364),
+            Color(0xFF292f4d),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -77,8 +75,8 @@ class _IngredientState extends State<Ingredient> {
                   const Color(0xFF96c93d),
                 ]
               : [
-                  const Color(0xFF666666),
-                  const Color(0xFF444444),
+                  const Color(0xFF525d7d),
+                  const Color(0xFF343e61),
                 ],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
@@ -95,12 +93,12 @@ class _IngredientState extends State<Ingredient> {
           children: [
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(15),
                 gradient: LinearGradient(
                   colors: _enabled
                       ? [
-                          Colors.transparent,
-                          Colors.transparent,
+                          const Color(0xBBFFFFFF),
+                          const Color(0xBBFFFFFF),
                         ]
                       : [
                           const Color(0xFF00b09b),
@@ -110,12 +108,9 @@ class _IngredientState extends State<Ingredient> {
                   end: Alignment.centerRight,
                 ),
               ),
-              margin: const EdgeInsets.fromLTRB(0, 15, 20, 15),
-              padding: const EdgeInsets.all(8),
-              child: const Icon(
-                Entypo.leaf,
-                color: Color(0xFFEEEEEE),
-              ),
+              margin: const EdgeInsets.fromLTRB(5, 20, 20, 20),
+              height: 25,
+              width: 25,
             ),
             Expanded(
               child: Align(
@@ -191,25 +186,77 @@ class LeafyGreensPage extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        selectedItemColor: Colors.white70,
-        unselectedItemColor: Colors.white30,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        items: const [
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Entypo.leaf),
+            icon: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return const LinearGradient(
+                  colors: <Color>[
+                    Color(0xFF00b09b),
+                    Color(0xFF96c93d),
+                  ],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.srcIn,
+              child: const Icon(
+                FontAwesome5.circle,
+              ),
+            ),
             label: 'Leafy greens',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesome5.carrot),
+            icon: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return const LinearGradient(
+                  colors: <Color>[
+                    Color(0xFFF37335),
+                    Color(0xFFFDC830),
+                  ],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.srcIn,
+              child: const Icon(
+                FontAwesome5.circle,
+              ),
+            ),
             label: 'Vegetables',
           ),
           BottomNavigationBarItem(
-            icon: Icon(RpgAwesome.meat),
-            label: 'Meats & Eggs',
+            icon: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return const LinearGradient(
+                  colors: <Color>[
+                    Color(0xFFFF416C),
+                    Color(0xFFFF4B2B),
+                  ],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.srcIn,
+              child: const Icon(
+                FontAwesome5.circle,
+              ),
+            ),
+            label: 'Meat & Eggs',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesome5.fish),
+            icon: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return const LinearGradient(
+                  colors: <Color>[
+                    Color(0xFF48b1bf),
+                    Color(0xFF06beb6),
+                  ],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.srcIn,
+              child: const Icon(
+                FontAwesome5.circle,
+              ),
+            ),
             label: 'Fish',
           ),
         ],
@@ -225,8 +272,8 @@ class LeafyGreensPage extends StatelessWidget {
               end: FractionalOffset.topCenter,
               begin: FractionalOffset.bottomCenter,
               colors: [
-                Color(0xFF111111),
-                Colors.transparent,
+                Color(0xFF292f4d),
+                Color(0x00292f4d),
               ],
               stops: [
                 0.0,
@@ -243,8 +290,7 @@ class LeafyGreensPage extends StatelessWidget {
                 snap: false,
                 floating: false,
                 expandedHeight: MediaQuery.of(context).size.height * 0.25,
-                elevation: 0,
-                backgroundColor: const Color(0xFF333333),
+                backgroundColor: const Color(0xFF384364),
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text(
@@ -279,7 +325,7 @@ class LeafyGreensPage extends StatelessWidget {
                           top: Radius.circular(0),
                           bottom: Radius.circular(20),
                         ),
-                        color: Colors.black38,
+                        color: Color(0x99384364),
                       ),
                     ),
                   ),
