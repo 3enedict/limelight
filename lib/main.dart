@@ -37,7 +37,110 @@ class IngredientsPage extends StatelessWidget {
           end: Alignment.bottomCenter,
         ),
       ),
-      child: const LeafyGreensPage(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white,
+          items: [
+            BottomNavigationBarItem(
+              icon: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    colors: <Color>[
+                      Color(0xFF00b09b),
+                      Color(0xFF96c93d),
+                    ],
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.srcIn,
+                child: const Icon(
+                  FontAwesome5.circle,
+                ),
+              ),
+              label: 'Leafy greens',
+            ),
+            BottomNavigationBarItem(
+              icon: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    colors: <Color>[
+                      Color(0xFFF37335),
+                      Color(0xFFFDC830),
+                    ],
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.srcIn,
+                child: const Icon(
+                  FontAwesome5.circle,
+                ),
+              ),
+              label: 'Vegetables',
+            ),
+            BottomNavigationBarItem(
+              icon: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    colors: <Color>[
+                      Color(0xFFFF416C),
+                      Color(0xFFFF4B2B),
+                    ],
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.srcIn,
+                child: const Icon(
+                  FontAwesome5.circle,
+                ),
+              ),
+              label: 'Meat & Eggs',
+            ),
+            BottomNavigationBarItem(
+              icon: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    colors: <Color>[
+                      Color(0xFF48b1bf),
+                      Color(0xFF06beb6),
+                    ],
+                  ).createShader(bounds);
+                },
+                blendMode: BlendMode.srcIn,
+                child: const Icon(
+                  FontAwesome5.circle,
+                ),
+              ),
+              label: 'Fish',
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white24,
+          onPressed: () {},
+          child: const Icon(Icons.search),
+        ),
+        body: ShaderMask(
+          shaderCallback: (bound) {
+            return const LinearGradient(
+                end: FractionalOffset.topCenter,
+                begin: FractionalOffset.bottomCenter,
+                colors: [
+                  Color(0xFF292f4d),
+                  Color(0x00292f4d),
+                ],
+                stops: [
+                  0.0,
+                  0.3,
+                ]).createShader(bound);
+          },
+          blendMode: BlendMode.srcOver,
+          child: const LeafyGreensPage(),
+        ),
+      ),
     );
   }
 }
@@ -175,218 +278,180 @@ class _IngredientState extends State<Ingredient> {
   }
 }
 
+class IngredientsPageLayout extends StatelessWidget {
+  final String title;
+  final AssetImage titleBackground;
+  final List<Ingredient> ingredients;
+
+  const IngredientsPageLayout({
+    super.key,
+    required this.title,
+    required this.titleBackground,
+    required this.ingredients,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            snap: false,
+            floating: false,
+            expandedHeight: MediaQuery.of(context).size.height * 0.25,
+            backgroundColor: const Color(0xFF384364),
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              title: Text(
+                title,
+                style: GoogleFonts.workSans(
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              background: Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(20),
+                  ),
+                  image: DecorationImage(
+                    alignment: Alignment.topCenter,
+                    fit: BoxFit.cover,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.grey,
+                      BlendMode.saturation,
+                    ),
+                    image: titleBackground,
+                  ),
+                ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(0),
+                      bottom: Radius.circular(20),
+                    ),
+                    color: Color(0x99384364),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                const Ingredient(
+                  name: 'Lettuce',
+                  season: 'Spring and fall',
+                  price: '\$1.00 per head',
+                  cheapness: 'Really cheap',
+                ),
+                const Ingredient(
+                  name: 'Kale',
+                  season: 'Fall and winter',
+                  price: '\$2.00 per lb',
+                  cheapness: 'Cheap',
+                ),
+                const Ingredient(
+                  name: 'Arugula',
+                  season: 'Late spring and early fall',
+                  price: '\$10.00 per lb',
+                  cheapness: 'Expensive',
+                ),
+                const Ingredient(
+                  name: 'Arugula',
+                  season: 'Late spring and early fall',
+                  price: '\$10.00 per lb',
+                  cheapness: 'Expensive',
+                ),
+                const Ingredient(
+                  name: 'Arugula',
+                  season: 'Late spring and early fall',
+                  price: '\$10.00 per lb',
+                  cheapness: 'Expensive',
+                ),
+                const Ingredient(
+                  name: 'Arugula',
+                  season: 'Late spring and early fall',
+                  price: '\$10.00 per lb',
+                  cheapness: 'Expensive',
+                ),
+                const Ingredient(
+                  name: 'Arugula',
+                  season: 'Late spring and early fall',
+                  price: '\$10.00 per lb',
+                  cheapness: 'Expensive',
+                ),
+                Container(
+                  color: Colors.transparent,
+                  height: MediaQuery.of(context).size.height - 100 - 80,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class LeafyGreensPage extends StatelessWidget {
   const LeafyGreensPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        items: [
-          BottomNavigationBarItem(
-            icon: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return const LinearGradient(
-                  colors: <Color>[
-                    Color(0xFF00b09b),
-                    Color(0xFF96c93d),
-                  ],
-                ).createShader(bounds);
-              },
-              blendMode: BlendMode.srcIn,
-              child: const Icon(
-                FontAwesome5.circle,
-              ),
-            ),
-            label: 'Leafy greens',
-          ),
-          BottomNavigationBarItem(
-            icon: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return const LinearGradient(
-                  colors: <Color>[
-                    Color(0xFFF37335),
-                    Color(0xFFFDC830),
-                  ],
-                ).createShader(bounds);
-              },
-              blendMode: BlendMode.srcIn,
-              child: const Icon(
-                FontAwesome5.circle,
-              ),
-            ),
-            label: 'Vegetables',
-          ),
-          BottomNavigationBarItem(
-            icon: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return const LinearGradient(
-                  colors: <Color>[
-                    Color(0xFFFF416C),
-                    Color(0xFFFF4B2B),
-                  ],
-                ).createShader(bounds);
-              },
-              blendMode: BlendMode.srcIn,
-              child: const Icon(
-                FontAwesome5.circle,
-              ),
-            ),
-            label: 'Meat & Eggs',
-          ),
-          BottomNavigationBarItem(
-            icon: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return const LinearGradient(
-                  colors: <Color>[
-                    Color(0xFF48b1bf),
-                    Color(0xFF06beb6),
-                  ],
-                ).createShader(bounds);
-              },
-              blendMode: BlendMode.srcIn,
-              child: const Icon(
-                FontAwesome5.circle,
-              ),
-            ),
-            label: 'Fish',
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white24,
-        onPressed: () {},
-        child: const Icon(Icons.search),
-      ),
-      body: ShaderMask(
-        shaderCallback: (bound) {
-          return const LinearGradient(
-              end: FractionalOffset.topCenter,
-              begin: FractionalOffset.bottomCenter,
-              colors: [
-                Color(0xFF292f4d),
-                Color(0x00292f4d),
-              ],
-              stops: [
-                0.0,
-                0.3,
-              ]).createShader(bound);
-        },
-        blendMode: BlendMode.srcOver,
-        child: ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(
-                pinned: true,
-                snap: false,
-                floating: false,
-                expandedHeight: MediaQuery.of(context).size.height * 0.25,
-                backgroundColor: const Color(0xFF384364),
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Text(
-                    'Leafy greens',
-                    style: GoogleFonts.workSans(
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  background: Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(0),
-                        bottom: Radius.circular(20),
-                      ),
-                      image: DecorationImage(
-                        alignment: Alignment.topCenter,
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Colors.grey,
-                          BlendMode.saturation,
-                        ),
-                        image: AssetImage('assets/Leafy Greeens.jpg'),
-                      ),
-                    ),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(0),
-                          bottom: Radius.circular(20),
-                        ),
-                        color: Color(0x99384364),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    const Ingredient(
-                      name: 'Lettuce',
-                      season: 'Spring and fall',
-                      price: '\$1.00 per head',
-                      cheapness: 'Really cheap',
-                    ),
-                    const Ingredient(
-                      name: 'Kale',
-                      season: 'Fall and winter',
-                      price: '\$2.00 per lb',
-                      cheapness: 'Cheap',
-                    ),
-                    const Ingredient(
-                      name: 'Arugula',
-                      season: 'Late spring and early fall',
-                      price: '\$10.00 per lb',
-                      cheapness: 'Expensive',
-                    ),
-                    const Ingredient(
-                      name: 'Arugula',
-                      season: 'Late spring and early fall',
-                      price: '\$10.00 per lb',
-                      cheapness: 'Expensive',
-                    ),
-                    const Ingredient(
-                      name: 'Arugula',
-                      season: 'Late spring and early fall',
-                      price: '\$10.00 per lb',
-                      cheapness: 'Expensive',
-                    ),
-                    const Ingredient(
-                      name: 'Arugula',
-                      season: 'Late spring and early fall',
-                      price: '\$10.00 per lb',
-                      cheapness: 'Expensive',
-                    ),
-                    const Ingredient(
-                      name: 'Arugula',
-                      season: 'Late spring and early fall',
-                      price: '\$10.00 per lb',
-                      cheapness: 'Expensive',
-                    ),
-                    Container(
-                      color: Colors.transparent,
-                      height: MediaQuery.of(context).size.height - 100 - 80,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+    return const IngredientsPageLayout(
+      title: 'Leafy greens',
+      titleBackground: AssetImage('assets/Leafy Greeens.jpg'),
+      ingredients: [
+        Ingredient(
+          name: 'Lettuce',
+          season: 'Spring and fall',
+          price: '\$1.00 per head',
+          cheapness: 'Really cheap',
         ),
-      ),
+        Ingredient(
+          name: 'Kale',
+          season: 'Fall and winter',
+          price: '\$2.00 per lb',
+          cheapness: 'Cheap',
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+        ),
+      ],
     );
   }
 }
