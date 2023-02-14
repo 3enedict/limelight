@@ -22,5 +22,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/Vegetables.webp
     - assets/Leafy Greeens.jpg
+    - assets/Vegetables.webp
+    - assets/Meat.jpg
+    - assets/Fish.jpg

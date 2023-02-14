@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,8 +22,21 @@ class Limelight extends StatelessWidget {
   }
 }
 
-class IngredientsPage extends StatelessWidget {
+class IngredientsPage extends StatefulWidget {
   const IngredientsPage({super.key});
+
+  @override
+  IngredientsPageState createState() => IngredientsPageState();
+}
+
+class IngredientsPageState extends State<IngredientsPage> {
+  int _currentIndex = 0;
+  final _screens = [
+    const LeafyGreensPage(),
+    const VegetablesPage(),
+    const MeatsPage(),
+    const FishPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +54,10 @@ class IngredientsPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.transparent,
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
           elevation: 0,
-          showSelectedLabels: false,
+          showSelectedLabels: true,
           showUnselectedLabels: false,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white,
@@ -53,8 +67,8 @@ class IngredientsPage extends StatelessWidget {
                 shaderCallback: (Rect bounds) {
                   return const LinearGradient(
                     colors: <Color>[
-                      Color(0xFF00b09b),
                       Color(0xFF96c93d),
+                      Color(0xFF00b09b),
                     ],
                   ).createShader(bounds);
                 },
@@ -63,15 +77,16 @@ class IngredientsPage extends StatelessWidget {
                   FontAwesome5.circle,
                 ),
               ),
-              label: 'Leafy greens',
+              label: '',
+              backgroundColor: Colors.transparent,
             ),
             BottomNavigationBarItem(
               icon: ShaderMask(
                 shaderCallback: (Rect bounds) {
                   return const LinearGradient(
                     colors: <Color>[
-                      Color(0xFFF37335),
-                      Color(0xFFFDC830),
+                      Color(0xFFF2C94C),
+                      Color(0xFFF2994A),
                     ],
                   ).createShader(bounds);
                 },
@@ -80,15 +95,16 @@ class IngredientsPage extends StatelessWidget {
                   FontAwesome5.circle,
                 ),
               ),
-              label: 'Vegetables',
+              label: '',
+              backgroundColor: Colors.transparent,
             ),
             BottomNavigationBarItem(
               icon: ShaderMask(
                 shaderCallback: (Rect bounds) {
                   return const LinearGradient(
                     colors: <Color>[
-                      Color(0xFFFF416C),
                       Color(0xFFFF4B2B),
+                      Color(0xFFFF416C),
                     ],
                   ).createShader(bounds);
                 },
@@ -97,15 +113,16 @@ class IngredientsPage extends StatelessWidget {
                   FontAwesome5.circle,
                 ),
               ),
-              label: 'Meat & Eggs',
+              label: '',
+              backgroundColor: Colors.transparent,
             ),
             BottomNavigationBarItem(
               icon: ShaderMask(
                 shaderCallback: (Rect bounds) {
                   return const LinearGradient(
                     colors: <Color>[
-                      Color(0xFF48b1bf),
-                      Color(0xFF06beb6),
+                      Color(0xFF00d2ff),
+                      Color(0xFF3a7bd5),
                     ],
                   ).createShader(bounds);
                 },
@@ -114,7 +131,8 @@ class IngredientsPage extends StatelessWidget {
                   FontAwesome5.circle,
                 ),
               ),
-              label: 'Fish',
+              label: '',
+              backgroundColor: Colors.transparent,
             ),
           ],
         ),
@@ -138,7 +156,10 @@ class IngredientsPage extends StatelessWidget {
                 ]).createShader(bound);
           },
           blendMode: BlendMode.srcOver,
-          child: const LeafyGreensPage(),
+          child: IndexedStack(
+            index: _currentIndex,
+            children: _screens,
+          ),
         ),
       ),
     );
@@ -150,6 +171,7 @@ class Ingredient extends StatefulWidget {
   final String season;
   final String price;
   final String cheapness;
+  final List<Color> gradient;
 
   const Ingredient({
     super.key,
@@ -157,13 +179,14 @@ class Ingredient extends StatefulWidget {
     required this.season,
     required this.price,
     required this.cheapness,
+    required this.gradient,
   });
 
   @override
-  _IngredientState createState() => _IngredientState();
+  IngredientState createState() => IngredientState();
 }
 
-class _IngredientState extends State<Ingredient> {
+class IngredientState extends State<Ingredient> {
   bool _enabled = false;
 
   @override
@@ -173,10 +196,7 @@ class _IngredientState extends State<Ingredient> {
         borderRadius: BorderRadius.circular(12),
         gradient: LinearGradient(
           colors: _enabled
-              ? [
-                  const Color(0xFF00b09b),
-                  const Color(0xFF96c93d),
-                ]
+              ? widget.gradient
               : [
                   const Color(0xFF525d7d),
                   const Color(0xFF343e61),
@@ -203,10 +223,7 @@ class _IngredientState extends State<Ingredient> {
                           const Color(0xBBFFFFFF),
                           const Color(0xBBFFFFFF),
                         ]
-                      : [
-                          const Color(0xFF00b09b),
-                          const Color(0xFF96c93d),
-                        ],
+                      : widget.gradient,
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
@@ -281,7 +298,7 @@ class _IngredientState extends State<Ingredient> {
 class IngredientsPageLayout extends StatelessWidget {
   final String title;
   final AssetImage titleBackground;
-  final List<Ingredient> ingredients;
+  final List<Widget> ingredients;
 
   const IngredientsPageLayout({
     super.key,
@@ -336,7 +353,7 @@ class IngredientsPageLayout extends StatelessWidget {
                       top: Radius.circular(0),
                       bottom: Radius.circular(20),
                     ),
-                    color: Color(0x99384364),
+                    color: Color(0x44384364),
                   ),
                 ),
               ),
@@ -344,54 +361,13 @@ class IngredientsPageLayout extends StatelessWidget {
           ),
           SliverList(
             delegate: SliverChildListDelegate(
-              [
-                const Ingredient(
-                  name: 'Lettuce',
-                  season: 'Spring and fall',
-                  price: '\$1.00 per head',
-                  cheapness: 'Really cheap',
+              List.from(ingredients)
+                ..add(
+                  Container(
+                    color: Colors.transparent,
+                    height: MediaQuery.of(context).size.height - 100 - 80,
+                  ),
                 ),
-                const Ingredient(
-                  name: 'Kale',
-                  season: 'Fall and winter',
-                  price: '\$2.00 per lb',
-                  cheapness: 'Cheap',
-                ),
-                const Ingredient(
-                  name: 'Arugula',
-                  season: 'Late spring and early fall',
-                  price: '\$10.00 per lb',
-                  cheapness: 'Expensive',
-                ),
-                const Ingredient(
-                  name: 'Arugula',
-                  season: 'Late spring and early fall',
-                  price: '\$10.00 per lb',
-                  cheapness: 'Expensive',
-                ),
-                const Ingredient(
-                  name: 'Arugula',
-                  season: 'Late spring and early fall',
-                  price: '\$10.00 per lb',
-                  cheapness: 'Expensive',
-                ),
-                const Ingredient(
-                  name: 'Arugula',
-                  season: 'Late spring and early fall',
-                  price: '\$10.00 per lb',
-                  cheapness: 'Expensive',
-                ),
-                const Ingredient(
-                  name: 'Arugula',
-                  season: 'Late spring and early fall',
-                  price: '\$10.00 per lb',
-                  cheapness: 'Expensive',
-                ),
-                Container(
-                  color: Colors.transparent,
-                  height: MediaQuery.of(context).size.height - 100 - 80,
-                ),
-              ],
             ),
           ),
         ],
@@ -403,53 +379,269 @@ class IngredientsPageLayout extends StatelessWidget {
 class LeafyGreensPage extends StatelessWidget {
   const LeafyGreensPage({super.key});
 
+  final List<Color> _gradient = const [
+    Color(0xFF96c93d),
+    Color(0xFF00b09b),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return const IngredientsPageLayout(
+    return IngredientsPageLayout(
       title: 'Leafy greens',
-      titleBackground: AssetImage('assets/Leafy Greeens.jpg'),
+      titleBackground: const AssetImage('assets/Leafy Greeens.jpg'),
       ingredients: [
         Ingredient(
           name: 'Lettuce',
           season: 'Spring and fall',
           price: '\$1.00 per head',
           cheapness: 'Really cheap',
+          gradient: _gradient,
         ),
         Ingredient(
           name: 'Kale',
           season: 'Fall and winter',
           price: '\$2.00 per lb',
           cheapness: 'Cheap',
+          gradient: _gradient,
         ),
         Ingredient(
           name: 'Arugula',
           season: 'Late spring and early fall',
           price: '\$10.00 per lb',
           cheapness: 'Expensive',
+          gradient: _gradient,
         ),
         Ingredient(
           name: 'Arugula',
           season: 'Late spring and early fall',
           price: '\$10.00 per lb',
           cheapness: 'Expensive',
+          gradient: _gradient,
         ),
         Ingredient(
           name: 'Arugula',
           season: 'Late spring and early fall',
           price: '\$10.00 per lb',
           cheapness: 'Expensive',
+          gradient: _gradient,
         ),
         Ingredient(
           name: 'Arugula',
           season: 'Late spring and early fall',
           price: '\$10.00 per lb',
           cheapness: 'Expensive',
+          gradient: _gradient,
         ),
         Ingredient(
           name: 'Arugula',
           season: 'Late spring and early fall',
           price: '\$10.00 per lb',
           cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+      ],
+    );
+  }
+}
+
+class VegetablesPage extends StatelessWidget {
+  const VegetablesPage({super.key});
+
+  final _gradient = const [
+    Color(0xFFF2C94C),
+    Color(0xFFF2994A),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return IngredientsPageLayout(
+      title: 'Vegetables',
+      titleBackground: const AssetImage('assets/Vegetables.webp'),
+      ingredients: [
+        Ingredient(
+          name: 'Lettuce',
+          season: 'Spring and fall',
+          price: '\$1.00 per head',
+          cheapness: 'Really cheap',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Kale',
+          season: 'Fall and winter',
+          price: '\$2.00 per lb',
+          cheapness: 'Cheap',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+      ],
+    );
+  }
+}
+
+class MeatsPage extends StatelessWidget {
+  const MeatsPage({super.key});
+
+  final _gradient = const [
+    Color(0xFFFF4B2B),
+    Color(0xFFFF416C),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return IngredientsPageLayout(
+      title: 'Meat & Eggs',
+      titleBackground: const AssetImage('assets/Meat.jpg'),
+      ingredients: [
+        Ingredient(
+          name: 'Lettuce',
+          season: 'Spring and fall',
+          price: '\$1.00 per head',
+          cheapness: 'Really cheap',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Kale',
+          season: 'Fall and winter',
+          price: '\$2.00 per lb',
+          cheapness: 'Cheap',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+      ],
+    );
+  }
+}
+
+class FishPage extends StatelessWidget {
+  const FishPage({super.key});
+
+  final _gradient = const [
+    Color(0xFF00d2ff),
+    Color(0xFF3a7bd5),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return IngredientsPageLayout(
+      title: 'Fish & Dairy',
+      titleBackground: const AssetImage('assets/Fish.jpg'),
+      ingredients: [
+        Ingredient(
+          name: 'Lettuce',
+          season: 'Spring and fall',
+          price: '\$1.00 per head',
+          cheapness: 'Really cheap',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Kale',
+          season: 'Fall and winter',
+          price: '\$2.00 per lb',
+          cheapness: 'Cheap',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
+        ),
+        Ingredient(
+          name: 'Arugula',
+          season: 'Late spring and early fall',
+          price: '\$10.00 per lb',
+          cheapness: 'Expensive',
+          gradient: _gradient,
         ),
       ],
     );
