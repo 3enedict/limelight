@@ -186,11 +186,14 @@ class Ingredient extends StatefulWidget {
   IngredientState createState() => IngredientState();
 }
 
-class IngredientState extends State<Ingredient> {
+class IngredientState extends State<Ingredient>
+    with AutomaticKeepAliveClientMixin {
   bool _enabled = false;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -293,6 +296,9 @@ class IngredientState extends State<Ingredient> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class IngredientsPageLayout extends StatelessWidget {
