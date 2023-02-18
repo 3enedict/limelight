@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'ingredients_page.dart';
+import 'package:limelight/pages/ingredients_page.dart';
+import 'package:limelight/pages/shopping_list_page.dart';
 
 void main() {
   Paint.enableDithering = true;
@@ -12,10 +13,18 @@ class Limelight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Limelight',
-      home: IngredientsPage(),
+      home: PageView(
+        controller: PageController(
+          initialPage: 1,
+        ),
+        children: const [
+          ShoppingListPage(),
+          IngredientsPage(),
+        ],
+      ),
     );
   }
 }

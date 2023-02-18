@@ -30,16 +30,55 @@ class IngredientState extends State<Ingredient>
   Widget build(BuildContext context) {
     super.build(context);
 
+    return IngredientLayout(
+      name: widget.name,
+      season: widget.season,
+      price: widget.price,
+      cheapness: widget.cheapness,
+      accentGradient: _enabled
+          ? const [Color(0xBBFFFFFF), Color(0xBBFFFFFF)]
+          : widget.gradient,
+      backgroundGradient: _enabled
+          ? widget.gradient
+          : const [Color(0xFF525d7d), Color(0xFF343e61)],
+      onPressed: () => setState(() => _enabled = !_enabled),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class IngredientLayout extends StatelessWidget {
+  final String name;
+  final String season;
+  final String price;
+  final String cheapness;
+  final List<Color> accentGradient;
+  final List<Color> backgroundGradient;
+  final VoidCallback onPressed;
+
+  const IngredientLayout({
+    super.key,
+    required this.name,
+    required this.season,
+    required this.price,
+    required this.cheapness,
+    required this.accentGradient,
+    this.backgroundGradient = const [
+      Color(0xFF525d7d),
+      Color(0xFF343e61),
+    ],
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         gradient: LinearGradient(
-          colors: _enabled
-              ? widget.gradient
-              : [
-                  const Color(0xFF525d7d),
-                  const Color(0xFF343e61),
-                ],
+          colors: backgroundGradient,
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
@@ -50,19 +89,14 @@ class IngredientState extends State<Ingredient>
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
         ),
-        onPressed: () => setState(() => _enabled = !_enabled),
+        onPressed: () => onPressed(),
         child: Row(
           children: [
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 gradient: LinearGradient(
-                  colors: _enabled
-                      ? [
-                          const Color(0xBBFFFFFF),
-                          const Color(0xBBFFFFFF),
-                        ]
-                      : widget.gradient,
+                  colors: accentGradient,
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
@@ -78,7 +112,7 @@ class IngredientState extends State<Ingredient>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.name,
+                      name,
                       style: GoogleFonts.workSans(
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
@@ -87,7 +121,7 @@ class IngredientState extends State<Ingredient>
                       ),
                     ),
                     Text(
-                      widget.season,
+                      season,
                       style: GoogleFonts.workSans(
                         textStyle: const TextStyle(
                           fontStyle: FontStyle.italic,
@@ -103,7 +137,7 @@ class IngredientState extends State<Ingredient>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  widget.price,
+                  price,
                   style: GoogleFonts.workSans(
                     textStyle: const TextStyle(
                       fontStyle: FontStyle.italic,
@@ -115,7 +149,7 @@ class IngredientState extends State<Ingredient>
                   height: 1,
                 ),
                 Text(
-                  widget.cheapness,
+                  cheapness,
                   style: GoogleFonts.workSans(
                     textStyle: TextStyle(
                       fontStyle: FontStyle.italic,
@@ -132,7 +166,4 @@ class IngredientState extends State<Ingredient>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

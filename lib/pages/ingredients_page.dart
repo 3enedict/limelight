@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'ingredients_page/leafy_greens_page.dart';
-import 'ingredients_page/vegetables_page.dart';
-import 'ingredients_page/meat_page.dart';
-import 'ingredients_page/fish_page.dart';
+import 'package:limelight/pages/ingredients_subpages/leafy_greens_page.dart';
+import 'package:limelight/pages/ingredients_subpages/vegetables_page.dart';
+import 'package:limelight/pages/ingredients_subpages/meat_page.dart';
+import 'package:limelight/pages/ingredients_subpages/fish_page.dart';
 
 class IngredientsPage extends StatefulWidget {
   const IngredientsPage({super.key});
@@ -16,7 +15,7 @@ class IngredientsPage extends StatefulWidget {
 }
 
 class IngredientsPageState extends State<IngredientsPage> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   final _screens = [
     const LeafyGreensPage(),
     const VegetablesPage(),
@@ -108,85 +107,4 @@ BottomNavigationBarItem bottomNavBarItem(List<Color> gradient) {
     label: '',
     backgroundColor: Colors.transparent,
   );
-}
-
-class IngredientsPageLayout extends StatelessWidget {
-  final String title;
-  final AssetImage titleBackground;
-  final List<Widget> ingredients;
-
-  const IngredientsPageLayout({
-    super.key,
-    required this.title,
-    required this.titleBackground,
-    required this.ingredients,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            snap: false,
-            floating: false,
-            expandedHeight: MediaQuery.of(context).size.height * 0.25,
-            backgroundColor: const Color(0xFF384364),
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Text(
-                title,
-                style: GoogleFonts.workSans(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              background: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(0),
-                    bottom: Radius.circular(20),
-                  ),
-                  image: DecorationImage(
-                    alignment: Alignment.topCenter,
-                    fit: BoxFit.cover,
-                    colorFilter: const ColorFilter.mode(
-                      Colors.grey,
-                      BlendMode.saturation,
-                    ),
-                    image: titleBackground,
-                  ),
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(0),
-                      bottom: Radius.circular(20),
-                    ),
-                    color: Color(0x44384364),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              List.from(ingredients)
-                ..add(
-                  Container(
-                    color: Colors.transparent,
-                    height: MediaQuery.of(context).size.height - 100 - 80,
-                  ),
-                ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
