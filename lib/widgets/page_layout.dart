@@ -6,12 +6,14 @@ class DefaultPageLayout extends StatelessWidget {
   final String title;
   final AssetImage titleBackground;
   final Widget items;
+  final double padding;
 
   const DefaultPageLayout({
     super.key,
     required this.title,
     required this.titleBackground,
     required this.items,
+    this.padding = 180,
   });
 
   @override
@@ -71,7 +73,7 @@ class DefaultPageLayout extends StatelessWidget {
               0,
               0,
               0,
-              MediaQuery.of(context).size.height - 100 - 80,
+              MediaQuery.of(context).size.height - padding,
             ),
             sliver: items,
           ),

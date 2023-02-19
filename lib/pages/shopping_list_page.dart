@@ -37,7 +37,8 @@ class ShoppingListPage extends StatefulWidget {
   State<ShoppingListPage> createState() => ShoppingListPageState();
 }
 
-class ShoppingListPageState extends State<ShoppingListPage> {
+class ShoppingListPageState extends State<ShoppingListPage>
+    with AutomaticKeepAliveClientMixin<ShoppingListPage> {
   final _key = GlobalKey<SliverAnimatedListState>();
   final _items = [
     IngredientData(
@@ -74,6 +75,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -124,6 +126,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
           child: DefaultPageLayout(
             title: 'Shopping List',
             titleBackground: const AssetImage('assets/Shopping List.jpg'),
+            padding: 125,
             items: SliverAnimatedList(
               key: _key,
               initialItemCount: _items.length,
@@ -158,4 +161,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
