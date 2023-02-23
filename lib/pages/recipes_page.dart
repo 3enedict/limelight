@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/recipe.dart';
+import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
   const RecipesPage({super.key});
-
-  final _gradient = const [
-    Color(0xFFF2C94C),
-    Color(0xFFF2994A),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -19,38 +15,35 @@ class RecipesPage extends StatelessWidget {
         creator: 'Limelight',
         time: '30 min',
         easiness: 'Really easy',
-        gradient: _gradient,
+        gradient: limelightGradient,
       ),
       RecipeData(
         name: 'Fried rice',
         creator: 'Limelight',
         time: '40 min',
         easiness: 'Easy',
-        gradient: _gradient,
+        gradient: limelightGradient,
       ),
       RecipeData(
         name: 'Tomatoes and mozzarella',
         creator: 'Limelight',
         time: '15 min',
         easiness: 'Extremely easy',
-        gradient: _gradient,
+        gradient: limelightGradient,
       ),
       RecipeData(
         name: 'Leek and potato soup',
         creator: 'Limelight',
         time: '30 min',
         easiness: 'Really easy',
-        gradient: _gradient,
+        gradient: limelightGradient,
       ),
     ];
 
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Color(0xFF384364),
-            Color(0xFF292f4d),
-          ],
+          colors: toBackgroundGradient(limelightGradient),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -66,6 +59,7 @@ class RecipesPage extends StatelessWidget {
           title: 'Recipes',
           titleBackground: const AssetImage('assets/Recipes.jpg'),
           padding: 125,
+          backgroundGradient: toBackgroundGradient(limelightGradient),
           items: SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {

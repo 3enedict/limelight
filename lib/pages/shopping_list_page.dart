@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/ingredient.dart';
+import 'package:limelight/gradients.dart';
 
 class ShoppingListPage extends StatefulWidget {
   const ShoppingListPage({super.key});
@@ -19,30 +20,21 @@ class ShoppingListPageState extends State<ShoppingListPage>
       season: 'Spring and fall',
       price: '\$1.00 per head',
       cheapness: 'Really cheap',
-      gradient: const [
-        Color(0xFFFF4B2B),
-        Color(0xFFFF416C),
-      ],
+      gradient: meatGradient,
     ),
     IngredientData(
       name: 'Kale',
       season: 'Fall and winter',
       price: '\$2.00 per lb',
       cheapness: 'Cheap',
-      gradient: const [
-        Color(0xFFFF4B2B),
-        Color(0xFFFF416C),
-      ],
+      gradient: meatGradient,
     ),
     IngredientData(
       name: 'Arugula',
       season: 'Late spring and early fall',
       price: '\$10.00 per lb',
       cheapness: 'Expensive',
-      gradient: const [
-        Color(0xFFFF4B2B),
-        Color(0xFFFF416C),
-      ],
+      gradient: meatGradient,
     ),
   ];
 
@@ -50,12 +42,9 @@ class ShoppingListPageState extends State<ShoppingListPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Color(0xFF384364),
-            Color(0xFF292f4d),
-          ],
+          colors: toBackgroundGradient(meatGradient),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -72,10 +61,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
                 season: 'Late spring and early fall',
                 price: '\$10.00 per lb',
                 cheapness: 'Expensive',
-                gradient: const [
-                  Color(0xFFFF4B2B),
-                  Color(0xFFFF416C),
-                ],
+                gradient: meatGradient,
               ),
             );
           },
@@ -85,6 +71,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
           title: 'Shopping List',
           titleBackground: const AssetImage('assets/Shopping List.jpg'),
           padding: 125,
+          backgroundGradient: toBackgroundGradient(meatGradient),
           items: SliverAnimatedList(
             key: _key,
             initialItemCount: _items.length,

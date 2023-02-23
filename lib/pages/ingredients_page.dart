@@ -6,6 +6,7 @@ import 'package:limelight/pages/ingredients_subpages/leafy_greens_page.dart';
 import 'package:limelight/pages/ingredients_subpages/vegetables_page.dart';
 import 'package:limelight/pages/ingredients_subpages/meat_page.dart';
 import 'package:limelight/pages/ingredients_subpages/fish_page.dart';
+import 'package:limelight/gradients.dart';
 
 class IngredientsPage extends StatefulWidget {
   const IngredientsPage({super.key});
@@ -23,15 +24,19 @@ class IngredientsPageState extends State<IngredientsPage> {
     const FishPage(),
   ];
 
+  final _gradients = [
+    leafyGreensGradient,
+    vegetablesGradient,
+    meatGradient,
+    fishGradient,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Color(0xFF3e486c),
-            Color(0xFF25304e),
-          ],
+          colors: toBackgroundGradient(_gradients[_currentIndex]),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -47,18 +52,10 @@ class IngredientsPageState extends State<IngredientsPage> {
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white,
           items: [
-            bottomNavBarItem(
-              [const Color(0xFF96c93d), const Color(0xFF00b09b)],
-            ),
-            bottomNavBarItem(
-              [const Color(0xFFF2C94C), const Color(0xFFF2994A)],
-            ),
-            bottomNavBarItem(
-              [const Color(0xFFFF4B2B), const Color(0xFFFF416C)],
-            ),
-            bottomNavBarItem(
-              [const Color(0xFF00d2ff), const Color(0xFF3a7bd5)],
-            ),
+            bottomNavBarItem(leafyGreensGradient),
+            bottomNavBarItem(vegetablesGradient),
+            bottomNavBarItem(meatGradient),
+            bottomNavBarItem(fishGradient),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -79,9 +76,7 @@ BottomNavigationBarItem bottomNavBarItem(List<Color> gradient) {
   return BottomNavigationBarItem(
     icon: ShaderMask(
       shaderCallback: (Rect bounds) {
-        return LinearGradient(
-          colors: gradient,
-        ).createShader(bounds);
+        return LinearGradient(colors: gradient).createShader(bounds);
       },
       blendMode: BlendMode.srcIn,
       child: const Icon(

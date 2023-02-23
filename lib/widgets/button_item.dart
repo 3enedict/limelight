@@ -8,6 +8,7 @@ class ButtonItem extends StatefulWidget {
   final String info;
   final String subInfo;
   final List<Color> accentGradient;
+  final List<Color> backgroundGradient;
 
   const ButtonItem({
     super.key,
@@ -16,6 +17,7 @@ class ButtonItem extends StatefulWidget {
     required this.info,
     required this.subInfo,
     required this.accentGradient,
+    required this.backgroundGradient,
   });
 
   @override
@@ -38,9 +40,8 @@ class ButtonItemState extends State<ButtonItem>
       accentGradient: _enabled
           ? const [Color(0xBBFFFFFF), Color(0xBBFFFFFF)]
           : widget.accentGradient,
-      backgroundGradient: _enabled
-          ? widget.accentGradient
-          : const [Color(0xFF525d7d), Color(0xFF343e61)],
+      backgroundGradient:
+          _enabled ? widget.accentGradient : widget.backgroundGradient,
       onPressed: () => setState(() => _enabled = !_enabled),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/item.dart';
 import 'package:limelight/widgets/button_item.dart';
+import 'package:limelight/gradients.dart';
 
 class IngredientData {
   final String name;
@@ -25,6 +26,7 @@ class IngredientData {
       info: price,
       subInfo: cheapness,
       accentGradient: gradient,
+      backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
     );
   }
@@ -36,6 +38,7 @@ class IngredientData {
       info: price,
       subInfo: cheapness,
       accentGradient: gradient,
+      backgroundGradient: toSurfaceGradient(gradient),
     );
   }
 }

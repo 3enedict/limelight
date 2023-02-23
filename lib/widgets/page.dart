@@ -6,6 +6,7 @@ class DefaultPage extends StatelessWidget {
   final String title;
   final AssetImage titleBackground;
   final Widget items;
+  final List<Color> backgroundGradient;
   final double padding;
 
   const DefaultPage({
@@ -13,6 +14,7 @@ class DefaultPage extends StatelessWidget {
     required this.title,
     required this.titleBackground,
     required this.items,
+    required this.backgroundGradient,
     this.padding = 180,
   });
 
@@ -20,14 +22,14 @@ class DefaultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShaderMask(
       shaderCallback: (bound) {
-        return const LinearGradient(
+        return LinearGradient(
             end: FractionalOffset.topCenter,
             begin: FractionalOffset.bottomCenter,
             colors: [
-              Color(0xFF292f4d),
-              Color(0x00292f4d),
+              backgroundGradient[1],
+              backgroundGradient[1].withAlpha(0),
             ],
-            stops: [
+            stops: const [
               0.0,
               0.3,
             ]).createShader(bound);
@@ -38,11 +40,11 @@ class DefaultPage extends StatelessWidget {
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              pinned: true,
+              pinned: false,
               snap: false,
               floating: false,
               expandedHeight: MediaQuery.of(context).size.height * 0.25,
-              backgroundColor: const Color(0xFF384364),
+              backgroundColor: backgroundGradient[0],
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
                 title: Text(
@@ -72,12 +74,12 @@ class DefaultPage extends StatelessWidget {
                     ),
                   ),
                   child: Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(0),
                         bottom: Radius.circular(20),
                       ),
-                      color: Color(0x44384364),
+                      color: backgroundGradient[0].withAlpha(40),
                     ),
                   ),
                 ),
