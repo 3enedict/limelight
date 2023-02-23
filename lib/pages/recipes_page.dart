@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/page_layout.dart';
-import 'package:limelight/widgets/ingredient.dart';
+import 'package:limelight/widgets/page.dart';
+import 'package:limelight/widgets/recipe.dart';
 
 class RecipesPage extends StatelessWidget {
   const RecipesPage({super.key});
@@ -13,6 +13,37 @@ class RecipesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final recipes = [
+      RecipeData(
+        name: 'Pasta and tomato sauce',
+        creator: 'Limelight',
+        time: '30 min',
+        easiness: 'Really easy',
+        gradient: _gradient,
+      ),
+      RecipeData(
+        name: 'Fried rice',
+        creator: 'Limelight',
+        time: '40 min',
+        easiness: 'Easy',
+        gradient: _gradient,
+      ),
+      RecipeData(
+        name: 'Tomatoes and mozzarella',
+        creator: 'Limelight',
+        time: '15 min',
+        easiness: 'Extremely easy',
+        gradient: _gradient,
+      ),
+      RecipeData(
+        name: 'Leek and potato soup',
+        creator: 'Limelight',
+        time: '30 min',
+        easiness: 'Really easy',
+        gradient: _gradient,
+      ),
+    ];
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -31,86 +62,16 @@ class RecipesPage extends StatelessWidget {
           onPressed: () {},
           child: const Icon(Icons.calendar_month_rounded),
         ),
-        body: ShaderMask(
-          shaderCallback: (bound) {
-            return const LinearGradient(
-                end: FractionalOffset.topCenter,
-                begin: FractionalOffset.bottomCenter,
-                colors: [
-                  Color(0xFF292f4d),
-                  Color(0x00292f4d),
-                ],
-                stops: [
-                  0.0,
-                  0.3,
-                ]).createShader(bound);
-          },
-          blendMode: BlendMode.srcOver,
-          child: DefaultPageLayout(
-            title: 'Recipes',
-            titleBackground: const AssetImage('assets/Recipes.jpg'),
-            padding: 125,
-            items: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  IngredientLayout(
-                    name: 'Lettuce',
-                    season: 'Spring and fall',
-                    price: '\$1.00 per head',
-                    cheapness: 'Really cheap',
-                    accentGradient: _gradient,
-                    onPressed: () {},
-                  ),
-                  IngredientLayout(
-                    name: 'Kale',
-                    season: 'Fall and winter',
-                    price: '\$2.00 per lb',
-                    cheapness: 'Cheap',
-                    accentGradient: _gradient,
-                    onPressed: () {},
-                  ),
-                  IngredientLayout(
-                    name: 'Arugula',
-                    season: 'Late spring and early fall',
-                    price: '\$10.00 per lb',
-                    cheapness: 'Expensive',
-                    accentGradient: _gradient,
-                    onPressed: () {},
-                  ),
-                  IngredientLayout(
-                    name: 'Arugula',
-                    season: 'Late spring and early fall',
-                    price: '\$10.00 per lb',
-                    cheapness: 'Expensive',
-                    accentGradient: _gradient,
-                    onPressed: () {},
-                  ),
-                  IngredientLayout(
-                    name: 'Arugula',
-                    season: 'Late spring and early fall',
-                    price: '\$10.00 per lb',
-                    cheapness: 'Expensive',
-                    accentGradient: _gradient,
-                    onPressed: () {},
-                  ),
-                  IngredientLayout(
-                    name: 'Arugula',
-                    season: 'Late spring and early fall',
-                    price: '\$10.00 per lb',
-                    cheapness: 'Expensive',
-                    accentGradient: _gradient,
-                    onPressed: () {},
-                  ),
-                  IngredientLayout(
-                    name: 'Arugula',
-                    season: 'Late spring and early fall',
-                    price: '\$10.00 per lb',
-                    cheapness: 'Expensive',
-                    accentGradient: _gradient,
-                    onPressed: () {},
-                  ),
-                ],
-              ),
+        body: DefaultPage(
+          title: 'Recipes',
+          titleBackground: const AssetImage('assets/Recipes.jpg'),
+          padding: 125,
+          items: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return recipes[index].toItem(() {});
+              },
+              childCount: recipes.length,
             ),
           ),
         ),

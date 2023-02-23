@@ -29,8 +29,8 @@ class IngredientsPageState extends State<IngredientsPage> {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFF384364),
-            Color(0xFF292f4d),
+            Color(0xFF3e486c),
+            Color(0xFF25304e),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -66,25 +66,9 @@ class IngredientsPageState extends State<IngredientsPage> {
           onPressed: () {},
           child: const Icon(Icons.search),
         ),
-        body: ShaderMask(
-          shaderCallback: (bound) {
-            return const LinearGradient(
-                end: FractionalOffset.topCenter,
-                begin: FractionalOffset.bottomCenter,
-                colors: [
-                  Color(0xFF292f4d),
-                  Color(0x00292f4d),
-                ],
-                stops: [
-                  0.0,
-                  0.3,
-                ]).createShader(bound);
-          },
-          blendMode: BlendMode.srcOver,
-          child: IndexedStack(
-            index: _currentIndex,
-            children: _screens,
-          ),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _screens,
         ),
       ),
     );

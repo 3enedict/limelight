@@ -17,6 +17,7 @@ class Limelight extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Limelight',
+      theme: ThemeData(useMaterial3: true),
       home: PageView(
         controller: PageController(
           initialPage: 1,
