@@ -8,8 +8,8 @@ const limelightGradient = [
 ];
 
 const leafyGreensGradient = [
-  Color(0xFFa8e063),
-  Color(0xFF56ab2f),
+  Color(0xFF38ba78),
+  Color(0xFF76c350),
 ];
 
 const vegetablesGradient = [
