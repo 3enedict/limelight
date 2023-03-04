@@ -53,6 +53,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
         backgroundColor: Colors.transparent,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white24,
+          heroTag: 'ShoppingListFAB',
           onPressed: () {
             _key.currentState!.insertItem(_items.length);
             _items.add(
@@ -70,7 +71,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
         body: DefaultPage(
           title: 'Shopping List',
           titleBackground: const AssetImage('assets/Shopping List.jpg'),
-          padding: 125,
+          padding: 80,
           backgroundGradient: toBackgroundGradient(meatGradient),
           items: SliverAnimatedList(
             key: _key,

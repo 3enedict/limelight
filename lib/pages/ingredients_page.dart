@@ -60,6 +60,7 @@ class IngredientsPageState extends State<IngredientsPage> {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white24,
+          heroTag: 'IngredientFAB$_currentIndex',
           onPressed: () {},
           child: const Icon(Icons.search),
         ),

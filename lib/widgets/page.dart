@@ -15,7 +15,7 @@ class DefaultPage extends StatelessWidget {
     required this.titleBackground,
     required this.items,
     required this.backgroundGradient,
-    this.padding = 180,
+    this.padding = 135,
   });
 
   @override
