@@ -61,6 +61,7 @@ class RecipesPage extends StatelessWidget {
           titleBackground: const AssetImage('assets/Recipes.jpg'),
           padding: 80,
           backgroundGradient: toBackgroundGradient(limelightGradient),
+          keyValue: 1,
           items: SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {

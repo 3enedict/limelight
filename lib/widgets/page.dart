@@ -8,6 +8,7 @@ class DefaultPage extends StatelessWidget {
   final Widget items;
   final List<Color> backgroundGradient;
   final double padding;
+  final int keyValue;
 
   const DefaultPage({
     super.key,
@@ -16,6 +17,7 @@ class DefaultPage extends StatelessWidget {
     required this.items,
     required this.backgroundGradient,
     this.padding = 135,
+    this.keyValue = 0,
   });
 
   @override
@@ -38,6 +40,7 @@ class DefaultPage extends StatelessWidget {
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: CustomScrollView(
+          key: PageStorageKey(keyValue),
           slivers: <Widget>[
             SliverAppBar(
               pinned: false,
