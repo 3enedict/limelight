@@ -10,30 +10,26 @@ class RecipesPage extends StatelessWidget {
   final recipes = [
     RecipeData(
       name: 'Pasta and tomato sauce',
-      creator: 'Limelight',
       time: '30 min',
-      easiness: 'Really easy',
+      price: '\$0.50',
       gradient: limelightGradient,
     ),
     RecipeData(
       name: 'Fried rice',
-      creator: 'Limelight',
       time: '40 min',
-      easiness: 'Easy',
+      price: '\$1.00',
       gradient: limelightGradient,
     ),
     RecipeData(
       name: 'Tomatoes and mozzarella',
-      creator: 'Limelight',
       time: '15 min',
-      easiness: 'Extremely easy',
+      price: '\$1.50',
       gradient: limelightGradient,
     ),
     RecipeData(
       name: 'Leek and potato soup',
-      creator: 'Limelight',
       time: '30 min',
-      easiness: 'Really easy',
+      price: '\$0.30',
       gradient: limelightGradient,
     ),
   ];

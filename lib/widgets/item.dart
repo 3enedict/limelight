@@ -74,12 +74,18 @@ class Item extends StatelessWidget {
                           ),
                         ),
                       ),
+                      const SizedBox(
+                        height: 1,
+                      ),
                       Text(
                         subTitle,
                         style: GoogleFonts.workSans(
-                          textStyle: const TextStyle(
+                          textStyle: TextStyle(
                             fontStyle: FontStyle.italic,
-                            color: Color(0xFFDDDDDD),
+                            fontSize: 14 *
+                                MediaQuery.of(context).textScaleFactor *
+                                0.8,
+                            color: const Color(0xFFDDDDDD),
                           ),
                         ),
                       ),
@@ -93,9 +99,11 @@ class Item extends StatelessWidget {
                   Text(
                     info,
                     style: GoogleFonts.workSans(
-                      textStyle: const TextStyle(
+                      textStyle: TextStyle(
                         fontStyle: FontStyle.italic,
-                        color: Color(0xFFEEEEEE),
+                        fontSize:
+                            14 * MediaQuery.of(context).textScaleFactor * 0.85,
+                        color: const Color(0xFFEEEEEE),
                       ),
                     ),
                   ),
@@ -108,7 +116,7 @@ class Item extends StatelessWidget {
                       textStyle: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontSize:
-                            14 * MediaQuery.of(context).textScaleFactor * 0.8,
+                            14 * MediaQuery.of(context).textScaleFactor * 0.6,
                         color: const Color(0xFFDDDDDD),
                       ),
                     ),

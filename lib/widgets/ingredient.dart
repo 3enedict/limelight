@@ -8,14 +8,14 @@ class IngredientData {
   final String name;
   final String season;
   final String price;
-  final String cheapness;
+  final String unit;
   final List<Color> gradient;
 
   IngredientData({
     required this.name,
     required this.season,
     required this.price,
-    required this.cheapness,
+    required this.unit,
     required this.gradient,
   });
 
@@ -24,7 +24,7 @@ class IngredientData {
       title: name,
       subTitle: season,
       info: price,
-      subInfo: cheapness,
+      subInfo: unit,
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
@@ -36,7 +36,7 @@ class IngredientData {
       title: name,
       subTitle: season,
       info: price,
-      subInfo: cheapness,
+      subInfo: unit,
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
     );
