@@ -79,18 +79,41 @@ class RecipesPage extends StatelessWidget {
   void _gotoDetailsPage(BuildContext context, int index) {
     Navigator.of(context).push(
       PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (_, __, ___) => Scaffold(
-          body: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              height: 75,
-              child: Hero(
-                tag: index.toString(),
-                child: recipes[index].toItem(
-                  () => Navigator.of(context).pop(),
+        transitionDuration: const Duration(milliseconds: 500),
+        pageBuilder: (_, __, ___) => Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: toBackgroundGradient(limelightGradient),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.white24,
+              heroTag: 'CalendarFAB',
+              onPressed: () {},
+              child: const Icon(Icons.search),
+            ),
+            body: Column(
+              children: [
+                Hero(
+                  tag: index.toString(),
+                  child: recipes[index].toItem(
+                    () => Navigator.of(context).pop(),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 50),
+                const Expanded(
+                  child: Text(
+                    'Hola',
+                    style: TextStyle(
+                      color: Colors.white70,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
