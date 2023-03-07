@@ -16,7 +16,7 @@ class IngredientsPage extends StatefulWidget {
 }
 
 class IngredientsPageState extends State<IngredientsPage> {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   final _screens = [
     const LeafyGreensPage(),
     const VegetablesPage(),

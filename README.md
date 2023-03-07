@@ -2,7 +2,6 @@
 
 ## TODO
 
-make leafy greens page 1st page
 fix animation time
 make items render correctly in Hero
 Cancel shopping cart
