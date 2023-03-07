@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
@@ -7,7 +6,6 @@ import 'package:limelight/pages/recipes_page.dart';
 
 void main() {
   Paint.enableDithering = true;
-  timeDilation = 2.0;
   runApp(const Limelight());
 }
 

@@ -78,8 +78,9 @@ class RecipesPage extends StatelessWidget {
 
   void _gotoDetailsPage(BuildContext context, int index) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => Scaffold(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 600),
+        pageBuilder: (_, __, ___) => Scaffold(
           body: Align(
             alignment: Alignment.topCenter,
             child: SizedBox(

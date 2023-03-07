@@ -2,7 +2,6 @@
 
 ## TODO
 
-fix animation time
 make items render correctly in Hero
 Cancel shopping cart
 Add aisle support
