@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/recipe.dart';
+import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
@@ -106,12 +107,7 @@ class RecipesPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 50),
                 const Expanded(
-                  child: Text(
-                    'Hola',
-                    style: TextStyle(
-                      color: Colors.white70,
-                    ),
-                  ),
+                  child: Calendar(),
                 ),
               ],
             ),

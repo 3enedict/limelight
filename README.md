@@ -2,6 +2,6 @@
 
 ## TODO
 
-make items render correctly in Hero
+make hero page appear after animation
 Cancel shopping cart
 Add aisle support
