@@ -8,11 +8,117 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Hola',
-      style: TextStyle(
-        color: Colors.white70,
+    return PageView(
+      controller: PageController(
+        initialPage: 2,
       ),
+      scrollDirection: Axis.vertical,
+      children: const [
+        CalendarPage(),
+        CalendarPage(),
+        CalendarPage(),
+        CalendarPage(),
+      ],
+    );
+  }
+}
+
+class CalendarPage extends StatelessWidget {
+  const CalendarPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Row(
+            children: [
+              const Text(
+                'Mon',
+                style: TextStyle(
+                  color: Colors.white70,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.tealAccent,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.redAccent,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              const Text(
+                'Mon',
+                style: TextStyle(
+                  color: Colors.white70,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.tealAccent,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.redAccent,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              const Text(
+                'Mon',
+                style: TextStyle(
+                  color: Colors.white70,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.tealAccent,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.redAccent,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              const Text(
+                'Mon',
+                style: TextStyle(
+                  color: Colors.white70,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.tealAccent,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.redAccent,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
