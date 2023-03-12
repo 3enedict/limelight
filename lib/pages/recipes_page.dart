@@ -106,8 +106,10 @@ class RecipesPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Expanded(
-                  child: Calendar(),
+                Expanded(
+                  child: Calendar(
+                    recipe: recipes[index],
+                  ),
                 ),
               ],
             ),

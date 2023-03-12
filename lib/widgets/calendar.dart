@@ -4,7 +4,8 @@ import 'package:limelight/widgets/recipe.dart';
 import 'package:limelight/gradients.dart';
 
 class Calendar extends StatelessWidget {
-  const Calendar({super.key});
+  final RecipeData recipe;
+  const Calendar({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -13,30 +14,31 @@ class Calendar extends StatelessWidget {
         initialPage: 2,
       ),
       scrollDirection: Axis.vertical,
-      children: const [
-        CalendarPage(),
-        CalendarPage(),
-        CalendarPage(),
-        CalendarPage(),
+      children: [
+        CalendarPage(recipe: recipe),
+        CalendarPage(recipe: recipe),
+        CalendarPage(recipe: recipe),
+        CalendarPage(recipe: recipe),
       ],
     );
   }
 }
 
 class CalendarPage extends StatelessWidget {
-  const CalendarPage({super.key});
+  final RecipeData recipe;
+  const CalendarPage({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        Day(day: 'M'),
-        Day(day: 'T'),
-        Day(day: 'W'),
-        Day(day: 'T'),
-        Day(day: 'F'),
-        Day(day: 'S'),
-        Day(day: 'S'),
+      children: [
+        Day(day: 'M', recipe: recipe),
+        Day(day: 'T', recipe: recipe),
+        Day(day: 'W', recipe: recipe),
+        Day(day: 'T', recipe: recipe),
+        Day(day: 'F', recipe: recipe),
+        Day(day: 'S', recipe: recipe),
+        Day(day: 'S', recipe: recipe),
       ],
     );
   }
@@ -44,7 +46,8 @@ class CalendarPage extends StatelessWidget {
 
 class Day extends StatelessWidget {
   final String day;
-  const Day({super.key, required this.day});
+  final RecipeData recipe;
+  const Day({super.key, required this.day, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -75,33 +78,15 @@ class Day extends StatelessWidget {
               width: 20,
             ),
             Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(12),
-                    right: Radius.zero,
-                  ),
-                  gradient: LinearGradient(
-                    colors: leafyGreensGradient,
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text('Empty'),
               ),
             ),
             Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.horizontal(
-                    right: Radius.circular(12),
-                    left: Radius.zero,
-                  ),
-                  gradient: LinearGradient(
-                    colors: meatGradient,
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text('Empty'),
               ),
             ),
           ],
