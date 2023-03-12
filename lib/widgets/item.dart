@@ -39,6 +39,7 @@ class Item extends StatelessWidget {
             end: Alignment.centerRight,
           ),
         ),
+        height: 70,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,
@@ -76,7 +77,7 @@ class Item extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 1,
+                        height: 2,
                       ),
                       Text(
                         subTitle,

@@ -9,10 +9,18 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime startDate = DateTime.now();
+    const double itemExtent = 70 * 2 + 15 * 2 + 20;
+    const int numberOfDays = 30 * 12;
+    final DateTime startDate = DateTime.now().subtract(
+      const Duration(days: numberOfDays),
+    );
 
     return ListView.builder(
-      itemCount: 120,
+      itemCount: numberOfDays,
+      itemExtent: itemExtent,
+      controller: ScrollController(
+        initialScrollOffset: (numberOfDays / 2) * itemExtent + 20,
+      ),
       itemBuilder: (BuildContext context, int index) {
         final DateTime date = startDate.add(Duration(days: index));
         final int day = date.day;
@@ -21,9 +29,10 @@ class Calendar extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
-              colors: startDate == date
-                  ? limelightGradient
-                  : toSurfaceGradient(limelightGradient),
+              colors:
+                  startDate.add(const Duration(days: numberOfDays ~/ 2)) == date
+                      ? limelightGradient
+                      : toSurfaceGradient(limelightGradient),
             ),
           ),
           margin: const EdgeInsets.fromLTRB(0, 25, 0, 0),
