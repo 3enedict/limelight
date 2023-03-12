@@ -11,7 +11,7 @@ class Calendar extends StatelessWidget {
   Widget build(BuildContext context) {
     final DateTime time = DateTime.now();
     return ListView.builder(
-      itemCount: 30 * 4,
+      itemCount: 100,
       itemBuilder: (BuildContext context, int index) {
         final int date = time.add(Duration(hours: 24 * index)).day;
         return Day(day: "$date", recipe: recipe);
@@ -28,40 +28,27 @@ class Day extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        gradient: LinearGradient(
-          colors: toSurfaceGradient(limelightGradient),
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-      ),
-      margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      color: Colors.transparent,
+      margin: const EdgeInsets.fromLTRB(20, 10, 0, 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            width: 20,
-          ),
           Text(
-            day,
+            "\n$day",
             style: TextStyle(
               fontSize: 14 * MediaQuery.of(context).textScaleFactor * 1.5,
               color: Colors.white70,
             ),
           ),
-          const SizedBox(
-            width: 20,
-          ),
           Expanded(
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Text('Empty'),
-            ),
-          ),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Text('Empty'),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                children: [
+                  recipe.toButtonItem(),
+                  recipe.toButtonItem(),
+                ],
+              ),
             ),
           ),
         ],
