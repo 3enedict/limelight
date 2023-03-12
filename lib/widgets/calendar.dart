@@ -9,19 +9,45 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime time = DateTime.now();
+    final DateTime startDate = DateTime.now();
+
     return ListView.builder(
-      itemCount: 100,
+      itemCount: 120,
       itemBuilder: (BuildContext context, int index) {
-        final int date = time.add(Duration(hours: 24 * index)).day;
-        return Day(day: "$date", recipe: recipe);
+        final DateTime date = startDate.add(Duration(days: index));
+        final int day = date.day;
+
+        final Container dayContainer = Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              colors: startDate == date
+                  ? limelightGradient
+                  : toSurfaceGradient(limelightGradient),
+            ),
+          ),
+          margin: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+          height: 40,
+          width: 40,
+          child: Center(
+            child: Text(
+              "$day",
+              style: TextStyle(
+                fontSize: 14 * MediaQuery.of(context).textScaleFactor * 1.5,
+                color: Colors.white70,
+              ),
+            ),
+          ),
+        );
+
+        return Day(day: dayContainer, recipe: recipe);
       },
     );
   }
 }
 
 class Day extends StatelessWidget {
-  final String day;
+  final Container day;
   final RecipeData recipe;
   const Day({super.key, required this.day, required this.recipe});
 
@@ -33,13 +59,7 @@ class Day extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "\n$day",
-            style: TextStyle(
-              fontSize: 14 * MediaQuery.of(context).textScaleFactor * 1.5,
-              color: Colors.white70,
-            ),
-          ),
+          day,
           Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
