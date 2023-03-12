@@ -105,7 +105,7 @@ class RecipesPage extends StatelessWidget {
                     () => Navigator.of(context).pop(),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 const Expanded(
                   child: Calendar(),
                 ),
