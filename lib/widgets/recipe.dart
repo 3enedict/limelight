@@ -17,6 +17,13 @@ class RecipeData {
     required this.gradient,
   });
 
+  RecipeData.empty({
+    this.name = 'Empty',
+    this.time = '',
+    this.price = '',
+    this.gradient = limelightGradient,
+  });
+
   Item toItem(VoidCallback onPressed) {
     return Item(
       title: name,

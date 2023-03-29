@@ -14,6 +14,8 @@ class Limelight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var calendar = Calendar();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Limelight',

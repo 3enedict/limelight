@@ -4,13 +4,18 @@ import 'package:limelight/widgets/recipe.dart';
 import 'package:limelight/gradients.dart';
 
 class Calendar extends StatelessWidget {
-  final RecipeData recipe;
-  const Calendar({super.key, required this.recipe});
+  static const int numberOfDays = 15 * 2;
+  final RecipeData recipe = RecipeData.empty();
+  final List<RecipeData> recipes = List.filled(
+    numberOfDays,
+    RecipeData.empty(),
+  );
+
+  Calendar({super.key});
 
   @override
   Widget build(BuildContext context) {
     const double itemExtent = 70 * 2 + 15 * 2 + 20;
-    const int numberOfDays = 30 * 12;
     final DateTime startDate = DateTime.now().subtract(
       const Duration(days: numberOfDays),
     );
@@ -49,7 +54,7 @@ class Calendar extends StatelessWidget {
           ),
         );
 
-        return Day(day: dayContainer, recipe: recipe);
+        return Day(day: dayContainer, recipe: recipes[index]);
       },
     );
   }

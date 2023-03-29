@@ -79,9 +79,8 @@ class RecipesPage extends StatelessWidget {
 
   void _gotoDetailsPage(BuildContext context, int index) {
     Navigator.of(context).push(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (_, __, ___) => Container(
+      CalendarRoute(
+        builder: (_) => Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: toBackgroundGradient(limelightGradient),
@@ -118,4 +117,11 @@ class RecipesPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class CalendarRoute extends MaterialPageRoute {
+  CalendarRoute({required WidgetBuilder builder}) : super(builder: builder);
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 600);
 }
