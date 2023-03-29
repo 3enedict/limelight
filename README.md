@@ -2,6 +2,6 @@
 
 ## TODO
 
-make hero page appear after animation
+Move dayContainer to Day
 Cancel shopping cart
 Add aisle support

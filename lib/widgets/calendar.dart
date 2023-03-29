@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/recipe.dart';
+import 'package:limelight/widgets/item.dart';
 import 'package:limelight/gradients.dart';
 
-class Calendar extends StatelessWidget {
-  static const int numberOfDays = 15 * 2;
-  final RecipeData recipe = RecipeData.empty();
+const int numberOfDays = 15 * 2;
+const int mealsPerDay = 2;
+
+class Calendar extends StatefulWidget {
+  RecipeData recipe = RecipeData.empty();
   final List<RecipeData> recipes = List.filled(
-    numberOfDays,
+    numberOfDays * mealsPerDay,
     RecipeData.empty(),
   );
 
   Calendar({super.key});
 
+  void setCurrentRecipe(RecipeData newRecipe) {
+    recipe = newRecipe;
+  }
+
+  @override
+  CalendarState createState() => CalendarState();
+}
+
+class CalendarState extends State<Calendar> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     const double itemExtent = 70 * 2 + 15 * 2 + 20;
     final DateTime startDate = DateTime.now().subtract(
       const Duration(days: numberOfDays),
@@ -54,16 +68,35 @@ class Calendar extends StatelessWidget {
           ),
         );
 
-        return Day(day: dayContainer, recipe: recipes[index]);
+        return Day(
+          day: dayContainer,
+          lunch: widget.recipes[index * mealsPerDay].toItem(
+            () => setState(
+                () => widget.recipes[index * mealsPerDay] = widget.recipe),
+          ),
+          dinner: widget.recipes[index * mealsPerDay + 1].toItem(
+            () => setState(
+                () => widget.recipes[index * mealsPerDay + 1] = widget.recipe),
+          ),
+        );
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class Day extends StatelessWidget {
   final Container day;
-  final RecipeData recipe;
-  const Day({super.key, required this.day, required this.recipe});
+  final Item lunch;
+  final Item dinner;
+  const Day({
+    super.key,
+    required this.day,
+    required this.lunch,
+    required this.dinner,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +112,8 @@ class Day extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Column(
                 children: [
-                  recipe.toButtonItem(),
-                  recipe.toButtonItem(),
+                  lunch,
+                  dinner,
                 ],
               ),
             ),

@@ -6,7 +6,8 @@ import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
-  RecipesPage({super.key});
+  final Calendar calendar;
+  RecipesPage({super.key, required this.calendar});
 
   final recipes = [
     RecipeData(
@@ -65,7 +66,7 @@ class RecipesPage extends StatelessWidget {
                 return Hero(
                   tag: index.toString(),
                   child: recipes[index].toItem(
-                    () => _gotoDetailsPage(context, index),
+                    () => _gotoDetailsPage(context, index, calendar),
                   ),
                 );
               },
@@ -77,7 +78,9 @@ class RecipesPage extends StatelessWidget {
     );
   }
 
-  void _gotoDetailsPage(BuildContext context, int index) {
+  void _gotoDetailsPage(BuildContext context, int index, Calendar calendar) {
+    calendar.setCurrentRecipe(recipes[index]);
+
     Navigator.of(context).push(
       CalendarRoute(
         builder: (_) => Container(
@@ -106,9 +109,7 @@ class RecipesPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Expanded(
-                  child: Calendar(
-                    recipe: recipes[index],
-                  ),
+                  child: calendar,
                 ),
               ],
             ),

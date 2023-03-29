@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 import 'package:limelight/pages/recipes_page.dart';
+import 'package:limelight/widgets/calendar.dart';
 
 void main() {
   Paint.enableDithering = true;
@@ -14,7 +15,7 @@ class Limelight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var calendar = Calendar();
+    Calendar calendar = Calendar();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -27,7 +28,7 @@ class Limelight extends StatelessWidget {
         children: [
           const ShoppingListPage(),
           const IngredientsPage(),
-          RecipesPage(),
+          RecipesPage(calendar: calendar),
         ],
       ),
     );
