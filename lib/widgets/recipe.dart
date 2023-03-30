@@ -17,7 +17,7 @@ class RecipeData {
     required this.gradient,
   });
 
-  RecipeData.empty({
+  const RecipeData.empty({
     this.name = 'Empty',
     this.time = '',
     this.price = '',

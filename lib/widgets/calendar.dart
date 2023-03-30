@@ -8,23 +8,28 @@ const int numberOfDays = 15 * 2;
 const int mealsPerDay = 2;
 
 class Calendar extends StatefulWidget {
-  RecipeData recipe = RecipeData.empty();
-  final List<RecipeData> recipes = List.filled(
-    numberOfDays * mealsPerDay,
-    RecipeData.empty(),
-  );
-
-  Calendar({super.key});
-
-  void setCurrentRecipe(RecipeData newRecipe) {
-    recipe = newRecipe;
-  }
+  final Stream<RecipeData> stream;
+  const Calendar({super.key, required this.stream});
 
   @override
   CalendarState createState() => CalendarState();
 }
 
 class CalendarState extends State<Calendar> with AutomaticKeepAliveClientMixin {
+  RecipeData currentRecipe = const RecipeData.empty();
+  List<RecipeData> recipes = List.filled(
+    numberOfDays * mealsPerDay,
+    const RecipeData.empty(),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    widget.stream.listen((newRecipe) {
+      setState(() => currentRecipe = newRecipe);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -70,13 +75,27 @@ class CalendarState extends State<Calendar> with AutomaticKeepAliveClientMixin {
 
         return Day(
           day: dayContainer,
-          lunch: widget.recipes[index * mealsPerDay].toItem(
+          lunch: recipes[index * mealsPerDay].toItem(
             () => setState(
-                () => widget.recipes[index * mealsPerDay] = widget.recipe),
+              () {
+                if (recipes[index * mealsPerDay] == currentRecipe) {
+                  recipes[index * mealsPerDay] = const RecipeData.empty();
+                } else {
+                  recipes[index * mealsPerDay] = currentRecipe;
+                }
+              },
+            ),
           ),
-          dinner: widget.recipes[index * mealsPerDay + 1].toItem(
+          dinner: recipes[index * mealsPerDay + 1].toItem(
             () => setState(
-                () => widget.recipes[index * mealsPerDay + 1] = widget.recipe),
+              () {
+                if (recipes[index * mealsPerDay] == currentRecipe) {
+                  recipes[index * mealsPerDay] = const RecipeData.empty();
+                } else {
+                  recipes[index * mealsPerDay] = currentRecipe;
+                }
+              },
+            ),
           ),
         );
       },
