@@ -89,10 +89,10 @@ class CalendarState extends State<Calendar> with AutomaticKeepAliveClientMixin {
           dinner: recipes[index * mealsPerDay + 1].toItem(
             () => setState(
               () {
-                if (recipes[index * mealsPerDay] == currentRecipe) {
-                  recipes[index * mealsPerDay] = const RecipeData.empty();
+                if (recipes[index * mealsPerDay + 1] == currentRecipe) {
+                  recipes[index * mealsPerDay + 1] = const RecipeData.empty();
                 } else {
-                  recipes[index * mealsPerDay] = currentRecipe;
+                  recipes[index * mealsPerDay + 1] = currentRecipe;
                 }
               },
             ),
