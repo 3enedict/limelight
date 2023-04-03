@@ -8,28 +8,30 @@ class RecipeData {
   final String name;
   final String time;
   final String price;
+  final String unit;
   final List<Color> gradient;
 
   RecipeData({
     required this.name,
     required this.time,
     required this.price,
+    this.unit = "per person",
     required this.gradient,
   });
 
-  const RecipeData.empty({
-    this.name = 'Empty',
+  RecipeData.empty({
+    this.name = '',
     this.time = '',
     this.price = '',
-    this.gradient = limelightGradient,
-  });
+    this.unit = '',
+  }) : gradient = toBackgroundGradient(limelightGradient);
 
   Item toItem(VoidCallback onPressed) {
     return Item(
       title: name,
       subTitle: time,
       info: price,
-      subInfo: "per person",
+      subInfo: unit,
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
@@ -41,7 +43,7 @@ class RecipeData {
       title: name,
       subTitle: time,
       info: price,
-      subInfo: "per person",
+      subInfo: unit,
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
     );

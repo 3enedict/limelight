@@ -16,10 +16,10 @@ class Calendar extends StatefulWidget {
 }
 
 class CalendarState extends State<Calendar> with AutomaticKeepAliveClientMixin {
-  RecipeData currentRecipe = const RecipeData.empty();
+  RecipeData currentRecipe = RecipeData.empty();
   List<RecipeData> recipes = List.filled(
     numberOfDays * mealsPerDay,
-    const RecipeData.empty(),
+    RecipeData.empty(),
   );
 
   @override
@@ -79,7 +79,7 @@ class CalendarState extends State<Calendar> with AutomaticKeepAliveClientMixin {
             () => setState(
               () {
                 if (recipes[index * mealsPerDay] == currentRecipe) {
-                  recipes[index * mealsPerDay] = const RecipeData.empty();
+                  recipes[index * mealsPerDay] = RecipeData.empty();
                 } else {
                   recipes[index * mealsPerDay] = currentRecipe;
                 }
@@ -90,7 +90,7 @@ class CalendarState extends State<Calendar> with AutomaticKeepAliveClientMixin {
             () => setState(
               () {
                 if (recipes[index * mealsPerDay + 1] == currentRecipe) {
-                  recipes[index * mealsPerDay + 1] = const RecipeData.empty();
+                  recipes[index * mealsPerDay + 1] = RecipeData.empty();
                 } else {
                   recipes[index * mealsPerDay + 1] = currentRecipe;
                 }
