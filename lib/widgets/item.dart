@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:limelight/gradients.dart';
-
 class Item extends StatelessWidget {
   final String title;
   final String subTitle;

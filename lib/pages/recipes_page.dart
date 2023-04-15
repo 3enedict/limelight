@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/recipe.dart';
@@ -8,8 +7,6 @@ import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
   RecipesPage({super.key});
-  final StreamController<RecipeData> _controller =
-      StreamController<RecipeData>();
 
   final recipes = [
     RecipeData(
@@ -40,8 +37,6 @@ class RecipesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Calendar calendar = Calendar(stream: _controller.stream);
-
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -71,8 +66,13 @@ class RecipesPage extends StatelessWidget {
                   tag: index.toString(),
                   child: recipes[index].toItem(
                     () {
-                      _controller.add(recipes[index]);
-                      _gotoDetailsPage(context, index, calendar);
+                      _gotoDetailsPage(
+                        context,
+                        index,
+                        Calendar(
+                          currentRecipe: recipes[index],
+                        ),
+                      );
                     },
                   ),
                 );

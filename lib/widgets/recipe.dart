@@ -16,7 +16,7 @@ class RecipeData {
     required this.time,
     required this.price,
     this.unit = "per person",
-    required this.gradient,
+    this.gradient = limelightGradient,
   });
 
   RecipeData.empty({
