@@ -40,7 +40,7 @@ class CalendarItemState extends State<CalendarItem>
       subInfo: _enabled ? _storedRecipe.unit : "",
       accentGradient: _enabled
           ? _storedRecipe.gradient
-          : toBackgroundGradient(limelightGradient),
+          : toBackgroundGradientWithReducedColorChange(limelightGradient),
       backgroundGradient: toSurfaceGradient(limelightGradient),
       onPressed: () => setState(() {
         if (_storedRecipe.name == widget.currentRecipe.name) {

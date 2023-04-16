@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/calendar_item.dart';
+import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/gradients.dart';
 
 // Always keep numberOfDays even (highlighting current day doesn't work otherwise)
 const int numberOfDays = 15 * 2;
 const int mealsPerDay = 2;
+
+const double dayMargin = 20;
 
 class Calendar extends StatelessWidget {
   final RecipeData currentRecipe;
@@ -18,16 +21,20 @@ class Calendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double itemExtent = 70 * 2 + 15 * 2 + 20;
     final DateTime startDate = DateTime.now().subtract(
       const Duration(days: numberOfDays ~/ 2),
     );
 
+    const double scrollOffsetToCurrentDay =
+        (numberOfDays / 2) * (itemExtent * 2 + dayMargin) + dayMargin / 2;
+
     return ListView.builder(
       itemCount: numberOfDays,
-      itemExtent: itemExtent,
+      itemExtent: itemExtent * 2 + 20,
       controller: ScrollController(
-        initialScrollOffset: (numberOfDays / 2) * itemExtent + 20,
+        initialScrollOffset: scrollOffsetToCurrentDay -
+            (MediaQuery.of(context).size.height - itemExtent - 15 - 5) *
+                (1 / 3),
       ),
       itemBuilder: (BuildContext context, int index) {
         return Day(
@@ -60,7 +67,8 @@ class Day extends StatelessWidget {
 
     return Container(
       color: Colors.transparent,
-      margin: const EdgeInsets.fromLTRB(20, 10, 0, 10),
+      margin: const EdgeInsets.fromLTRB(0, dayMargin / 2, 0, dayMargin / 2),
+      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

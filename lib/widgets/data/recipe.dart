@@ -25,7 +25,7 @@ class RecipeData {
     this.time = '',
     this.price = '',
     this.unit = '',
-  }) : gradient = toBackgroundGradient(limelightGradient);
+  }) : gradient = toBackgroundGradientWithReducedColorChange(limelightGradient);
 
   Item toItem(VoidCallback onPressed) {
     return Item(

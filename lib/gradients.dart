@@ -34,6 +34,13 @@ List<Color> toBackgroundGradient(List<Color> gradient) {
   ];
 }
 
+List<Color> toBackgroundGradientWithReducedColorChange(List<Color> gradient) {
+  return [
+    toBackgroundColor(gradient[0], 0.135, 0.2),
+    toBackgroundColor(gradient[1], 0.11, 0.2),
+  ];
+}
+
 List<Color> toSurfaceGradient(List<Color> gradient) {
   return [
     toBackgroundColor(gradient[0], 0.22, 0.2),

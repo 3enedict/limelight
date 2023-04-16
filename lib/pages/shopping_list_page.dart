@@ -20,21 +20,21 @@ class ShoppingListPageState extends State<ShoppingListPage>
       season: 'Spring and fall',
       price: '\$1.00',
       unit: 'per head',
-      gradient: meatGradient,
+      gradient: limelightGradient,
     ),
     IngredientData(
       name: 'Kale',
       season: 'Fall and winter',
       price: '\$2.00',
       unit: 'per lb',
-      gradient: meatGradient,
+      gradient: limelightGradient,
     ),
     IngredientData(
       name: 'Arugula',
       season: 'Late spring and early fall',
       price: '\$10.00',
       unit: 'per lb',
-      gradient: meatGradient,
+      gradient: limelightGradient,
     ),
   ];
 
@@ -44,7 +44,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: toBackgroundGradient(meatGradient),
+          colors: toBackgroundGradient(limelightGradient),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -62,7 +62,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
                 season: 'Late spring and early fall',
                 price: '\$10.00',
                 unit: 'per lb',
-                gradient: meatGradient,
+                gradient: limelightGradient,
               ),
             );
           },
@@ -72,7 +72,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
           title: 'Shopping List',
           titleBackground: const AssetImage('assets/Shopping List.jpg'),
           padding: 80,
-          backgroundGradient: toBackgroundGradient(meatGradient),
+          backgroundGradient: toBackgroundGradient(limelightGradient),
           items: SliverAnimatedList(
             key: _key,
             initialItemCount: _items.length,

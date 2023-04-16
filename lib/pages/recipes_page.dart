@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/data/recipe.dart';
+import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/gradients.dart';
 
@@ -105,19 +106,50 @@ class RecipesPage extends StatelessWidget {
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
-            body: Column(
+            body: Stack(
               children: [
-                Expanded(
-                  child: calendar,
-                ),
-                const SizedBox(height: 5),
-                Hero(
-                  tag: index.toString(),
-                  child: currentRecipe.toItem(
-                    () => Navigator.of(context).pop(),
+                ShaderMask(
+                  shaderCallback: (bound) {
+                    return LinearGradient(
+                        end: FractionalOffset.topCenter,
+                        begin: FractionalOffset.bottomCenter,
+                        colors: [
+                          toBackgroundGradient(limelightGradient)[1],
+                          toBackgroundGradient(limelightGradient)[1],
+                          toBackgroundGradient(limelightGradient)[1]
+                              .withAlpha(0),
+                        ],
+                        stops: const [
+                          0.0,
+                          0.1,
+                          0.3,
+                        ]).createShader(bound);
+                  },
+                  blendMode: BlendMode.srcOver,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: calendar,
+                      ),
+                      const SizedBox(height: itemExtent + 5 + 15),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                Column(
+                  children: [
+                    Expanded(
+                      child: Container(),
+                    ),
+                    const SizedBox(height: 5),
+                    Hero(
+                      tag: index.toString(),
+                      child: currentRecipe.toItem(
+                        () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                  ],
+                )
               ],
             ),
           ),
