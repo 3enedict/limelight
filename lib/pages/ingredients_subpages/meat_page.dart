@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/ingredient.dart';
+import 'package:limelight/widgets/data/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
 class MeatsPage extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/item.dart';
+import 'package:limelight/widgets/items/item.dart';
 
 class ButtonItem extends StatefulWidget {
   final String title;

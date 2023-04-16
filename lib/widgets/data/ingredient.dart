@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/item.dart';
-import 'package:limelight/widgets/button_item.dart';
+import 'package:limelight/widgets/items/item.dart';
+import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/gradients.dart';
 
 class IngredientData {

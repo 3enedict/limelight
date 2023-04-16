@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:limelight/widgets/item.dart';
-import 'package:limelight/widgets/button_item.dart';
+import 'package:limelight/widgets/items/item.dart';
+import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipeData {
@@ -11,7 +12,7 @@ class RecipeData {
   final String unit;
   final List<Color> gradient;
 
-  RecipeData({
+  const RecipeData({
     required this.name,
     required this.time,
     required this.price,
@@ -48,4 +49,29 @@ class RecipeData {
       backgroundGradient: toSurfaceGradient(gradient),
     );
   }
+}
+
+Future<RecipeData> getRecipeData(String key) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final recipe = prefs.getStringList(key);
+
+  if (recipe == null) {
+    return RecipeData.empty();
+  } else {
+    return RecipeData(
+      name: recipe[0],
+      time: recipe[1],
+      price: recipe[2],
+    );
+  }
+}
+
+Future<bool> setRecipe(String key, RecipeData value) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.setStringList(key, [value.name, value.time, value.price]);
+}
+
+Future<bool> removeRecipe(String key) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.remove(key);
 }

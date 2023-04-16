@@ -22,9 +22,9 @@ class Limelight extends StatelessWidget {
         controller: PageController(
           initialPage: 1,
         ),
-        children: [
-          const ShoppingListPage(),
-          const IngredientsPage(),
+        children: const [
+          ShoppingListPage(),
+          IngredientsPage(),
           RecipesPage(),
         ],
       ),

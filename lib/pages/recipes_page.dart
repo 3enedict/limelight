@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/recipe.dart';
+import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
-  RecipesPage({super.key});
+  const RecipesPage({super.key});
 
-  final recipes = [
+  final recipes = const [
     RecipeData(
       name: 'Pasta and tomato sauce',
       time: '30 min',
