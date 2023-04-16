@@ -86,6 +86,13 @@ class RecipesPage extends StatelessWidget {
   }
 
   void _gotoDetailsPage(BuildContext context, int index, Calendar calendar) {
+    RecipeData currentRecipe = RecipeData(
+      name: recipes[index].name,
+      time: recipes[index].time,
+      price: recipes[index].price,
+      gradient: meatGradient,
+    );
+
     Navigator.of(context).push(
       CalendarRoute(
         builder: (_) => Container(
@@ -98,24 +105,19 @@ class RecipesPage extends StatelessWidget {
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.white24,
-              heroTag: 'CalendarFAB',
-              onPressed: () {},
-              child: const Icon(Icons.search),
-            ),
             body: Column(
               children: [
+                Expanded(
+                  child: calendar,
+                ),
+                const SizedBox(height: 5),
                 Hero(
                   tag: index.toString(),
-                  child: recipes[index].toItem(
+                  child: currentRecipe.toItem(
                     () => Navigator.of(context).pop(),
                   ),
                 ),
                 const SizedBox(height: 20),
-                Expanded(
-                  child: calendar,
-                ),
               ],
             ),
           ),
