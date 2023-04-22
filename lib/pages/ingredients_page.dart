@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:nested_scroll_views/material.dart';
 
 import 'package:limelight/pages/ingredients_subpages/leafy_greens_page.dart';
 import 'package:limelight/pages/ingredients_subpages/vegetables_page.dart';
@@ -35,44 +36,42 @@ class IngredientsPageState extends State<IngredientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: toBackgroundGradient(_gradients[_currentIndex]),
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+    return NestedPageView(
+      scrollDirection: Axis.vertical,
+      children: [
+        const Text("Hello"),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: toBackgroundGradient(_gradients[_currentIndex]),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: (index) => setState(() => _currentIndex = index),
+              elevation: 0,
+              showSelectedLabels: true,
+              showUnselectedLabels: false,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white,
+              items: [
+                bottomNavBarItem(leafyGreensGradient),
+                bottomNavBarItem(vegetablesGradient),
+                bottomNavBarItem(meatGradient),
+                bottomNavBarItem(fishGradient),
+              ],
+            ),
+            body: IndexedStack(
+              index: _currentIndex,
+              children: _screens,
+            ),
+          ),
         ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
-          elevation: 0,
-          showSelectedLabels: true,
-          showUnselectedLabels: false,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white,
-          items: [
-            bottomNavBarItem(leafyGreensGradient),
-            bottomNavBarItem(vegetablesGradient),
-            bottomNavBarItem(meatGradient),
-            bottomNavBarItem(fishGradient),
-          ],
-        ),
-        floatingActionButton: SearchBar(
-          title: "hello",
-          subTitle: "world",
-          info: "!",
-          subInfo: "yo",
-          accentGradient: limelightGradient,
-          backgroundGradient: toSurfaceGradient(limelightGradient),
-        ),
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _screens,
-        ),
-      ),
+      ],
     );
   }
 }
