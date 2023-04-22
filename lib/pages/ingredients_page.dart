@@ -8,6 +8,8 @@ import 'package:limelight/pages/ingredients_subpages/meat_page.dart';
 import 'package:limelight/pages/ingredients_subpages/fish_page.dart';
 import 'package:limelight/gradients.dart';
 
+import 'package:limelight/widgets/search_bar.dart';
+
 class IngredientsPage extends StatefulWidget {
   const IngredientsPage({super.key});
 
@@ -58,11 +60,13 @@ class IngredientsPageState extends State<IngredientsPage> {
             bottomNavBarItem(fishGradient),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white24,
-          heroTag: 'IngredientFAB$_currentIndex',
-          onPressed: () {},
-          child: const Icon(Icons.search),
+        floatingActionButton: SearchBar(
+          title: "hello",
+          subTitle: "world",
+          info: "!",
+          subInfo: "yo",
+          accentGradient: limelightGradient,
+          backgroundGradient: toSurfaceGradient(limelightGradient),
         ),
         body: IndexedStack(
           index: _currentIndex,
