@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nested_scroll_views/material.dart';
 
 class DefaultPage extends StatelessWidget {
   final String title;
@@ -40,7 +39,7 @@ class DefaultPage extends StatelessWidget {
       blendMode: BlendMode.srcOver,
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-        child: NestedCustomScrollView(
+        child: CustomScrollView(
           key: PageStorageKey(keyValue),
           slivers: <Widget>[
             SliverAppBar(

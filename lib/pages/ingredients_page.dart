@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:nested_scroll_views/material.dart';
 
+import 'package:limelight/pages/ingredients_search_page.dart';
 import 'package:limelight/pages/ingredients_subpages/leafy_greens_page.dart';
 import 'package:limelight/pages/ingredients_subpages/vegetables_page.dart';
 import 'package:limelight/pages/ingredients_subpages/meat_page.dart';
 import 'package:limelight/pages/ingredients_subpages/fish_page.dart';
 import 'package:limelight/gradients.dart';
-
-import 'package:limelight/widgets/search_bar.dart';
 
 class IngredientsPage extends StatefulWidget {
   const IngredientsPage({super.key});
@@ -36,42 +34,74 @@ class IngredientsPageState extends State<IngredientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return NestedPageView(
-      scrollDirection: Axis.vertical,
-      children: [
-        const Text("Hello"),
-        Container(
+    double fabDiameter = 58;
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: toBackgroundGradient(_gradients[_currentIndex]),
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        floatingActionButton: Container(
+          height: fabDiameter,
+          width: fabDiameter,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: toBackgroundGradient(_gradients[_currentIndex]),
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+              colors: toSurfaceGradient(limelightGradient),
             ),
+            borderRadius: BorderRadius.circular(fabDiameter / 2),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 5,
+                offset: Offset(0, 1),
+              ),
+            ],
           ),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (index) => setState(() => _currentIndex = index),
-              elevation: 0,
-              showSelectedLabels: true,
-              showUnselectedLabels: false,
-              selectedItemColor: Colors.white,
-              unselectedItemColor: Colors.white,
-              items: [
-                bottomNavBarItem(leafyGreensGradient),
-                bottomNavBarItem(vegetablesGradient),
-                bottomNavBarItem(meatGradient),
-                bottomNavBarItem(fishGradient),
-              ],
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              foregroundColor: Colors.white70,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(fabDiameter / 2),
+              ),
             ),
-            body: IndexedStack(
-              index: _currentIndex,
-              children: _screens,
-            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const IngredientsSearchPage(),
+                ),
+              );
+            },
+            child: const Icon(Icons.search),
           ),
         ),
-      ],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
+          elevation: 0,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white,
+          items: [
+            bottomNavBarItem(leafyGreensGradient),
+            bottomNavBarItem(vegetablesGradient),
+            bottomNavBarItem(meatGradient),
+            bottomNavBarItem(fishGradient),
+          ],
+        ),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _screens,
+        ),
+      ),
     );
   }
 }
