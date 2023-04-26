@@ -45,13 +45,17 @@ class IngredientsPageState extends State<IngredientsPage> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        floatingActionButton: Hero(
-          tag: 'IngredientsPage hero',
-          child: CustomFloatingActionButton(
-            gradient: _gradients[_currentIndex],
-            icon: const Icon(Icons.search),
-            onPressed: () => _gotoDetailsPage(context),
-          ),
+        floatingActionButton: CustomFloatingActionButton(
+          gradient: toSurfaceGradient(_gradients[_currentIndex]),
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const IngredientsSearchPage(),
+              ),
+            );
+          },
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -74,12 +78,6 @@ class IngredientsPageState extends State<IngredientsPage> {
         ),
       ),
     );
-  }
-
-  void _gotoDetailsPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute<void>(
-      builder: (BuildContext context) => const IngredientsSearchPage(),
-    ));
   }
 }
 

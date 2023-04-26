@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/gradients.dart';
-
 class CustomFloatingActionButton extends StatelessWidget {
   final double diameter;
   final List<Color> gradient;
@@ -23,7 +21,7 @@ class CustomFloatingActionButton extends StatelessWidget {
       width: diameter,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: toSurfaceGradient(gradient),
+          colors: gradient,
         ),
         borderRadius: BorderRadius.circular(diameter / 2),
         boxShadow: const [
@@ -34,7 +32,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           ),
         ],
       ),
-      child: ElevatedButton(
+      child: IconButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
@@ -44,7 +42,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: icon,
+        icon: icon,
       ),
     );
   }

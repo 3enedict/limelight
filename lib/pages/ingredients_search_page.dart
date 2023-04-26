@@ -8,6 +8,8 @@ class IngredientsSearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double searchBoxDiameter = 50;
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -18,22 +20,51 @@ class IngredientsSearchPage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        floatingActionButton: Hero(
-          tag: 'IngredientsPage hero',
-          child: Container(
-            margin: EdgeInsets.fromLTRB(
-              0,
-              0,
-              MediaQuery.of(context).size.width - 58 - 30,
-              50,
+        floatingActionButton: Container(
+          margin: const EdgeInsets.fromLTRB(30 + 10, 0, 10, 40),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: toSurfaceGradient(limelightGradient),
             ),
-            child: CustomFloatingActionButton(
-              gradient: toSurfaceGradient(limelightGradient),
-              icon: const Icon(Icons.arrow_back_sharp),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            borderRadius: BorderRadius.circular(searchBoxDiameter),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 5,
+                offset: Offset(0, 1),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(width: 30),
+              const Expanded(
+                child: TextField(
+                  autofocus: true,
+                  cursorColor: Colors.grey,
+                  style: TextStyle(color: Colors.white70),
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: InputBorder.none,
+                    hintText: 'Ingredient',
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                margin: const EdgeInsets.all(6),
+                child: CustomFloatingActionButton(
+                  diameter: searchBoxDiameter - 5,
+                  gradient: limelightGradient,
+                  icon: const Icon(Icons.assignment),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
           ),
         ),
         body: ShaderMask(
@@ -53,14 +84,7 @@ class IngredientsSearchPage extends StatelessWidget {
           blendMode: BlendMode.srcOver,
           child: Column(
             children: const [
-              Center(
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Ingredient',
-                  ),
-                ),
-              ),
+              Text("halo"),
             ],
           ),
         ),
