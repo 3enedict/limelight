@@ -18,12 +18,23 @@ class IngredientsSearchPage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        floatingActionButton: CustomFloatingActionButton(
-          gradient: toSurfaceGradient(limelightGradient),
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        floatingActionButton: Hero(
+          tag: 'IngredientsPage hero',
+          child: Container(
+            margin: EdgeInsets.fromLTRB(
+              0,
+              0,
+              MediaQuery.of(context).size.width - 58 - 30,
+              50,
+            ),
+            child: CustomFloatingActionButton(
+              gradient: toSurfaceGradient(limelightGradient),
+              icon: const Icon(Icons.arrow_back_sharp),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
         ),
         body: ShaderMask(
           shaderCallback: (bound) {
