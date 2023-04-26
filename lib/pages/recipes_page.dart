@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
+import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
@@ -48,11 +49,10 @@ class RecipesPage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white24,
-          heroTag: 'RecipeFAB',
+        floatingActionButton: CustomFloatingActionButton(
+          gradient: toSurfaceGradient(limelightGradient),
+          icon: const Icon(Icons.calendar_month_rounded),
           onPressed: () {},
-          child: const Icon(Icons.calendar_month_rounded),
         ),
         body: DefaultPage(
           title: 'Recipes',

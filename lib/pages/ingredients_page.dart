@@ -7,6 +7,7 @@ import 'package:limelight/pages/ingredients_subpages/leafy_greens_page.dart';
 import 'package:limelight/pages/ingredients_subpages/vegetables_page.dart';
 import 'package:limelight/pages/ingredients_subpages/meat_page.dart';
 import 'package:limelight/pages/ingredients_subpages/fish_page.dart';
+import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/gradients.dart';
 
 class IngredientsPage extends StatefulWidget {
@@ -34,8 +35,6 @@ class IngredientsPageState extends State<IngredientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    double fabDiameter = 58;
-
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -46,41 +45,17 @@ class IngredientsPageState extends State<IngredientsPage> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        floatingActionButton: Container(
-          height: fabDiameter,
-          width: fabDiameter,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: toSurfaceGradient(limelightGradient),
-            ),
-            borderRadius: BorderRadius.circular(fabDiameter / 2),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 5,
-                offset: Offset(0, 1),
+        floatingActionButton: CustomFloatingActionButton(
+          gradient: _gradients[_currentIndex],
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const IngredientsSearchPage(),
               ),
-            ],
-          ),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              foregroundColor: Colors.white70,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(fabDiameter / 2),
-              ),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const IngredientsSearchPage(),
-                ),
-              );
-            },
-            child: const Icon(Icons.search),
-          ),
+            );
+          },
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,

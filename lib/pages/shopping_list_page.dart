@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
+import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/widgets/data/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
@@ -51,9 +52,9 @@ class ShoppingListPageState extends State<ShoppingListPage>
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white24,
-          heroTag: 'ShoppingListFAB',
+        floatingActionButton: CustomFloatingActionButton(
+          gradient: toSurfaceGradient(limelightGradient),
+          icon: const Icon(Icons.add),
           onPressed: () {
             _key.currentState!.insertItem(_items.length);
             _items.add(
@@ -66,7 +67,6 @@ class ShoppingListPageState extends State<ShoppingListPage>
               ),
             );
           },
-          child: const Icon(Icons.add),
         ),
         body: DefaultPage(
           title: 'Shopping List',

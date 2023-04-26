@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/gradients.dart';
 
 class IngredientsSearchPage extends StatelessWidget {
@@ -17,12 +18,12 @@ class IngredientsSearchPage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'IngredientsSearchFAB',
+        floatingActionButton: CustomFloatingActionButton(
+          gradient: toSurfaceGradient(limelightGradient),
+          icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Icon(Icons.add),
         ),
         body: ShaderMask(
           shaderCallback: (bound) {
