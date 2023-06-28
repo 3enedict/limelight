@@ -48,9 +48,23 @@ class IngredientsPageState extends State<IngredientsPage> {
         floatingActionButton: CustomFloatingActionButton(
           gradient: toSurfaceGradient(_gradients[_currentIndex]),
           icon: const Icon(Icons.search),
-          onPressed: () => showSearch(
-            context: context,
-            delegate: SearchPage(),
+          onPressed: () => Navigator.push(
+            context,
+            PageRouteBuilder<void>(
+              pageBuilder: (BuildContext context, _, __) {
+                return Container(
+                  color: Colors.white70,
+                  child: const Text('My PageRoute'),
+                );
+              },
+              transitionsBuilder:
+                  (___, Animation<double> animation, ____, Widget child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+            ),
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
