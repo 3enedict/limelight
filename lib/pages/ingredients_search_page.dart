@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:limelight/widgets/data/ingredient.dart';
-import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/gradients.dart';
 
 class SearchPage extends StatelessWidget {
@@ -61,24 +62,60 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: toBackgroundGradient(limelightGradient),
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        floatingActionButton: CustomFloatingActionButton(
-          gradient: toSurfaceGradient(limelightGradient),
-          icon: const Icon(Icons.add),
-          onPressed: () => Navigator.pop(context),
-        ),
-        body: const Center(
-          child: Text("Search page"),
-        ),
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: toBackgroundGradient(limelightGradient),
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: const Center(
+                child: Text("Search page"),
+              ),
+            ),
+          ),
+          Container(
+            color: toBackgroundGradient(limelightGradient)[1],
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: toSurfaceGradientWithReducedColorChange(
+                      limelightGradient),
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Search...",
+                      style: GoogleFonts.workSans(
+                        textStyle: const TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white60,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

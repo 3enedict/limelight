@@ -48,6 +48,13 @@ List<Color> toSurfaceGradient(List<Color> gradient) {
   ];
 }
 
+List<Color> toSurfaceGradientWithReducedColorChange(List<Color> gradient) {
+  return [
+    toBackgroundColor(gradient[0], 0.215, 0.2),
+    toBackgroundColor(gradient[1], 0.20, 0.2),
+  ];
+}
+
 Color toBackgroundColor(Color color, double value, double saturation) {
   var hsvColor = HSVColor.fromColor(color);
   hsvColor = hsvColor.withValue(value);
