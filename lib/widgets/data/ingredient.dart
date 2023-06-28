@@ -4,7 +4,7 @@ import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/gradients.dart';
 
-class IngredientData {
+class IngredientData implements Comparable<IngredientData> {
   final String name;
   final String season;
   final String price;
@@ -41,4 +41,7 @@ class IngredientData {
       backgroundGradient: toSurfaceGradient(gradient),
     );
   }
+
+  @override
+  int compareTo(IngredientData other) => name.compareTo(other.name);
 }

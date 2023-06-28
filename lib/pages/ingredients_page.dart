@@ -48,14 +48,10 @@ class IngredientsPageState extends State<IngredientsPage> {
         floatingActionButton: CustomFloatingActionButton(
           gradient: toSurfaceGradient(_gradients[_currentIndex]),
           icon: const Icon(Icons.search),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const IngredientsSearchPage(),
-              ),
-            );
-          },
+          onPressed: () => showSearch(
+            context: context,
+            delegate: SearchPage(),
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,

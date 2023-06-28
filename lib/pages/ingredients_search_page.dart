@@ -1,94 +1,118 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/fab.dart';
+import 'package:limelight/widgets/data/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
-class IngredientsSearchPage extends StatelessWidget {
-  const IngredientsSearchPage({super.key});
+class SearchPage extends SearchDelegate {
+  List<IngredientData> ingredients = [
+    IngredientData(
+      name: 'Lettuce',
+      season: 'Spring and fall',
+      price: '\$1.00',
+      unit: 'per head',
+      gradient: meatGradient,
+    ),
+    IngredientData(
+      name: 'Kale',
+      season: 'Fall and winter',
+      price: '\$2.00',
+      unit: 'per lb',
+      gradient: meatGradient,
+    ),
+    IngredientData(
+      name: 'Arugula',
+      season: 'Late spring and early fall',
+      price: '\$10.00',
+      unit: 'per lb',
+      gradient: meatGradient,
+    ),
+    IngredientData(
+      name: 'Arugula',
+      season: 'Late spring and early fall',
+      price: '\$10.00',
+      unit: 'per lb',
+      gradient: meatGradient,
+    ),
+    IngredientData(
+      name: 'Arugula',
+      season: 'Late spring and early fall',
+      price: '\$10.00',
+      unit: 'per lb',
+      gradient: meatGradient,
+    ),
+    IngredientData(
+      name: 'Arugula',
+      season: 'Late spring and early fall',
+      price: '\$10.00',
+      unit: 'per lb',
+      gradient: meatGradient,
+    ),
+    IngredientData(
+      name: 'Arugula',
+      season: 'Late spring and early fall',
+      price: '\$10.00',
+      unit: 'per lb',
+      gradient: meatGradient,
+    ),
+  ];
 
   @override
-  Widget build(BuildContext context) {
-    double searchBoxDiameter = 50;
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: toBackgroundGradient(limelightGradient),
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        floatingActionButton: Container(
-          margin: const EdgeInsets.fromLTRB(30 + 10, 0, 10, 40),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: toSurfaceGradient(limelightGradient),
-            ),
-            borderRadius: BorderRadius.circular(searchBoxDiameter),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 5,
-                offset: Offset(0, 1),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(width: 30),
-              const Expanded(
-                child: TextField(
-                  autofocus: true,
-                  cursorColor: Colors.grey,
-                  style: TextStyle(color: Colors.white70),
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: InputBorder.none,
-                    hintText: 'Ingredient',
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Container(
-                margin: const EdgeInsets.all(6),
-                child: CustomFloatingActionButton(
-                  diameter: searchBoxDiameter - 5,
-                  gradient: limelightGradient,
-                  icon: const Icon(Icons.assignment),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-        body: ShaderMask(
-          shaderCallback: (bound) {
-            return LinearGradient(
-                end: FractionalOffset.topCenter,
-                begin: FractionalOffset.bottomCenter,
-                colors: [
-                  toBackgroundGradient(limelightGradient)[1],
-                  toBackgroundGradient(limelightGradient)[1].withAlpha(0),
-                ],
-                stops: const [
-                  0.0,
-                  0.3,
-                ]).createShader(bound);
-          },
-          blendMode: BlendMode.srcOver,
-          child: Column(
-            children: const [
-              Text("halo"),
-            ],
-          ),
-        ),
-      ),
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchQuery = [];
+
+    for (var ingredient in ingredients) {
+      if (ingredient.name.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(ingredient.name);
+      }
+    }
+
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index) {
+        var result = matchQuery[index];
+        return ListTile(title: Text(result));
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchQuery = [];
+
+    for (var ingredient in ingredients) {
+      if (ingredient.name.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(ingredient.name);
+      }
+    }
+
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index) {
+        var result = matchQuery[index];
+        return ListTile(title: Text(result));
+      },
     );
   }
 }

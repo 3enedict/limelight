@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   fluttericon: ^2.0.0
   google_fonts: ^3.0.1
+  search_page: ^2.3.0
   shared_preferences: ^2.1.0
 
 dev_dependencies:
