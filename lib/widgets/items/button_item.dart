@@ -42,6 +42,9 @@ class ButtonItemState extends State<ButtonItem>
           : widget.accentGradient,
       backgroundGradient:
           _enabled ? widget.accentGradient : widget.backgroundGradient,
+      textColor: _enabled ? const Color(0xFF111111) : const Color(0xFFEEEEEE),
+      subTextColor:
+          _enabled ? const Color(0xFF222222) : const Color(0xFFDDDDDD),
       onPressed: () => setState(() => _enabled = !_enabled),
     );
   }

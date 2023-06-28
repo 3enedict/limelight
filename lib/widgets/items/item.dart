@@ -12,6 +12,8 @@ class Item extends StatelessWidget {
   final VoidCallback onPressed;
   final List<Color> accentGradient;
   final List<Color> backgroundGradient;
+  final Color textColor;
+  final Color subTextColor;
 
   const Item({
     super.key,
@@ -22,6 +24,8 @@ class Item extends StatelessWidget {
     required this.onPressed,
     required this.accentGradient,
     required this.backgroundGradient,
+    this.textColor = const Color(0xFFEEEEEE),
+    this.subTextColor = const Color(0xFFDDDDDD),
   });
 
   @override
@@ -70,9 +74,9 @@ class Item extends StatelessWidget {
                       Text(
                         title,
                         style: GoogleFonts.workSans(
-                          textStyle: const TextStyle(
+                          textStyle: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFFEEEEEE),
+                            color: textColor,
                           ),
                         ),
                       ),
@@ -87,7 +91,7 @@ class Item extends StatelessWidget {
                             fontSize: 14 *
                                 MediaQuery.of(context).textScaleFactor *
                                 0.8,
-                            color: const Color(0xFFDDDDDD),
+                            color: subTextColor,
                           ),
                         ),
                       ),
@@ -106,7 +110,7 @@ class Item extends StatelessWidget {
                         fontStyle: FontStyle.italic,
                         fontSize:
                             14 * MediaQuery.of(context).textScaleFactor * 0.85,
-                        color: const Color(0xFFEEEEEE),
+                        color: textColor,
                       ),
                     ),
                   ),
@@ -120,7 +124,7 @@ class Item extends StatelessWidget {
                         fontStyle: FontStyle.italic,
                         fontSize:
                             14 * MediaQuery.of(context).textScaleFactor * 0.6,
-                        color: const Color(0xFFDDDDDD),
+                        color: subTextColor,
                       ),
                     ),
                   ),

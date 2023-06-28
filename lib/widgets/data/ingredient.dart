@@ -25,7 +25,7 @@ class IngredientData implements Comparable<IngredientData> {
       subTitle: season,
       info: price,
       subInfo: unit,
-      accentGradient: toTonedDownGradient(gradient),
+      accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
     );
@@ -37,7 +37,7 @@ class IngredientData implements Comparable<IngredientData> {
       subTitle: season,
       info: price,
       subInfo: unit,
-      accentGradient: toTonedDownGradient(gradient),
+      accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
     );
   }

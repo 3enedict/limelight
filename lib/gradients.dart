@@ -62,18 +62,3 @@ Color toBackgroundColor(Color color, double value, double saturation) {
 
   return hsvColor.toColor();
 }
-
-List<Color> toTonedDownGradient(List<Color> gradient) {
-  return [
-    toTonedDownColor(gradient[0]),
-    toTonedDownColor(gradient[1]),
-  ];
-}
-
-Color toTonedDownColor(Color color) {
-  var hsvColor = HSVColor.fromColor(color);
-  var value = hsvColor.value - 0.2;
-  hsvColor = hsvColor.withValue(value);
-
-  return hsvColor.toColor();
-}
