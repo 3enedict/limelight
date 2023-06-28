@@ -52,10 +52,7 @@ class IngredientsPageState extends State<IngredientsPage> {
             context,
             PageRouteBuilder<void>(
               pageBuilder: (BuildContext context, _, __) {
-                return Container(
-                  color: Colors.white70,
-                  child: const Text('My PageRoute'),
-                );
+                return SearchPage();
               },
               transitionsBuilder:
                   (___, Animation<double> animation, ____, Widget child) {

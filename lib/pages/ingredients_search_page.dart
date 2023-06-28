@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/data/ingredient.dart';
+import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/gradients.dart';
 
-class SearchPage extends SearchDelegate {
-  List<IngredientData> ingredients = [
+class SearchPage extends StatelessWidget {
+  SearchPage({super.key});
+
+  final ingredients = [
     IngredientData(
       name: 'Lettuce',
       season: 'Spring and fall',
@@ -57,62 +60,26 @@ class SearchPage extends SearchDelegate {
   ];
 
   @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: toBackgroundGradient(limelightGradient),
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-
-    for (var ingredient in ingredients) {
-      if (ingredient.name.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(ingredient.name);
-      }
-    }
-
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(title: Text(result));
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-
-    for (var ingredient in ingredients) {
-      if (ingredient.name.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(ingredient.name);
-      }
-    }
-
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(title: Text(result));
-      },
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        floatingActionButton: CustomFloatingActionButton(
+          gradient: toSurfaceGradient(limelightGradient),
+          icon: const Icon(Icons.add),
+          onPressed: () => Navigator.pop(context),
+        ),
+        body: const Center(
+          child: Text("Search page"),
+        ),
+      ),
     );
   }
 }
