@@ -230,13 +230,31 @@ class SearchPage extends StatelessWidget {
               ),
               child: Row(
                 children: [
+                  const Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.search,
+                      color: Color(0xFFDDDDDD),
+                      size: 20.0,
+                    ),
+                  ),
                   Expanded(
-                    child: Text(
-                      "Search...",
+                    child: TextField(
+                      autofocus: true,
+                      cursorColor: const Color(0xFFEEEEEE),
+                      decoration: const InputDecoration(
+                        hintText: "Search...",
+                        hintStyle: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Color(0xFFEEEEEE),
+                        ),
+                        border: InputBorder.none,
+                      ),
+                      expands: false,
                       style: GoogleFonts.workSans(
                         textStyle: const TextStyle(
                           fontStyle: FontStyle.italic,
-                          color: Colors.white70,
+                          color: Color(0xFFEEEEEE),
                         ),
                       ),
                     ),
@@ -244,7 +262,7 @@ class SearchPage extends StatelessWidget {
                   IconButton(
                     icon: const Icon(
                       Icons.arrow_back,
-                      color: Colors.white60,
+                      color: Color(0xFFDDDDDD),
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
