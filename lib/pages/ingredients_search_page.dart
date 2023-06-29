@@ -5,8 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:limelight/widgets/data/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
-class SearchPage extends StatelessWidget {
-  SearchPage({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
+  @override
+  State<SearchPage> createState() => SearchPageState();
+}
+
+class SearchPageState extends State<SearchPage> {
+  String _query = "";
 
   final ingredients = [
     IngredientData(
@@ -193,8 +200,27 @@ class SearchPage extends StatelessWidget {
     ),
   ];
 
+  List<IngredientData> sort(String query) {
+    List<IngredientData> matches = [];
+    String cleanQuery = query.toLowerCase().trim();
+
+    if (cleanQuery != "") {
+      for (var ingredient in ingredients) {
+        String cleanIngredient = ingredient.name.toLowerCase().trim();
+
+        if (cleanIngredient.contains(cleanQuery)) {
+          matches.add(ingredient);
+        }
+      }
+    }
+
+    return matches;
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<IngredientData> sortedIngredients = sort(_query);
+
     return Scaffold(
       body: Column(
         children: [
@@ -209,9 +235,9 @@ class SearchPage extends StatelessWidget {
               ),
               child: ListView.builder(
                 reverse: true,
-                itemCount: ingredients.length,
+                itemCount: sortedIngredients.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ingredients[index].toButtonItem();
+                  return sortedIngredients[index].toButtonItem();
                 },
               ),
             ),
@@ -257,13 +283,11 @@ class SearchPage extends StatelessWidget {
                           color: Color(0xFFEEEEEE),
                         ),
                       ),
+                      onChanged: (query) => setState(() => _query = query),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Color(0xFFDDDDDD),
-                    ),
+                  BackButton(
+                    color: const Color(0xFFDDDDDD),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
