@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/data/ingredient.dart';
+import 'package:limelight/ingredients.dart';
 import 'package:limelight/gradients.dart';
 
 class MeatsPage extends StatelessWidget {
@@ -9,58 +9,6 @@ class MeatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ingredients = [
-      IngredientData(
-        name: 'Lettuce',
-        season: 'Spring and fall',
-        price: '\$1.00',
-        unit: 'per head',
-        gradient: meatGradient,
-      ),
-      IngredientData(
-        name: 'Kale',
-        season: 'Fall and winter',
-        price: '\$2.00',
-        unit: 'per lb',
-        gradient: meatGradient,
-      ),
-      IngredientData(
-        name: 'Arugula',
-        season: 'Late spring and early fall',
-        price: '\$10.00',
-        unit: 'per lb',
-        gradient: meatGradient,
-      ),
-      IngredientData(
-        name: 'Arugula',
-        season: 'Late spring and early fall',
-        price: '\$10.00',
-        unit: 'per lb',
-        gradient: meatGradient,
-      ),
-      IngredientData(
-        name: 'Arugula',
-        season: 'Late spring and early fall',
-        price: '\$10.00',
-        unit: 'per lb',
-        gradient: meatGradient,
-      ),
-      IngredientData(
-        name: 'Arugula',
-        season: 'Late spring and early fall',
-        price: '\$10.00',
-        unit: 'per lb',
-        gradient: meatGradient,
-      ),
-      IngredientData(
-        name: 'Arugula',
-        season: 'Late spring and early fall',
-        price: '\$10.00',
-        unit: 'per lb',
-        gradient: meatGradient,
-      ),
-    ];
-
     return DefaultPage(
       title: 'Meat & Eggs',
       titleBackground: const AssetImage('assets/Meat.jpg'),
@@ -68,9 +16,9 @@ class MeatsPage extends StatelessWidget {
       items: SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            return ingredients[index].toButtonItem();
+            return meats[index].toButtonItem();
           },
-          childCount: ingredients.length,
+          childCount: meats.length,
         ),
       ),
     );

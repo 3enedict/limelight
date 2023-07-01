@@ -5,37 +5,11 @@ import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
+import 'package:limelight/recipes.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
   const RecipesPage({super.key});
-
-  final recipes = const [
-    RecipeData(
-      name: 'Pasta and tomato sauce',
-      time: '30 min',
-      price: '\$0.50',
-      gradient: limelightGradient,
-    ),
-    RecipeData(
-      name: 'Fried rice',
-      time: '40 min',
-      price: '\$1.00',
-      gradient: limelightGradient,
-    ),
-    RecipeData(
-      name: 'Tomatoes and mozzarella',
-      time: '15 min',
-      price: '\$1.50',
-      gradient: limelightGradient,
-    ),
-    RecipeData(
-      name: 'Leek and potato soup',
-      time: '30 min',
-      price: '\$0.30',
-      gradient: limelightGradient,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {

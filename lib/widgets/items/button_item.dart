@@ -38,7 +38,7 @@ class ButtonItemState extends State<ButtonItem>
       info: widget.info,
       subInfo: widget.subInfo,
       accentGradient: _enabled
-          ? const [Color(0xBBFFFFFF), Color(0xBBFFFFFF)]
+          ? const [Color(0xFF222222), Color(0xFF222222)]
           : widget.accentGradient,
       backgroundGradient:
           _enabled ? widget.accentGradient : widget.backgroundGradient,
