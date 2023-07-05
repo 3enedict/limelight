@@ -6,12 +6,12 @@ import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
 
 class CalendarItem extends StatefulWidget {
-  final String currentRecipeName;
+  final int recipeId;
   final String recipeKey;
 
   const CalendarItem({
     super.key,
-    required this.currentRecipeName,
+    required this.recipeId,
     required this.recipeKey,
   });
 
@@ -21,7 +21,6 @@ class CalendarItem extends StatefulWidget {
 
 class CalendarItemState extends State<CalendarItem>
     with AutomaticKeepAliveClientMixin {
-  RecipeData _storedRecipe = RecipeData.empty();
   bool _enabled = false;
 
   @override
@@ -35,23 +34,18 @@ class CalendarItemState extends State<CalendarItem>
     super.build(context);
 
     return Item(
-      title: _enabled ? widget.currentRecipeName : "",
-      subTitle: _enabled ? _storedRecipe.difficulty : "",
-      info: _enabled ? _storedRecipe.price : "",
-      subInfo: _enabled ? "per person" : "",
+      title: _enabled ? "" : recipes[widget.recipeId].name,
+      subTitle: _enabled ? "" : recipes[widget.recipeId].difficulty,
+      info: _enabled ? "" : recipes[widget.recipeId].price,
+      subInfo: _enabled ? "" : "per person",
       accentGradient: _enabled
-          ? _storedRecipe.gradient
-          : toBackgroundGradientWithReducedColorChange(limelightGradient),
+          ? toBackgroundGradientWithReducedColorChange(limelightGradient)
+          : recipes[widget.recipeId].gradient,
       backgroundGradient: toSurfaceGradient(limelightGradient),
       onPressed: () => setState(() {
-        if (_storedRecipe == RecipeData.empty()) {
-          _storedRecipe =
-              recipes[widget.currentRecipeName] ?? RecipeData.empty();
-        }
-
-        print(_storedRecipe.difficulty);
         if (_enabled) removeRecipe(widget.recipeKey);
-        if (!_enabled) setRecipe(widget.recipeKey, widget.currentRecipeName);
+        if (!_enabled) setRecipe(widget.recipeKey, widget.recipeId);
+
         _enabled = !_enabled;
       }),
     );
@@ -59,7 +53,7 @@ class CalendarItemState extends State<CalendarItem>
 
   void loadRecipe() {
     getRecipeData(widget.recipeKey).then(
-      (recipe) => setState(() => _storedRecipe = recipe),
+      (recipe) => setState(() => _enabled = true),
     );
   }
 

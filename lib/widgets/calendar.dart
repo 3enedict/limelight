@@ -11,11 +11,11 @@ const int mealsPerDay = 2;
 const double dayMargin = 20;
 
 class Calendar extends StatelessWidget {
-  final String currentRecipeName;
+  final int recipeId;
 
   const Calendar({
     super.key,
-    required this.currentRecipeName,
+    required this.recipeId,
   });
 
   @override
@@ -39,7 +39,7 @@ class Calendar extends StatelessWidget {
         return Day(
           date: startDate.add(Duration(days: index)),
           currentDay: index == numberOfDays ~/ 2,
-          currentRecipeName: currentRecipeName,
+          recipeId: recipeId,
         );
       },
     );
@@ -49,13 +49,13 @@ class Calendar extends StatelessWidget {
 class Day extends StatelessWidget {
   final DateTime date;
   final bool currentDay;
-  final String currentRecipeName;
+  final int recipeId;
 
   const Day({
     super.key,
     required this.date,
     required this.currentDay,
-    required this.currentRecipeName,
+    required this.recipeId,
   });
 
   @override
@@ -99,11 +99,11 @@ class Day extends StatelessWidget {
               child: Column(
                 children: [
                   CalendarItem(
-                    currentRecipeName: currentRecipeName,
+                    recipeId: recipeId,
                     recipeKey: "$year/$month/$day/lunch",
                   ),
                   CalendarItem(
-                    currentRecipeName: currentRecipeName,
+                    recipeId: recipeId,
                     recipeKey: "$year/$month/$day/dinner",
                   ),
                 ],

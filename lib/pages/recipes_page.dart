@@ -13,24 +13,6 @@ class RecipesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Hero> recipeHeroes = [];
-    recipes.forEach(
-      (key, value) => recipeHeroes.add(
-        Hero(
-          tag: key,
-          child: value.toItem(
-            key,
-            () {
-              _gotoDetailsPage(
-                context,
-                key,
-              );
-            },
-          ),
-        ),
-      ),
-    );
-
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -55,7 +37,17 @@ class RecipesPage extends StatelessWidget {
           items: SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return recipeHeroes[index];
+                return Hero(
+                  tag: index,
+                  child: recipes[index].toItem(
+                    () {
+                      _gotoDetailsPage(
+                        context,
+                        index,
+                      );
+                    },
+                  ),
+                );
               },
               childCount: recipes.length,
             ),
@@ -65,7 +57,7 @@ class RecipesPage extends StatelessWidget {
     );
   }
 
-  void _gotoDetailsPage(BuildContext context, String currentRecipeName) {
+  void _gotoDetailsPage(BuildContext context, int index) {
     RecipeData currentRecipe = RecipeData.empty();
 
     Navigator.of(context).push(
@@ -103,7 +95,7 @@ class RecipesPage extends StatelessWidget {
                   child: Column(
                     children: [
                       Expanded(
-                        child: Calendar(currentRecipeName: currentRecipeName),
+                        child: Calendar(recipeId: index),
                       ),
                       const SizedBox(height: itemExtent + 5 + 15),
                     ],

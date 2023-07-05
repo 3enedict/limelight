@@ -8,6 +8,7 @@ import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipeData {
+  final String name;
   final String difficulty;
   final String price;
   final List<IngredientData> ingredientList;
@@ -15,6 +16,7 @@ class RecipeData {
   final List<Color> gradient;
 
   const RecipeData({
+    required this.name,
     required this.difficulty,
     required this.price,
     required this.ingredientList,
@@ -23,6 +25,7 @@ class RecipeData {
   });
 
   RecipeData.empty({
+    this.name = '',
     this.difficulty = '',
     this.price = '',
   })  : gradient =
@@ -30,7 +33,7 @@ class RecipeData {
         ingredientList = [],
         instructionSet = [];
 
-  Item toItem(String name, VoidCallback onPressed) {
+  Item toItem(VoidCallback onPressed) {
     return Item(
       title: name,
       subTitle: difficulty,
@@ -42,7 +45,7 @@ class RecipeData {
     );
   }
 
-  ButtonItem toButtonItem(String name) {
+  ButtonItem toButtonItem() {
     return ButtonItem(
       title: name,
       subTitle: difficulty,
@@ -56,18 +59,18 @@ class RecipeData {
 
 Future<RecipeData> getRecipeData(String key) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final recipe = prefs.getString(key);
+  final recipeId = prefs.getInt(key);
 
-  if (recipe == null) {
+  if (recipeId == null) {
     return RecipeData.empty();
   } else {
-    return recipes[recipe] ?? RecipeData.empty();
+    return recipes[recipeId];
   }
 }
 
-Future<bool> setRecipe(String key, String name) async {
+Future<bool> setRecipe(String key, int id) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.setString(key, name);
+  return prefs.setInt(key, id);
 }
 
 Future<bool> removeRecipe(String key) async {
