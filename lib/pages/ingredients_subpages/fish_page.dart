@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
-import 'package:limelight/ingredients.dart';
+import 'package:limelight/data/ingredients.dart';
 
 class FishPage extends StatelessWidget {
   const FishPage({super.key});

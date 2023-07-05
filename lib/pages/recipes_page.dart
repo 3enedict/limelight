@@ -5,7 +5,7 @@ import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
-import 'package:limelight/recipes.dart';
+import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
@@ -13,6 +13,24 @@ class RecipesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Hero> recipeHeroes = [];
+    recipes.forEach(
+      (key, value) => recipeHeroes.add(
+        Hero(
+          tag: key,
+          child: value.toItem(
+            key,
+            () {
+              _gotoDetailsPage(
+                context,
+                key,
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -37,20 +55,7 @@ class RecipesPage extends StatelessWidget {
           items: SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Hero(
-                  tag: index.toString(),
-                  child: recipes[index].toItem(
-                    () {
-                      _gotoDetailsPage(
-                        context,
-                        index,
-                        Calendar(
-                          currentRecipe: recipes[index],
-                        ),
-                      );
-                    },
-                  ),
-                );
+                return recipeHeroes[index];
               },
               childCount: recipes.length,
             ),
@@ -60,13 +65,8 @@ class RecipesPage extends StatelessWidget {
     );
   }
 
-  void _gotoDetailsPage(BuildContext context, int index, Calendar calendar) {
-    RecipeData currentRecipe = RecipeData(
-      name: recipes[index].name,
-      time: recipes[index].time,
-      price: recipes[index].price,
-      gradient: meatGradient,
-    );
+  void _gotoDetailsPage(BuildContext context, String currentRecipeName) {
+    RecipeData currentRecipe = RecipeData.empty();
 
     Navigator.of(context).push(
       CalendarRoute(
@@ -103,7 +103,7 @@ class RecipesPage extends StatelessWidget {
                   child: Column(
                     children: [
                       Expanded(
-                        child: calendar,
+                        child: Calendar(currentRecipeName: currentRecipeName),
                       ),
                       const SizedBox(height: itemExtent + 5 + 15),
                     ],
@@ -116,9 +116,9 @@ class RecipesPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     Hero(
-                      tag: index.toString(),
-                      child: currentRecipe.toItem(
-                        () => Navigator.of(context).pop(),
+                      tag: currentRecipe,
+                      child: BackButton(
+                        onPressed: () => Navigator.of(context).pop(),
                       ),
                     ),
                     const SizedBox(height: 15),

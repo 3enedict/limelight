@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:limelight/widgets/data/ingredient.dart';
+import 'package:limelight/data/ingredients.dart';
 import 'package:limelight/gradients.dart';
-import 'package:limelight/ingredients.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -21,7 +21,7 @@ class SearchPageState extends State<SearchPage> {
     String cleanQuery = query.toLowerCase().trim();
 
     if (cleanQuery != "") {
-      for (var ingredient in ingredients) {
+      for (var ingredient in vegetables) {
         String cleanIngredient = ingredient.name.toLowerCase().trim();
 
         if (cleanIngredient.contains(cleanQuery)) {

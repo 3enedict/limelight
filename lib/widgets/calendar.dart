@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/calendar_item.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/gradients.dart';
@@ -12,11 +11,11 @@ const int mealsPerDay = 2;
 const double dayMargin = 20;
 
 class Calendar extends StatelessWidget {
-  final RecipeData currentRecipe;
+  final String currentRecipeName;
 
   const Calendar({
     super.key,
-    required this.currentRecipe,
+    required this.currentRecipeName,
   });
 
   @override
@@ -40,7 +39,7 @@ class Calendar extends StatelessWidget {
         return Day(
           date: startDate.add(Duration(days: index)),
           currentDay: index == numberOfDays ~/ 2,
-          currentRecipe: currentRecipe,
+          currentRecipeName: currentRecipeName,
         );
       },
     );
@@ -50,13 +49,13 @@ class Calendar extends StatelessWidget {
 class Day extends StatelessWidget {
   final DateTime date;
   final bool currentDay;
-  final RecipeData currentRecipe;
+  final String currentRecipeName;
 
   const Day({
     super.key,
     required this.date,
     required this.currentDay,
-    required this.currentRecipe,
+    required this.currentRecipeName,
   });
 
   @override
@@ -100,12 +99,12 @@ class Day extends StatelessWidget {
               child: Column(
                 children: [
                   CalendarItem(
+                    currentRecipeName: currentRecipeName,
                     recipeKey: "$year/$month/$day/lunch",
-                    currentRecipe: currentRecipe,
                   ),
                   CalendarItem(
+                    currentRecipeName: currentRecipeName,
                     recipeKey: "$year/$month/$day/dinner",
-                    currentRecipe: currentRecipe,
                   ),
                 ],
               ),

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
+import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
 
 class CalendarItem extends StatefulWidget {
-  final RecipeData currentRecipe;
+  final String currentRecipeName;
   final String recipeKey;
 
   const CalendarItem({
     super.key,
-    required this.currentRecipe,
+    required this.currentRecipeName,
     required this.recipeKey,
   });
 
@@ -21,7 +22,7 @@ class CalendarItem extends StatefulWidget {
 class CalendarItemState extends State<CalendarItem>
     with AutomaticKeepAliveClientMixin {
   RecipeData _storedRecipe = RecipeData.empty();
-  bool _enabled = true;
+  bool _enabled = false;
 
   @override
   void initState() {
@@ -34,23 +35,24 @@ class CalendarItemState extends State<CalendarItem>
     super.build(context);
 
     return Item(
-      title: _enabled ? _storedRecipe.name : "",
-      subTitle: _enabled ? _storedRecipe.time : "",
+      title: _enabled ? widget.currentRecipeName : "",
+      subTitle: _enabled ? _storedRecipe.difficulty : "",
       info: _enabled ? _storedRecipe.price : "",
-      subInfo: _enabled ? _storedRecipe.unit : "",
+      subInfo: _enabled ? "per person" : "",
       accentGradient: _enabled
           ? _storedRecipe.gradient
           : toBackgroundGradientWithReducedColorChange(limelightGradient),
       backgroundGradient: toSurfaceGradient(limelightGradient),
       onPressed: () => setState(() {
-        if (_storedRecipe.name == widget.currentRecipe.name) {
-          if (_enabled) removeRecipe(widget.recipeKey);
-          if (!_enabled) setRecipe(widget.recipeKey, _storedRecipe);
-          _enabled = !_enabled;
-        } else {
-          _storedRecipe = widget.currentRecipe;
-          setRecipe(widget.recipeKey, _storedRecipe);
+        if (_storedRecipe == RecipeData.empty()) {
+          _storedRecipe =
+              recipes[widget.currentRecipeName] ?? RecipeData.empty();
         }
+
+        print(_storedRecipe.difficulty);
+        if (_enabled) removeRecipe(widget.recipeKey);
+        if (!_enabled) setRecipe(widget.recipeKey, widget.currentRecipeName);
+        _enabled = !_enabled;
       }),
     );
   }
