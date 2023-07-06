@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/widgets/data/recipe.dart';
-import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
@@ -72,50 +73,67 @@ class RecipesPage extends StatelessWidget {
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
-            body: Stack(
+            body: Column(
               children: [
-                ShaderMask(
-                  shaderCallback: (bound) {
-                    return LinearGradient(
-                        end: FractionalOffset.topCenter,
-                        begin: FractionalOffset.bottomCenter,
-                        colors: [
-                          toBackgroundGradient(limelightGradient)[1],
-                          toBackgroundGradient(limelightGradient)[1],
-                          toBackgroundGradient(limelightGradient)[1]
-                              .withAlpha(0),
-                        ],
-                        stops: const [
-                          0.0,
-                          0.1,
-                          0.3,
-                        ]).createShader(bound);
-                  },
-                  blendMode: BlendMode.srcOver,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Calendar(recipeId: index),
-                      ),
-                      const SizedBox(height: itemExtent + 5 + 15),
-                    ],
+                Expanded(
+                  child: ShaderMask(
+                    shaderCallback: (bound) {
+                      return LinearGradient(
+                          end: FractionalOffset.topCenter,
+                          begin: FractionalOffset.bottomCenter,
+                          colors: [
+                            toBackgroundGradient(limelightGradient)[1],
+                            toBackgroundGradient(limelightGradient)[1]
+                                .withAlpha(0),
+                          ],
+                          stops: const [
+                            0.0,
+                            0.3,
+                          ]).createShader(bound);
+                    },
+                    blendMode: BlendMode.srcOver,
+                    child: Calendar(recipeId: index),
                   ),
                 ),
-                Column(
-                  children: [
-                    Expanded(
-                      child: Container(),
-                    ),
-                    const SizedBox(height: 5),
-                    Hero(
-                      tag: currentRecipe,
-                      child: BackButton(
+                Hero(
+                  tag: currentRecipe,
+                  child: Card(
+                    color: Colors.transparent,
+                    elevation: 4,
+                    margin: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        gradient: const LinearGradient(
+                          colors: limelightGradient,
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                      ),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width - 60,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
                         onPressed: () => Navigator.of(context).pop(),
+                        child: Text(
+                          "Back",
+                          style: GoogleFonts.workSans(
+                            fontSize: 14 *
+                                MediaQuery.of(context).textScaleFactor *
+                                1.1,
+                            textStyle: const TextStyle(color: Colors.white70),
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                  ],
-                )
+                  ),
+                ),
               ],
             ),
           ),
