@@ -37,6 +37,9 @@ class SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     List<IngredientData> sortedIngredients = sort(_query);
 
+    double searchBarHeight = 50;
+    double distanceBetweenItems = 15;
+
     return Scaffold(
       body: Column(
         children: [
@@ -60,51 +63,149 @@ class SearchPageState extends State<SearchPage> {
           ),
           Container(
             color: toBackgroundGradient(limelightGradient)[1],
-            child: Container(
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: toSurfaceGradientWithReducedColorChange(
-                      limelightGradient),
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: Icon(
-                      Icons.search,
-                      color: Color(0xFFDDDDDD),
-                      size: 20.0,
+                  SizedBox(
+                    width: distanceBetweenItems,
+                  ),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(searchBarHeight / 2),
                     ),
+                    color: Colors.transparent,
+                    elevation: 4,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(searchBarHeight / 2),
+                        gradient: const LinearGradient(
+                          colors: limelightGradient,
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                      ),
+                      height: searchBarHeight,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(searchBarHeight / 2),
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(
+                          "Back",
+                          style: GoogleFonts.workSans(
+                            fontSize: 14 *
+                                MediaQuery.of(context).textScaleFactor *
+                                1.1,
+                            textStyle: const TextStyle(color: Colors.white70),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: distanceBetweenItems,
                   ),
                   Expanded(
-                    child: TextField(
-                      autofocus: true,
-                      cursorColor: const Color(0xFFEEEEEE),
-                      decoration: const InputDecoration(
-                        hintText: "Search...",
-                        hintStyle: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: Color(0xFFEEEEEE),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: toSurfaceGradientWithReducedColorChange(
+                              limelightGradient),
                         ),
-                        border: InputBorder.none,
+                        borderRadius:
+                            BorderRadius.circular(searchBarHeight / 2),
                       ),
-                      expands: false,
-                      style: GoogleFonts.workSans(
-                        textStyle: const TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: Color(0xFFEEEEEE),
-                        ),
+                      height: searchBarHeight,
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          const Icon(
+                            Icons.search,
+                            color: Color(0xFFDDDDDD),
+                            size: 20.0,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextField(
+                              autofocus: true,
+                              cursorColor: const Color(0xFFEEEEEE),
+                              decoration: const InputDecoration(
+                                hintText: "Search...",
+                                hintStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Color(0xFFEEEEEE),
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(bottom: 4),
+                              ),
+                              expands: false,
+                              style: GoogleFonts.workSans(
+                                textStyle: const TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Color(0xFFEEEEEE),
+                                ),
+                              ),
+                              onChanged: (query) =>
+                                  setState(() => _query = query),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                        ],
                       ),
-                      onChanged: (query) => setState(() => _query = query),
                     ),
                   ),
-                  BackButton(
-                    color: const Color(0xFFDDDDDD),
-                    onPressed: () => Navigator.pop(context),
+                  SizedBox(
+                    width: distanceBetweenItems,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(searchBarHeight / 2),
+                      gradient: const LinearGradient(
+                        colors: limelightGradient,
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                    ),
+                    height: searchBarHeight,
+                    width: searchBarHeight,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        const Icon(
+                          Icons.check,
+                          color: Color(0xFFDDDDDD),
+                          size: 25.0,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(searchBarHeight / 2),
+                            ),
+                          ),
+                          onPressed: () {},
+                          child: const SizedBox.expand(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: distanceBetweenItems,
                   ),
                 ],
               ),
