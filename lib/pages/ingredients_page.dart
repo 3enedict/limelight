@@ -54,8 +54,12 @@ class IngredientsPageState extends State<IngredientsPage> {
               pageBuilder: (BuildContext context, _, __) {
                 return SearchPage();
               },
-              transitionsBuilder:
-                  (___, Animation<double> animation, ____, Widget child) {
+              transitionsBuilder: (
+                ___,
+                Animation<double> animation,
+                ____,
+                Widget child,
+              ) {
                 return FadeTransition(
                   opacity: animation,
                   child: child,
