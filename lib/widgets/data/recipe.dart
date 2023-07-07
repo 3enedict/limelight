@@ -7,20 +7,30 @@ import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
 
+class Variation {
+  String name;
+  List<String> variations;
+
+  Variation({
+    required this.name,
+    required this.variations,
+  });
+}
+
 class RecipeData {
   final String name;
   final String difficulty;
   final String price;
-  final List<IngredientData> ingredientList;
-  final List<String> instructionSet;
+  final List<Variation> variations;
+  final (List<IngredientData>, List<String>) Function(List<String>) generate;
   final List<Color> gradient;
 
   const RecipeData({
     required this.name,
     required this.difficulty,
     required this.price,
-    required this.ingredientList,
-    required this.instructionSet,
+    required this.variations,
+    required this.generate,
     this.gradient = limelightGradient,
   });
 
@@ -30,8 +40,10 @@ class RecipeData {
     this.price = '',
   })  : gradient =
             toBackgroundGradientWithReducedColorChange(limelightGradient),
-        ingredientList = [],
-        instructionSet = [];
+        variations = [],
+        generate = ((variations) {
+          return ([], []);
+        });
 
   Item toItem(VoidCallback onPressed) {
     return Item(

@@ -7,40 +7,38 @@ final recipes = [
     name: "Pasta with tomato sauce",
     difficulty: "Easy",
     price: "Cheap",
-    ingredientList: [
-      IngredientData(
-          name: "Dry pasta",
-          season: "",
-          price: "",
-          unit: "",
-          gradient: limelightGradient),
-      IngredientData(
-          name: "Tomato sauce",
-          season: "",
-          price: "",
-          unit: "",
-          gradient: limelightGradient),
-      IngredientData(
-          name: "Garlic",
-          season: "",
-          price: "",
-          unit: "",
-          gradient: limelightGradient),
-      IngredientData(
-          name: "Olive oil",
-          season: "",
-          price: "",
-          unit: "",
-          gradient: limelightGradient),
+    variations: [
+      Variation(
+        name: "Type of pasta",
+        variations: [
+          "Dry pasta",
+          "Fresh pasta",
+        ],
+      ),
+      Variation(
+        name: "Type of base for the sauce",
+        variations: [
+          "Fried onions and garlic",
+          "Sofrito (onions, carrots, celery)",
+        ],
+      ),
+      Variation(
+        name: "Type of tomato sauce",
+        variations: [
+          "Regular canned tomato sauce",
+          "Fresh baby tomatoes (crushed)",
+        ],
+      ),
     ],
-    instructionSet: [
-      "Mince two garlic cloves",
-      "Start heating up a pot of water",
-      "Set them in a pan to sweat with some olive oil",
-      "Before any browning happens, add in the tomato sauce to reduce",
-      "When the water is boiling add in the pasta",
-      "When cooked, drain (keeping some of the water) and incorporate into the sauce",
-      "Serve",
-    ],
+    generate: (variations) {
+      List<IngredientData> ingredientList = [];
+      List<String> instructionSet = [];
+
+      if (variations.contains("Dry pasta")) {
+        ingredientList.add(IngredientData(name: "Dry pasta", quantity: "100g"));
+      }
+
+      return (ingredientList, instructionSet);
+    },
   ),
 ];

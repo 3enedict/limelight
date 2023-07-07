@@ -103,7 +103,7 @@ class SearchPageState extends State<SearchPage> {
                             fontSize: 14 *
                                 MediaQuery.of(context).textScaleFactor *
                                 1.1,
-                            textStyle: const TextStyle(color: Colors.white70),
+                            textStyle: const TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
