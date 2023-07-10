@@ -16,21 +16,21 @@ class ShoppingListPageState extends State<ShoppingListPage>
     with AutomaticKeepAliveClientMixin<ShoppingListPage> {
   final _key = GlobalKey<SliverAnimatedListState>();
   final _items = [
-    IngredientData(
+    IngredientDescription(
       name: 'Lettuce',
       season: 'Spring and fall',
       price: '\$1.00',
       unit: 'per head',
       gradient: limelightGradient,
     ),
-    IngredientData(
+    IngredientDescription(
       name: 'Kale',
       season: 'Fall and winter',
       price: '\$2.00',
       unit: 'per lb',
       gradient: limelightGradient,
     ),
-    IngredientData(
+    IngredientDescription(
       name: 'Arugula',
       season: 'Late spring and early fall',
       price: '\$10.00',
@@ -58,7 +58,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
           onPressed: () {
             _key.currentState!.insertItem(_items.length);
             _items.add(
-              IngredientData(
+              IngredientDescription(
                 name: 'Arugula',
                 season: 'Late spring and early fall',
                 price: '\$10.00',

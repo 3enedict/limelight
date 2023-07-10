@@ -1,0 +1,14 @@
+{
+  "recipes": [
+    {
+      "name": "Pasta with tomato sauce",
+      "difficulty": "Easy",
+      "price": "$1"
+    },
+    {
+      "name": "Bolognese",
+      "difficulty": "Normal",
+      "price": "$2.50"
+    }
+  ]
+}

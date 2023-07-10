@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:limelight/main.dart';
 import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
-import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
 
 class Day extends StatelessWidget {
@@ -93,6 +93,7 @@ class CalendarItem extends StatefulWidget {
 class CalendarItemState extends State<CalendarItem>
     with AutomaticKeepAliveClientMixin {
   bool _enabled = false;
+  int _recipeId = 0;
 
   @override
   void initState() {
@@ -105,16 +106,20 @@ class CalendarItemState extends State<CalendarItem>
     super.build(context);
 
     return Item(
-      title: _enabled ? "" : recipes[widget.recipeId].name,
-      subTitle: _enabled ? "" : recipes[widget.recipeId].difficulty,
-      info: _enabled ? "" : recipes[widget.recipeId].price,
-      subInfo: _enabled ? "" : "per person",
+      title: _enabled ? recipes[_recipeId].name : "",
+      subTitle: _enabled ? recipes[_recipeId].difficulty : "",
+      info: _enabled ? recipes[_recipeId].price : "",
+      subInfo: _enabled ? "per person" : "",
       accentGradient: _enabled
-          ? toBackgroundGradientWithReducedColorChange(limelightGradient)
-          : recipes[widget.recipeId].gradient,
+          ? recipes[_recipeId].gradient
+          : toBackgroundGradientWithReducedColorChange(limelightGradient),
       backgroundGradient: toSurfaceGradient(limelightGradient),
       onPressed: () => setState(() {
-        if (_enabled) removeRecipe(widget.recipeKey);
+        if (_enabled) {
+          removeRecipe(widget.recipeKey);
+          _recipeId = widget.recipeId;
+        }
+
         if (!_enabled) setRecipe(widget.recipeKey, widget.recipeId);
 
         _enabled = !_enabled;
@@ -123,8 +128,13 @@ class CalendarItemState extends State<CalendarItem>
   }
 
   void loadRecipe() {
-    getRecipeData(widget.recipeKey).then(
-      (recipe) => setState(() => _enabled = true),
+    getRecipe(widget.recipeKey).then(
+      (recipeId) => setState(
+        () {
+          _recipeId = recipeId ?? widget.recipeId;
+          if (recipeId != null) _enabled = true;
+        },
+      ),
     );
   }
 

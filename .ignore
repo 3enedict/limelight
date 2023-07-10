@@ -4,7 +4,13 @@ windows/
 web/
 ios/
 macos/
-assets/
 pubspec.lock
 analysis_options.yaml
 limelight.iml
+
+assets/Fish.jpg
+assets/Leafy Greeens.jpg
+assets/Meat.jpg
+assets/Recipes.jpg
+assets/Shopping List.jpg
+assets/Vegetables.webp

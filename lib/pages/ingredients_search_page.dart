@@ -16,8 +16,8 @@ class SearchPage extends StatefulWidget {
 class SearchPageState extends State<SearchPage> {
   String _query = "";
 
-  List<IngredientData> sort(String query) {
-    List<IngredientData> matches = [];
+  List<IngredientDescription> sort(String query) {
+    List<IngredientDescription> matches = [];
     String cleanQuery = query.toLowerCase().trim();
 
     if (cleanQuery != "") {
@@ -35,7 +35,7 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<IngredientData> sortedIngredients = sort(_query);
+    List<IngredientDescription> sortedIngredients = sort(_query);
 
     double searchBarHeight = 50;
     double distanceBetweenItems = 15;

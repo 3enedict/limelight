@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 import 'package:limelight/pages/recipes_page.dart';
+import 'package:limelight/widgets/data/recipe.dart';
 
-void main() {
+List<RecipeData> recipes = [];
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  recipes = await loadAllRecipes();
+
   Paint.enableDithering = true;
   runApp(const Limelight());
 }

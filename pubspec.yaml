@@ -1,5 +1,5 @@
 name: limelight
-description: The number 1 recipe app.
+description: The number one recipe app.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -11,22 +11,15 @@ dependencies:
     sdk: flutter
   fluttericon: ^2.0.0
   google_fonts: ^5.0.1
-  search_page: ^2.3.0
   shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  test: ^1.24.1
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/Leafy Greeens.jpg
-    - assets/Vegetables.webp
-    - assets/Meat.jpg
-    - assets/Fish.jpg
-    - assets/Shopping List.jpg
-    - assets/Recipes.jpg
+    - assets/

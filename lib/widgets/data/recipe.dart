@@ -1,36 +1,48 @@
+import 'dart:convert';
+import 'dart:async' show Future;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:limelight/widgets/data/ingredient.dart';
+import 'package:limelight/main.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/items/button_item.dart';
-import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
 
-class Variation {
-  String name;
-  List<String> variations;
+class Recipes {
+  Recipes({required this.recipes});
+  final List<RecipeData> recipes;
 
-  Variation({
-    required this.name,
-    required this.variations,
-  });
+  factory Recipes.fromJson(Map<String, dynamic> data) {
+    final recipesData = data['recipes'] as List<dynamic>?;
+    final recipes = recipesData != null
+        ? recipesData
+            .map((reviewData) => RecipeData.fromJson(reviewData))
+            .toList()
+        : <RecipeData>[];
+
+    return Recipes(
+      recipes: recipes,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'reviews': recipes.map((recipe) => recipe.toJson()).toList(),
+    };
+  }
 }
 
 class RecipeData {
   final String name;
   final String difficulty;
   final String price;
-  final List<Variation> variations;
-  final (List<IngredientData>, List<String>) Function(List<String>) generate;
   final List<Color> gradient;
 
   const RecipeData({
     required this.name,
     required this.difficulty,
     required this.price,
-    required this.variations,
-    required this.generate,
     this.gradient = limelightGradient,
   });
 
@@ -38,19 +50,35 @@ class RecipeData {
     this.name = '',
     this.difficulty = '',
     this.price = '',
-  })  : gradient =
-            toBackgroundGradientWithReducedColorChange(limelightGradient),
-        variations = [],
-        generate = ((variations) {
-          return ([], []);
-        });
+  }) : gradient = toBackgroundGradientWithReducedColorChange(limelightGradient);
+
+  factory RecipeData.fromJson(Map<String, dynamic> data) {
+    final name = data['name'] as String;
+    final difficulty = data['difficulty'] as String;
+    final price = data['price'] as String;
+
+    return RecipeData(
+      name: name,
+      difficulty: difficulty,
+      price: price,
+      gradient: limelightGradient,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'difficulty': difficulty,
+      'price': price,
+    };
+  }
 
   Item toItem(VoidCallback onPressed) {
     return Item(
       title: name,
       subTitle: difficulty,
       info: price,
-      subInfo: "per person",
+      subInfo: "per serving",
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
@@ -62,22 +90,24 @@ class RecipeData {
       title: name,
       subTitle: difficulty,
       info: price,
-      subInfo: "per person",
+      subInfo: "per serving",
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
     );
   }
 }
 
-Future<RecipeData> getRecipeData(String key) async {
+Future<List<RecipeData>> loadAllRecipes() async {
+  final jsonData = await rootBundle.loadString('assets/recipes.json');
+  final parsedJson = jsonDecode(jsonData);
+
+  return Recipes.fromJson(parsedJson).recipes;
+}
+
+Future<int?> getRecipe(String key) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final recipeId = prefs.getInt(key);
-
-  if (recipeId == null) {
-    return RecipeData.empty();
-  } else {
-    return recipes[recipeId];
-  }
+  return recipeId;
 }
 
 Future<bool> setRecipe(String key, int id) async {

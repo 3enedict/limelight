@@ -52,7 +52,7 @@ class IngredientsPageState extends State<IngredientsPage> {
             context,
             PageRouteBuilder<void>(
               pageBuilder: (BuildContext context, _, __) {
-                return SearchPage();
+                return const SearchPage();
               },
               transitionsBuilder: (
                 ___,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:limelight/main.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/widgets/calendar.dart';
-import 'package:limelight/data/recipes.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
