@@ -51,4 +51,21 @@ class IngredientData {
     required this.name,
     required this.quantity,
   });
+
+  factory IngredientData.fromJson(Map<String, dynamic> data) {
+    final name = data['name'] as String;
+    final quantity = data['quantity'].toString();
+
+    return IngredientData(
+      name: name,
+      quantity: quantity,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'quantity': quantity,
+    };
+  }
 }

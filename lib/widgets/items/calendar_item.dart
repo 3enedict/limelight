@@ -109,7 +109,7 @@ class CalendarItemState extends State<CalendarItem>
       title: _enabled ? recipes[_recipeId].name : "",
       subTitle: _enabled ? recipes[_recipeId].difficulty : "",
       info: _enabled ? recipes[_recipeId].price : "",
-      subInfo: _enabled ? "per person" : "",
+      subInfo: _enabled ? "per serving" : "",
       accentGradient: _enabled
           ? recipes[_recipeId].gradient
           : toBackgroundGradientWithReducedColorChange(limelightGradient),
