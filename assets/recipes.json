@@ -29,6 +29,7 @@
           "variations": [
             {
               "name": "Tagliatelle",
+              "time": "+1 hour",
               "ingredients": [
                 {
                   "name": "Flour",
@@ -53,6 +54,7 @@
             },
             {
               "name": "Dry pasta",
+              "time": "+10 min",
               "ingredients": [
                 {
                   "name": "Dry pasta",
@@ -72,6 +74,7 @@
           "variations": [
             {
               "name": "Soffritto",
+              "time": "+10 min",
               "ingredients": [
                 {
                   "name": "Onion(s)",
@@ -95,6 +98,7 @@
             },
             {
               "name": "Onions and garlic",
+              "time": "+10 min",
               "ingredients": [
                 {
                   "name": "Onion(s)",
@@ -120,6 +124,7 @@
           "variations": [
             {
               "name": "Crushed baby tomatoes",
+              "time": "+20 min",
               "ingredients": [
                 {
                   "name": "Baby tomato(es)",
@@ -135,6 +140,7 @@
             },
             {
               "name": "Canned tomato sauce",
+              "time": "+15 min",
               "ingredients": [
                 {
                   "name": "Can(s) of tomato sauce",

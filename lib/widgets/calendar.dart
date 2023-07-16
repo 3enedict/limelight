@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:limelight/widgets/variation_picker.dart';
+import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/calendar_item.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/gradients.dart';
@@ -12,16 +14,45 @@ const int mealsPerDay = 2;
 
 const double dayMargin = 20;
 
-class Calendar extends StatelessWidget {
+class Calendar extends StatefulWidget {
   final int recipeId;
 
-  const Calendar({
-    super.key,
-    required this.recipeId,
-  });
+  const Calendar({super.key, required this.recipeId});
+
+  @override
+  State<Calendar> createState() => CalendarState();
+}
+
+class CalendarState extends State<Calendar> {
+  bool? _needToAskForVariations;
+
+  @override
+  void initState() {
+    chechForVariations(widget.recipeId).then(
+      (needToAskForVariations) => setState(() {
+        _needToAskForVariations = needToAskForVariations;
+      }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_needToAskForVariations == null) {
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: toBackgroundGradient(limelightGradient),
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      );
+    }
+
+    if (_needToAskForVariations == true) {
+      return VariationPicker(recipeId: widget.recipeId);
+    }
+
     final DateTime startDate = DateTime.now().subtract(
       const Duration(days: numberOfDays ~/ 2),
     );
@@ -73,7 +104,7 @@ class Calendar extends StatelessWidget {
                       return Day(
                         date: startDate.add(Duration(days: index)),
                         currentDay: index == numberOfDays ~/ 2,
-                        recipeId: recipeId,
+                        recipeId: widget.recipeId,
                       );
                     },
                   )),
