@@ -46,6 +46,7 @@ class ButtonItemState extends State<ButtonItem>
       subTextColor:
           _enabled ? const Color(0xFF222222) : const Color(0xFFDDDDDD),
       onPressed: () => setState(() => _enabled = !_enabled),
+      onLongPress: () {},
     );
   }
 

@@ -28,6 +28,7 @@ class IngredientDescription {
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
+      onLongPress: () {},
     );
   }
 

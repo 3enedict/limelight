@@ -4,6 +4,7 @@ import 'package:limelight/main.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/fab.dart';
 import 'package:limelight/widgets/calendar.dart';
+import 'package:limelight/widgets/recipe_description_page.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipesPage extends StatelessWidget {
@@ -41,6 +42,27 @@ class RecipesPage extends StatelessWidget {
                     PageRouteBuilder<void>(
                       pageBuilder: (BuildContext context, _, __) {
                         return Calendar(recipeId: index);
+                      },
+                      transitionsBuilder: (
+                        ___,
+                        Animation<double> animation,
+                        ____,
+                        Widget child,
+                      ) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  ),
+                  () => Navigator.push(
+                    context,
+                    PageRouteBuilder<void>(
+                      pageBuilder: (BuildContext context, _, __) {
+                        return RecipeDescriptionPage(
+                          recipeId: index,
+                        );
                       },
                       transitionsBuilder: (
                         ___,

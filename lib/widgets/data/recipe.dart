@@ -103,7 +103,7 @@ class RecipeData {
     };
   }
 
-  Item toItem(VoidCallback onPressed) {
+  Item toItem(VoidCallback onPressed, VoidCallback onLongPress) {
     return Item(
       title: name,
       subTitle: difficulty,
@@ -112,6 +112,7 @@ class RecipeData {
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
+      onLongPress: onLongPress,
     );
   }
 

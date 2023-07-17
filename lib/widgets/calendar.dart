@@ -28,6 +28,7 @@ class CalendarState extends State<Calendar> {
 
   @override
   void initState() {
+    super.initState();
     chechForVariations(widget.recipeId).then(
       (needToAskForVariations) => setState(() {
         _needToAskForVariations = needToAskForVariations;

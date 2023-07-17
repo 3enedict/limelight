@@ -8,7 +8,7 @@ class CustomFloatingActionButton extends StatelessWidget {
 
   const CustomFloatingActionButton({
     super.key,
-    this.diameter = 58,
+    this.diameter = 56,
     required this.gradient,
     required this.onPressed,
     required this.icon,

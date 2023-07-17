@@ -10,6 +10,7 @@ class Item extends StatelessWidget {
   final String info;
   final String subInfo;
   final VoidCallback onPressed;
+  final VoidCallback onLongPress;
   final List<Color> accentGradient;
   final List<Color> backgroundGradient;
   final Color textColor;
@@ -22,6 +23,7 @@ class Item extends StatelessWidget {
     required this.info,
     required this.subInfo,
     required this.onPressed,
+    required this.onLongPress,
     required this.accentGradient,
     required this.backgroundGradient,
     this.textColor = const Color(0xFFEEEEEE),
@@ -53,6 +55,7 @@ class Item extends StatelessWidget {
             ),
           ),
           onPressed: () => onPressed(),
+          onLongPress: () => onLongPress(),
           child: Row(
             children: [
               Container(
