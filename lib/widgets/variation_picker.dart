@@ -29,6 +29,7 @@ class VariationPickerState extends State<VariationPicker> {
     }
 
     const double borderSize = 15;
+    const double margin = 20;
     var variationGroup =
         recipes[widget.recipeId].variationGroups[_variationNumber];
 
@@ -41,7 +42,7 @@ class VariationPickerState extends State<VariationPicker> {
           ),
           color: Colors.transparent,
           elevation: 4,
-          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+          margin: const EdgeInsets.fromLTRB(margin, 0, margin, margin),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderSize),
@@ -51,8 +52,7 @@ class VariationPickerState extends State<VariationPicker> {
                 end: Alignment.bottomRight,
               ),
             ),
-            height: 70,
-            width: MediaQuery.of(context).size.width - 120,
+            width: MediaQuery.of(context).size.width - 140,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
@@ -60,6 +60,7 @@ class VariationPickerState extends State<VariationPicker> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderSize),
                 ),
+                padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
               ),
               onPressed: () => setState(() {
                 setVariation(widget.recipeId, variation.name);
@@ -67,50 +68,38 @@ class VariationPickerState extends State<VariationPicker> {
               }),
               child: Row(
                 children: [
+                  const SizedBox(width: 20),
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(11),
                       gradient: const LinearGradient(colors: limelightGradient),
                     ),
-                    margin: const EdgeInsets.fromLTRB(5, 20, 20, 20),
-                    height: 25,
-                    width: 25,
+                    height: 22,
+                    width: 22,
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            variation.name,
-                            style: GoogleFonts.workSans(
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            variation.time,
-                            style: GoogleFonts.workSans(
-                              textStyle: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontSize: 14 *
-                                    MediaQuery.of(context).textScaleFactor *
-                                    0.8,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
+                  const SizedBox(width: 17),
+                  Text(
+                    variation.name,
+                    style: GoogleFonts.workSans(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),
+                  const Expanded(child: SizedBox()),
+                  Text(
+                    variation.time,
+                    style: GoogleFonts.workSans(
+                      textStyle: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize:
+                            14 * MediaQuery.of(context).textScaleFactor * 0.8,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
                 ],
               ),
             ),
@@ -138,7 +127,7 @@ class VariationPickerState extends State<VariationPicker> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(2),
+              padding: const EdgeInsets.all(1),
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -148,28 +137,24 @@ class VariationPickerState extends State<VariationPicker> {
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(10),
-                        child: Text(
-                          variationGroup.groupName,
-                          style: GoogleFonts.workSans(
-                            fontSize: 14 *
-                                MediaQuery.of(context).textScaleFactor *
-                                1.2,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold,
-                            textStyle: const TextStyle(color: Colors.white),
-                          ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(margin),
+                      child: Text(
+                        variationGroup.groupName,
+                        style: GoogleFonts.workSans(
+                          fontSize:
+                              14 * MediaQuery.of(context).textScaleFactor * 1.2,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                          textStyle: const TextStyle(color: Colors.white),
                         ),
                       ),
-                      ...variationButtons,
-                    ],
-                  ),
+                    ),
+                    ...variationButtons,
+                  ],
                 ),
               ),
             ),
