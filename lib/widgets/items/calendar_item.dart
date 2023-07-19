@@ -5,7 +5,6 @@ import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/gradients.dart';
-import 'package:limelight/widgets/recipe_description_page.dart';
 
 class Day extends StatelessWidget {
   final DateTime date;

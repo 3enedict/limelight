@@ -7,8 +7,10 @@ import 'package:limelight/pages/ingredients_subpages/leafy_greens_page.dart';
 import 'package:limelight/pages/ingredients_subpages/vegetables_page.dart';
 import 'package:limelight/pages/ingredients_subpages/meat_page.dart';
 import 'package:limelight/pages/ingredients_subpages/fish_page.dart';
-import 'package:limelight/widgets/fab.dart';
+import 'package:limelight/widgets/custom_fab.dart';
+import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/transitions.dart';
 
 class IngredientsPage extends StatefulWidget {
   const IngredientsPage({super.key});
@@ -35,58 +37,33 @@ class IngredientsPageState extends State<IngredientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: toBackgroundGradient(_gradients[_currentIndex]),
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
+    final List<Color> gradient = _gradients[_currentIndex];
+
+    return EmptyPage(
+      gradient: gradient,
+      fab: CustomFloatingActionButton(
+        gradient: toSurfaceGradient(gradient),
+        icon: const Icon(Icons.search),
+        onPressed: fadeTransition(context, const SearchPage()),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        floatingActionButton: CustomFloatingActionButton(
-          gradient: toSurfaceGradient(_gradients[_currentIndex]),
-          icon: const Icon(Icons.search),
-          onPressed: () => Navigator.push(
-            context,
-            PageRouteBuilder<void>(
-              pageBuilder: (BuildContext context, _, __) {
-                return const SearchPage();
-              },
-              transitionsBuilder: (
-                ___,
-                Animation<double> animation,
-                ____,
-                Widget child,
-              ) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-            ),
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
-          elevation: 0,
-          showSelectedLabels: true,
-          showUnselectedLabels: false,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white,
-          items: [
-            bottomNavBarItem(leafyGreensGradient),
-            bottomNavBarItem(vegetablesGradient),
-            bottomNavBarItem(meatGradient),
-            bottomNavBarItem(fishGradient),
-          ],
-        ),
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _screens,
-        ),
+      bottomNavBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        elevation: 0,
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        items: [
+          bottomNavBarItem(leafyGreensGradient),
+          bottomNavBarItem(vegetablesGradient),
+          bottomNavBarItem(meatGradient),
+          bottomNavBarItem(fishGradient),
+        ],
+      ),
+      child: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
       ),
     );
   }

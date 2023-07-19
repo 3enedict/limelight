@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/fab.dart';
+import 'package:limelight/widgets/custom_fab.dart';
+import 'package:limelight/widgets/custom_sliver_list.dart';
 import 'package:limelight/widgets/data/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
@@ -42,65 +43,56 @@ class ShoppingListPageState extends State<ShoppingListPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: toBackgroundGradient(limelightGradient),
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
+    return EmptyPage(
+      gradient: limelightGradient,
+      fab: CustomFloatingActionButton(
+        gradient: toSurfaceGradient(limelightGradient),
+        icon: const Icon(Icons.add),
+        onPressed: () {
+          _key.currentState!.insertItem(_items.length);
+          _items.add(
+            IngredientDescription(
+              name: 'Arugula',
+              season: 'Late spring and early fall',
+              price: '\$10.00',
+              unit: 'per lb',
+              gradient: limelightGradient,
+            ),
+          );
+        },
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        floatingActionButton: CustomFloatingActionButton(
-          gradient: toSurfaceGradient(limelightGradient),
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            _key.currentState!.insertItem(_items.length);
-            _items.add(
-              IngredientDescription(
-                name: 'Arugula',
-                season: 'Late spring and early fall',
-                price: '\$10.00',
-                unit: 'per lb',
-                gradient: limelightGradient,
+      child: CustomSliverList(
+        title: 'Shopping List',
+        titleBackground: const AssetImage('assets/Shopping List.jpg'),
+        padding: 80,
+        gradient: limelightGradient,
+        items: SliverAnimatedList(
+          key: _key,
+          initialItemCount: _items.length,
+          itemBuilder: (context, index, animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: SizeTransition(
+                sizeFactor: animation,
+                child: _items[index].toItem(
+                  () {
+                    var item = _items.removeAt(index);
+
+                    SliverAnimatedList.of(context).removeItem(
+                      index,
+                      (context, animation) => FadeTransition(
+                        opacity: animation,
+                        child: SizeTransition(
+                          sizeFactor: animation,
+                          child: item.toItem(() {}),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           },
-        ),
-        body: DefaultPage(
-          title: 'Shopping List',
-          titleBackground: const AssetImage('assets/Shopping List.jpg'),
-          padding: 80,
-          backgroundGradient: toBackgroundGradient(limelightGradient),
-          items: SliverAnimatedList(
-            key: _key,
-            initialItemCount: _items.length,
-            itemBuilder: (context, index, animation) {
-              return FadeTransition(
-                opacity: animation,
-                child: SizeTransition(
-                  sizeFactor: animation,
-                  child: _items[index].toItem(
-                    () {
-                      var item = _items.removeAt(index);
-
-                      SliverAnimatedList.of(context).removeItem(
-                        index,
-                        (context, animation) => FadeTransition(
-                          opacity: animation,
-                          child: SizeTransition(
-                            sizeFactor: animation,
-                            child: item.toItem(() {}),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              );
-            },
-          ),
         ),
       ),
     );

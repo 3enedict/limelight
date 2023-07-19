@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/page.dart';
+import 'package:limelight/widgets/custom_sliver_list.dart';
 import 'package:limelight/data/ingredients.dart';
 import 'package:limelight/gradients.dart';
 
@@ -9,10 +9,10 @@ class MeatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultPage(
+    return CustomSliverList(
       title: 'Meat & Eggs',
       titleBackground: const AssetImage('assets/Meat.jpg'),
-      backgroundGradient: toBackgroundGradient(meatGradient),
+      gradient: meatGradient,
       items: SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {

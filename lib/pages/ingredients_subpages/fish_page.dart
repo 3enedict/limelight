@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/page.dart';
+import 'package:limelight/widgets/custom_sliver_list.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/data/ingredients.dart';
 
@@ -9,10 +9,10 @@ class FishPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultPage(
+    return CustomSliverList(
       title: 'Fish & Dairy',
       titleBackground: const AssetImage('assets/Fish.jpg'),
-      backgroundGradient: toBackgroundGradient(fishGradient),
+      gradient: fishGradient,
       items: SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
