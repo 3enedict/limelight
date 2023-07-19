@@ -6,6 +6,7 @@ import 'package:limelight/main.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/widgets/data/recipe.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/widgets/items/compact_item.dart';
 
 class VariationPicker extends StatefulWidget {
   final int recipeId;
@@ -28,82 +29,17 @@ class VariationPickerState extends State<VariationPicker> {
       );
     }
 
-    const double borderSize = 15;
-    const double margin = 20;
     var variationGroup =
         recipes[widget.recipeId].variationGroups[_variationNumber];
 
-    List<Card> variationButtons = [];
+    List<CompactItem> variationButtons = [];
     for (var variation in variationGroup.variations) {
       variationButtons.add(
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderSize),
-          ),
-          color: Colors.transparent,
-          elevation: 4,
-          margin: const EdgeInsets.fromLTRB(margin, 0, margin, margin),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(borderSize),
-              gradient: LinearGradient(
-                colors: toSurfaceGradient(limelightGradient),
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            width: MediaQuery.of(context).size.width - 140,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderSize),
-                ),
-                padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
-              ),
-              onPressed: () => setState(() {
-                setVariation(widget.recipeId, variation.name);
-                _variationNumber += 1;
-              }),
-              child: Row(
-                children: [
-                  const SizedBox(width: 20),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(11),
-                      gradient: const LinearGradient(colors: limelightGradient),
-                    ),
-                    height: 22,
-                    width: 22,
-                  ),
-                  const SizedBox(width: 17),
-                  Text(
-                    variation.name,
-                    style: GoogleFonts.workSans(
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const Expanded(child: SizedBox()),
-                  Text(
-                    variation.time,
-                    style: GoogleFonts.workSans(
-                      textStyle: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontSize:
-                            14 * MediaQuery.of(context).textScaleFactor * 0.8,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
-            ),
-          ),
+        variation.toCompactItem(
+          () => setState(() {
+            setVariation(widget.recipeId, variation.name);
+            _variationNumber += 1;
+          }),
         ),
       );
     }
@@ -141,7 +77,7 @@ class VariationPickerState extends State<VariationPicker> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      margin: const EdgeInsets.all(margin),
+                      margin: const EdgeInsets.all(20),
                       child: Text(
                         variationGroup.groupName,
                         style: GoogleFonts.workSans(

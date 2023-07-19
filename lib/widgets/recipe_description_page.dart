@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:limelight/main.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/widgets/items/compact_item.dart';
 
 class RecipeDescriptionPage extends StatelessWidget {
   final int recipeId;
@@ -16,6 +17,11 @@ class RecipeDescriptionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String recipeName = recipes[recipeId].name;
+
+    List<CompactItem> ingredients = [];
+    for (var ingredient in recipes[recipeId].ingredients) {
+      ingredients.add(ingredient.toCompactItem(() {}));
+    }
 
     return Container(
       decoration: BoxDecoration(

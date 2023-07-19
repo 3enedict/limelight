@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:limelight/widgets/items/compact_item.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/gradients.dart';
@@ -68,5 +69,16 @@ class IngredientData {
       'name': name,
       'quantity': quantity,
     };
+  }
+
+  CompactItem toCompactItem(VoidCallback onPressed) {
+    return CompactItem(
+      title: name,
+      info: quantity,
+      backgroundGradient: toSurfaceGradient(limelightGradient),
+      accentGradient: limelightGradient,
+      onPressed: onPressed,
+      onLongPress: () {},
+    );
   }
 }
