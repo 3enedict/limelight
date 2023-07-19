@@ -55,8 +55,8 @@ class CompactItem extends StatelessWidget {
             ),
             padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
           ),
-          onPressed: () => onPressed,
-          onLongPress: () => onLongPress,
+          onPressed: () => onPressed(),
+          onLongPress: () => onLongPress(),
           child: Row(
             children: [
               const SizedBox(width: 20),

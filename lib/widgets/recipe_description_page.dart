@@ -4,23 +4,63 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:limelight/main.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/widgets/data/recipe.dart';
+import 'package:limelight/widgets/data/variation_group.dart';
 import 'package:limelight/widgets/items/compact_item.dart';
 
-class RecipeDescriptionPage extends StatelessWidget {
+class RecipeDescriptionPage extends StatefulWidget {
   final int recipeId;
 
-  const RecipeDescriptionPage({
-    super.key,
-    required this.recipeId,
-  });
+  const RecipeDescriptionPage({super.key, required this.recipeId});
+
+  @override
+  State<RecipeDescriptionPage> createState() => RecipeDescriptionPageState();
+}
+
+class RecipeDescriptionPageState extends State<RecipeDescriptionPage> {
+  List<String>? _variations;
+
+  @override
+  void initState() {
+    super.initState();
+    getVariations(widget.recipeId).then(
+      (variations) => setState(() {
+        _variations = variations;
+      }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final String recipeName = recipes[recipeId].name;
+    if (_variations == null) {
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: toBackgroundGradient(limelightGradient),
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      );
+    }
+
+    final String recipeName = recipes[widget.recipeId].name;
+    final List<VariationGroup> variationGroups =
+        recipes[widget.recipeId].variationGroups;
 
     List<CompactItem> ingredients = [];
-    for (var ingredient in recipes[recipeId].ingredients) {
+    for (var ingredient in recipes[widget.recipeId].ingredients) {
       ingredients.add(ingredient.toCompactItem(() {}));
+    }
+
+    for (var i = 0; i < _variations!.length; i++) {
+      for (var variation in variationGroups[i].variations) {
+        if (_variations![i] == variation.name) {
+          for (var ingredient in variation.ingredients) {
+            ingredients.add(ingredient.toCompactItem(() {}));
+          }
+        }
+      }
     }
 
     return Container(
@@ -52,6 +92,7 @@ class RecipeDescriptionPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 15),
+                  ...ingredients,
                 ],
               ),
             ),
