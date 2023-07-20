@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:limelight/widgets/data/ingredient.dart';
-import 'package:limelight/widgets/data/variation_group.dart';
+import 'package:limelight/data/ingredient.dart';
+import 'package:limelight/data/variation_group.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/gradients.dart';

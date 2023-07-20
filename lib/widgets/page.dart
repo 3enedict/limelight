@@ -10,7 +10,7 @@ class EmptyPage extends StatelessWidget {
 
   const EmptyPage({
     super.key,
-    required this.gradient,
+    this.gradient = limelightGradient,
     this.fab,
     this.bottomNavBar,
     this.child = const SizedBox(),
@@ -42,7 +42,7 @@ class Fade extends StatelessWidget {
 
   const Fade({
     super.key,
-    required this.gradient,
+    this.gradient = limelightGradient,
     this.child = const SizedBox(),
   });
 
@@ -77,7 +77,7 @@ class EmptyPageWithBottomBar extends StatelessWidget {
 
   const EmptyPageWithBottomBar({
     super.key,
-    required this.gradient,
+    this.gradient = limelightGradient,
     this.body = const SizedBox(),
     this.bottomBar = const SizedBox(),
   });

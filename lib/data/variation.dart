@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/gradients.dart';
-import 'package:limelight/widgets/data/ingredient.dart';
+import 'package:limelight/data/ingredient.dart';
 import 'package:limelight/widgets/items/compact_item.dart';
 
 class Variation {

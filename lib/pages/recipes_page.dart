@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/main.dart';
+import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/calendar.dart';
-import 'package:limelight/widgets/custom_fab.dart';
-import 'package:limelight/widgets/custom_sliver_list.dart';
+import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/pages/recipe_description_page.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/transitions.dart';
@@ -16,12 +16,19 @@ class RecipesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return EmptyPage(
       gradient: limelightGradient,
-      fab: CustomFloatingActionButton(
+      fab: GradientButton(
+        diameter: 56,
         gradient: toSurfaceGradient(limelightGradient),
-        icon: const Icon(Icons.calendar_month_rounded),
         onPressed: () {},
+        padding: const EdgeInsets.all(0),
+        child: const Center(
+          child: Icon(
+            Icons.calendar_month_rounded,
+            color: Colors.white70,
+          ),
+        ),
       ),
-      child: CustomSliverList(
+      child: ItemList(
         title: 'Recipes',
         titleBackground: const AssetImage('assets/Recipes.jpg'),
         padding: 80,

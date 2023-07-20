@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/main.dart';
-import 'package:limelight/widgets/data/recipe.dart';
+import 'package:limelight/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/gradients.dart';

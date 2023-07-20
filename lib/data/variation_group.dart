@@ -1,4 +1,4 @@
-import 'package:limelight/widgets/data/variation.dart';
+import 'package:limelight/data/variation.dart';
 
 class VariationGroup {
   final String groupName;

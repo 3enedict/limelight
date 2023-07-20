@@ -5,6 +5,11 @@ import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/gradients.dart';
 
+final leafyGreens = [];
+final vegetables = [];
+final meats = [];
+final fish = [];
+
 class IngredientDescription {
   final String name;
   final String season;

@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/widgets/page.dart';
 
-class CustomSliverList extends StatelessWidget {
+class ItemList extends StatelessWidget {
   final String title;
   final AssetImage titleBackground;
   final Widget items;
@@ -13,7 +13,7 @@ class CustomSliverList extends StatelessWidget {
   final double padding;
   final int keyValue;
 
-  const CustomSliverList({
+  const ItemList({
     super.key,
     required this.title,
     required this.titleBackground,

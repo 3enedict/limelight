@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/custom_fab.dart';
-import 'package:limelight/widgets/custom_sliver_list.dart';
-import 'package:limelight/widgets/data/ingredient.dart';
+import 'package:limelight/widgets/gradient_button.dart';
+import 'package:limelight/widgets/item_list.dart';
+import 'package:limelight/data/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
 class ShoppingListPage extends StatefulWidget {
@@ -45,9 +45,9 @@ class ShoppingListPageState extends State<ShoppingListPage>
     super.build(context);
     return EmptyPage(
       gradient: limelightGradient,
-      fab: CustomFloatingActionButton(
+      fab: GradientButton(
+        diameter: 56,
         gradient: toSurfaceGradient(limelightGradient),
-        icon: const Icon(Icons.add),
         onPressed: () {
           _key.currentState!.insertItem(_items.length);
           _items.add(
@@ -60,8 +60,15 @@ class ShoppingListPageState extends State<ShoppingListPage>
             ),
           );
         },
+        padding: const EdgeInsets.all(0),
+        child: const Center(
+          child: Icon(
+            Icons.add,
+            color: Colors.white70,
+          ),
+        ),
       ),
-      child: CustomSliverList(
+      child: ItemList(
         title: 'Shopping List',
         titleBackground: const AssetImage('assets/Shopping List.jpg'),
         padding: 80,

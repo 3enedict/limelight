@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 import 'package:limelight/pages/recipes_page.dart';
-import 'package:limelight/widgets/data/recipe.dart';
+import 'package:limelight/data/recipe.dart';
 
 List<RecipeData> recipes = [];
 

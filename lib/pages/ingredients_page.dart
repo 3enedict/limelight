@@ -7,7 +7,7 @@ import 'package:limelight/pages/ingredients_subpages/leafy_greens_page.dart';
 import 'package:limelight/pages/ingredients_subpages/vegetables_page.dart';
 import 'package:limelight/pages/ingredients_subpages/meat_page.dart';
 import 'package:limelight/pages/ingredients_subpages/fish_page.dart';
-import 'package:limelight/widgets/custom_fab.dart';
+import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/transitions.dart';
@@ -41,10 +41,17 @@ class IngredientsPageState extends State<IngredientsPage> {
 
     return EmptyPage(
       gradient: gradient,
-      fab: CustomFloatingActionButton(
+      fab: GradientButton(
+        diameter: 56,
         gradient: toSurfaceGradient(gradient),
-        icon: const Icon(Icons.search),
         onPressed: fadeTransition(context, const SearchPage()),
+        padding: const EdgeInsets.all(0),
+        child: const Center(
+          child: Icon(
+            Icons.search,
+            color: Colors.white70,
+          ),
+        ),
       ),
       bottomNavBar: BottomNavigationBar(
         currentIndex: _currentIndex,

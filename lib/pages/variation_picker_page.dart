@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:limelight/main.dart';
+import 'package:limelight/widgets/gradient_box.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/widgets/items/compact_item.dart';
-import 'package:limelight/widgets/data/recipe.dart';
+import 'package:limelight/data/recipe.dart';
 import 'package:limelight/gradients.dart';
 
 class VariationPicker extends StatefulWidget {
@@ -48,44 +49,24 @@ class VariationPickerState extends State<VariationPicker> {
     return EmptyPage(
       gradient: limelightGradient,
       child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: limelightGradient,
-            ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(1),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: toBackgroundGradient(limelightGradient),
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(20),
-                    child: Text(
-                      variationGroup.groupName,
-                      style: GoogleFonts.workSans(
-                        fontSize:
-                            14 * MediaQuery.of(context).textScaleFactor * 1.2,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold,
-                        textStyle: const TextStyle(color: Colors.white),
-                      ),
-                    ),
+        child: GradientBox(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: Text(
+                  variationGroup.groupName,
+                  style: GoogleFonts.workSans(
+                    fontSize: 14 * MediaQuery.of(context).textScaleFactor * 1.2,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    textStyle: const TextStyle(color: Colors.white),
                   ),
-                  ...variationButtons,
-                ],
+                ),
               ),
-            ),
+              ...variationButtons,
+            ],
           ),
         ),
       ),
