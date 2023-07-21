@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:limelight/main.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/widgets/gradient_button.dart';
+import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/data/recipe.dart';
 import 'package:limelight/data/variation_group.dart';
@@ -36,7 +37,6 @@ class RecipeDescriptionPageState extends State<RecipeDescriptionPage> {
       return const EmptyPage(gradient: limelightGradient);
     }
 
-    final String recipeName = recipes[widget.recipeId].name;
     final List<VariationGroup> variationGroups =
         recipes[widget.recipeId].variationGroups;
 
@@ -60,24 +60,18 @@ class RecipeDescriptionPageState extends State<RecipeDescriptionPage> {
       child: Column(
         children: [
           Expanded(
-            child: Column(
-              children: [
-                const SizedBox(height: 15),
-                Center(
-                  child: Text(
-                    recipeName,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize:
-                          14 * MediaQuery.of(context).textScaleFactor * 1.2,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
+            child: ItemList(
+              title: "Ingredients",
+              titleBackground: const AssetImage('assets/Recipe.jpg'),
+              gradient: fishGradient,
+              items: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return ingredients[index];
+                  },
+                  childCount: ingredients.length,
                 ),
-                const SizedBox(height: 15),
-                ...ingredients,
-              ],
+              ),
             ),
           ),
           const Padding(
