@@ -36,7 +36,7 @@ class ItemList extends StatelessWidget {
               pinned: false,
               snap: false,
               floating: false,
-              expandedHeight: MediaQuery.of(context).size.height * 0.25,
+              expandedHeight: MediaQuery.of(context).size.height * 0.3,
               backgroundColor: toBackgroundGradient(gradient)[0],
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
@@ -54,10 +54,10 @@ class ItemList extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(0),
-                      bottom: Radius.circular(20),
+                      bottom: Radius.circular(25),
                     ),
                     image: DecorationImage(
-                      alignment: Alignment.topCenter,
+                      alignment: Alignment.bottomCenter,
                       fit: BoxFit.cover,
                       colorFilter: const ColorFilter.mode(
                         Colors.grey,
