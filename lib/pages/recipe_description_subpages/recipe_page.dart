@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:limelight/main.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/items/compact_item.dart';
 
 class RecipeSubPage extends StatelessWidget {
   final int recipeId;
@@ -17,7 +18,22 @@ class RecipeSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<CompactItem> steps = [];
+    List<String> instructions = [];
+    for (var instruction in recipes[recipeId].instructions) {
+      if (instruction.startsWith("{") && instruction.endsWith("}")) {
+        final instructionsLocation =
+            instruction.replaceAll("{", "").replaceAll("}", "").split(":");
+
+        final variationGroupId = int.parse(instructionsLocation[0]);
+        final variationId = int.parse(instructionsLocation[1]);
+        final instructionGroupId = int.parse(instructionsLocation[2]);
+
+        instructions.addAll(recipes[recipeId]
+            .variationGroups[variationGroupId]
+            .variations[variationId]
+            .instructionGroups[instructionGroupId]);
+      }
+    }
 
     return EmptyPage(
       gradient: limelightGradient,
@@ -31,9 +47,43 @@ class RecipeSubPage extends StatelessWidget {
               items: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return steps[index];
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              (index + 1).toString(),
+                              style: GoogleFonts.workSans(
+                                textStyle: const TextStyle(
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(10, 1, 0, 1),
+                              child: VerticalDivider(
+                                color: Colors.white60,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                instructions[index],
+                                textAlign: TextAlign.justify,
+                                style: GoogleFonts.workSans(
+                                  textStyle: const TextStyle(
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   },
-                  childCount: steps.length,
+                  childCount: instructions.length,
                 ),
               ),
             ),

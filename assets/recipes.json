@@ -11,15 +11,14 @@
         }
       ],
       "instructions": [
-        "{Tagliatelle:1}",
-        "{Soffritto:1}",
-        "{Onions and garlic:1}",
-        "Now is a good time to not forget to add some salt...",
-        "{Crushed baby tomatoes:1}",
-        "{Canned tomato sauce:1}",
-        "Taste and salt if needed",
-        "{Tagliatelle:2}",
-        "{Dry pasta:1}",
+        "{0:0:0}",
+        "{1:0:0}",
+        "{1:1:0}",
+        "{2:0:0}",
+        "{2:1:0}",
+        "Salt to taste",
+        "{0:0:1}",
+        "{0:1:0}",
         "Drain the pasta, while keeping some of the water that it cooked in.",
         "Mix the drained pasta into the sauce, adding some of the pasta water until everything has a good consistency."
       ],
