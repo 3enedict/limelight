@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'package:limelight/data/variation.dart';
+import 'package:limelight/widgets/variation_picker.dart';
 
 class VariationGroup {
   final String groupName;
@@ -30,5 +33,13 @@ class VariationGroup {
       'groupName': groupName,
       'variations': variations,
     };
+  }
+
+  VariationPicker toVariationPicker(void Function(Variation) onPressed) {
+    return VariationPicker(
+      groupName: groupName,
+      variations: variations,
+      onPressed: onPressed,
+    );
   }
 }

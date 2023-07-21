@@ -42,7 +42,7 @@ class CalendarState extends State<Calendar> {
     }
 
     if (_needToAskForVariations == true) {
-      return VariationPicker(recipeId: widget.recipeId);
+      return VariationPickerPage(recipeId: widget.recipeId);
     }
 
     final DateTime startDate = DateTime.now().subtract(

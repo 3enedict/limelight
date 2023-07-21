@@ -5,7 +5,6 @@ import 'package:limelight/gradients.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/items/compact_item.dart';
 
 class VariationSubPage extends StatelessWidget {
   final int recipeId;
@@ -17,7 +16,7 @@ class VariationSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<CompactItem> variations = [];
+    var variationGroup = recipes[recipeId].variationGroups;
 
     return EmptyPage(
       gradient: limelightGradient,
@@ -27,13 +26,18 @@ class VariationSubPage extends StatelessWidget {
             child: ItemList(
               title: "Variations",
               titleBackground: const AssetImage('assets/Variation.jpg'),
-              gradient: fishGradient,
+              gradient: limelightGradient,
               items: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return variations[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 25),
+                      child: Center(
+                        child: variationGroup[index].toVariationPicker((_) {}),
+                      ),
+                    );
                   },
-                  childCount: variations.length,
+                  childCount: variationGroup.length,
                 ),
               ),
             ),

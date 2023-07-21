@@ -37,7 +37,7 @@ class CompactItem extends StatelessWidget {
         gradient: backgroundGradient,
         borderRadius: borderSize,
         onPressed: () => onPressed(),
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(28),
         child: Row(
           children: [
             Container(

@@ -27,6 +27,8 @@ class GradientBox extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
+      width: width,
+      height: height,
       child: Padding(
         padding: const EdgeInsets.all(1),
         child: DecoratedBox(

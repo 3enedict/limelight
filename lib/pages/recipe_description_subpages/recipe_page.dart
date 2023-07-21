@@ -10,10 +10,12 @@ import 'package:limelight/widgets/page.dart';
 
 class RecipeSubPage extends StatelessWidget {
   final int recipeId;
+  final List<String> variations;
 
   const RecipeSubPage({
     super.key,
     required this.recipeId,
+    required this.variations,
   });
 
   @override
@@ -28,10 +30,15 @@ class RecipeSubPage extends StatelessWidget {
         final variationId = int.parse(instructionsLocation[1]);
         final instructionGroupId = int.parse(instructionsLocation[2]);
 
-        instructions.addAll(recipes[recipeId]
+        final variation = recipes[recipeId]
             .variationGroups[variationGroupId]
-            .variations[variationId]
-            .instructionGroups[instructionGroupId]);
+            .variations[variationId];
+
+        if (variations.contains(variation.name)) {
+          instructions.addAll(variation.instructionGroups[instructionGroupId]);
+        }
+      } else {
+        instructions.add(instruction);
       }
     }
 
@@ -43,7 +50,7 @@ class RecipeSubPage extends StatelessWidget {
             child: ItemList(
               title: "Recipe",
               titleBackground: const AssetImage('assets/Recipe.jpg'),
-              gradient: fishGradient,
+              gradient: limelightGradient,
               items: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {

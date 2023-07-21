@@ -41,11 +41,8 @@ class RecipeDescriptionPageState extends State<RecipeDescriptionPage> {
       ),
       children: [
         VariationSubPage(recipeId: widget.recipeId),
-        IngredientSubPage(
-          recipeId: widget.recipeId,
-          variations: _variations!,
-        ),
-        RecipeSubPage(recipeId: widget.recipeId),
+        IngredientSubPage(recipeId: widget.recipeId, variations: _variations!),
+        RecipeSubPage(recipeId: widget.recipeId, variations: _variations!),
       ],
     );
   }

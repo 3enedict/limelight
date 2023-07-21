@@ -44,7 +44,7 @@ class IngredientSubPage extends StatelessWidget {
             child: ItemList(
               title: "Ingredients",
               titleBackground: const AssetImage('assets/Ingredient.jpg'),
-              gradient: fishGradient,
+              gradient: limelightGradient,
               items: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {

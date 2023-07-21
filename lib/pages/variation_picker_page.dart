@@ -10,16 +10,16 @@ import 'package:limelight/widgets/items/compact_item.dart';
 import 'package:limelight/data/recipe.dart';
 import 'package:limelight/gradients.dart';
 
-class VariationPicker extends StatefulWidget {
+class VariationPickerPage extends StatefulWidget {
   final int recipeId;
 
-  const VariationPicker({super.key, required this.recipeId});
+  const VariationPickerPage({super.key, required this.recipeId});
 
   @override
-  State<VariationPicker> createState() => VariationPickerState();
+  State<VariationPickerPage> createState() => VariationPickerPageState();
 }
 
-class VariationPickerState extends State<VariationPicker> {
+class VariationPickerPageState extends State<VariationPickerPage> {
   int _variationNumber = 0;
 
   @override
@@ -49,25 +49,11 @@ class VariationPickerState extends State<VariationPicker> {
     return EmptyPage(
       gradient: limelightGradient,
       child: Center(
-        child: GradientBox(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: Text(
-                  variationGroup.groupName,
-                  style: GoogleFonts.workSans(
-                    fontSize: 14 * MediaQuery.of(context).textScaleFactor * 1.2,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold,
-                    textStyle: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              ...variationButtons,
-            ],
-          ),
+        child: variationGroup.toVariationPicker(
+          (variation) => setState(() {
+            setVariation(widget.recipeId, variation.name);
+            _variationNumber += 1;
+          }),
         ),
       ),
     );
