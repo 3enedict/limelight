@@ -10,27 +10,43 @@ import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/gradients.dart';
 
-class Recipes {
-  Recipes({required this.recipes});
-  final List<RecipeData> recipes;
+class RecipeModel extends ChangeNotifier {
+  final List<RecipeData> _recipes = [];
 
-  factory Recipes.fromJson(Map<String, dynamic> data) {
-    final recipesData = data['recipes'] as List<dynamic>?;
-    final recipes = recipesData != null
-        ? recipesData
-            .map((reviewData) => RecipeData.fromJson(reviewData))
-            .toList()
-        : <RecipeData>[];
+  void load() {
+    rootBundle.loadString('assets/recipes.json').then(
+      (jsonData) {
+        final parsedJson = jsonDecode(jsonData);
+        final recipeData = parsedJson['recipes'] as List<dynamic>?;
+        final recipes = recipeData != null
+            ? recipeData
+                .map((reviewData) => RecipeData.fromJson(reviewData))
+                .toList()
+            : <RecipeData>[];
 
-    return Recipes(
-      recipes: recipes,
+        _recipes.addAll(recipes);
+        notifyListeners();
+      },
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'reviews': recipes.map((recipe) => recipe.toJson()).toList(),
-    };
+  void add(RecipeData recipe) {
+    _recipes.add(recipe);
+    notifyListeners();
+  }
+
+  int get number => _recipes.length;
+
+  int numberOfVariationGroups(int id) {
+    return _recipes[id].variationGroups.length;
+  }
+
+  VariationGroup variationGroup(int recipeId, int variationGroupId) {
+    return _recipes[recipeId].variationGroups[variationGroupId];
+  }
+
+  RecipeData recipe(int id) {
+    return _recipes[id];
   }
 }
 
@@ -126,13 +142,6 @@ class RecipeData {
       backgroundGradient: toSurfaceGradient(gradient),
     );
   }
-}
-
-Future<List<RecipeData>> loadAllRecipes() async {
-  final jsonData = await rootBundle.loadString('assets/recipes.json');
-  final parsedJson = jsonDecode(jsonData);
-
-  return Recipes.fromJson(parsedJson).recipes;
 }
 
 Future<int?> getRecipe(String key) async {

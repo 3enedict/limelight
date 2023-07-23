@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/main.dart';
 import 'package:limelight/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/gradients.dart';
+import 'package:provider/provider.dart';
 
 class Day extends StatelessWidget {
   final DateTime date;
@@ -105,25 +105,31 @@ class CalendarItemState extends State<CalendarItem>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Item(
-      title: _enabled ? recipes[_recipeId].name : "",
-      subTitle: _enabled ? recipes[_recipeId].difficulty : "",
-      info: _enabled ? recipes[_recipeId].price : "",
-      subInfo: _enabled ? "per serving" : "",
-      accentGradient: _enabled
-          ? recipes[_recipeId].gradient
-          : toBackgroundGradientWithReducedColorChange(limelightGradient),
-      backgroundGradient: toSurfaceGradient(limelightGradient),
-      onPressed: () => setState(() {
-        if (_enabled) {
-          removeRecipe(widget.recipeKey);
-          _recipeId = widget.recipeId;
-        }
-        if (!_enabled) setRecipe(widget.recipeKey, widget.recipeId);
+    return Consumer<RecipeModel>(
+      builder: (context, recipes, child) {
+        final recipe = recipes.recipe(_recipeId);
 
-        _enabled = !_enabled;
-      }),
-      onLongPress: () {},
+        return Item(
+          title: _enabled ? recipe.name : "",
+          subTitle: _enabled ? recipe.difficulty : "",
+          info: _enabled ? recipe.price : "",
+          subInfo: _enabled ? "per serving" : "",
+          accentGradient: _enabled
+              ? recipe.gradient
+              : toBackgroundGradientWithReducedColorChange(limelightGradient),
+          backgroundGradient: toSurfaceGradient(limelightGradient),
+          onPressed: () => setState(() {
+            if (_enabled) {
+              removeRecipe(widget.recipeKey);
+              _recipeId = widget.recipeId;
+            }
+            if (!_enabled) setRecipe(widget.recipeKey, widget.recipeId);
+
+            _enabled = !_enabled;
+          }),
+          onLongPress: () {},
+        );
+      },
     );
   }
 

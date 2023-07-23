@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/main.dart';
+import 'package:provider/provider.dart';
+
 import 'package:limelight/gradients.dart';
+import 'package:limelight/data/recipe.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
@@ -19,23 +21,6 @@ class IngredientSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final variationGroups = recipes[recipeId].variationGroups;
-
-    List<CompactItem> ingredients = [];
-    for (var ingredient in recipes[recipeId].ingredients) {
-      ingredients.add(ingredient.toCompactItem(() {}));
-    }
-
-    for (var i = 0; i < variations.length; i++) {
-      for (var variation in variationGroups[i].variations) {
-        if (variations[i] == variation.name) {
-          for (var ingredient in variation.ingredients) {
-            ingredients.add(ingredient.toCompactItem(() {}));
-          }
-        }
-      }
-    }
-
     return EmptyPage(
       gradient: limelightGradient,
       child: Column(
@@ -45,13 +30,35 @@ class IngredientSubPage extends StatelessWidget {
               title: "Ingredients",
               titleBackground: const AssetImage('assets/Ingredient.jpg'),
               gradient: limelightGradient,
-              items: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return ingredients[index];
-                  },
-                  childCount: ingredients.length,
-                ),
+              items: Consumer<RecipeModel>(
+                builder: (context, recipes, child) {
+                  final recipe = recipes.recipe(recipeId);
+
+                  List<CompactItem> ingredients = [];
+                  for (var ingredient in recipe.ingredients) {
+                    ingredients.add(ingredient.toCompactItem(() {}));
+                  }
+
+                  final variationGroups = recipe.variationGroups;
+                  for (var i = 0; i < variations.length; i++) {
+                    for (var variation in variationGroups[i].variations) {
+                      if (variations[i] == variation.name) {
+                        for (var ingredient in variation.ingredients) {
+                          ingredients.add(ingredient.toCompactItem(() {}));
+                        }
+                      }
+                    }
+                  }
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return ingredients[index];
+                      },
+                      childCount: ingredients.length,
+                    ),
+                  );
+                },
               ),
             ),
           ),

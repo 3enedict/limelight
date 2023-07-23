@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import 'package:limelight/main.dart';
 import 'package:limelight/widgets/gradient_box.dart';
@@ -24,36 +25,28 @@ class VariationPickerPageState extends State<VariationPickerPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_variationNumber >
-        recipes[widget.recipeId].variationGroups.length - 1) {
-      return Calendar(
-        recipeId: widget.recipeId,
-      );
-    }
-
-    var variationGroup =
-        recipes[widget.recipeId].variationGroups[_variationNumber];
-
-    List<CompactItem> variationButtons = [];
-    for (var variation in variationGroup.variations) {
-      variationButtons.add(
-        variation.toCompactItem(
-          () => setState(() {
-            setVariation(widget.recipeId, variation.name);
-            _variationNumber += 1;
-          }),
-        ),
-      );
-    }
-
     return EmptyPage(
       gradient: limelightGradient,
       child: Center(
-        child: variationGroup.toVariationPicker(
-          (variation) => setState(() {
-            setVariation(widget.recipeId, variation.name);
-            _variationNumber += 1;
-          }),
+        child: Consumer<RecipeModel>(
+          builder: (context, recipes, child) {
+            final varNum = recipes.numberOfVariationGroups(widget.recipeId);
+            if (_variationNumber > varNum - 1) {
+              return Calendar(recipeId: widget.recipeId);
+            }
+
+            var variationGroup = recipes.variationGroup(
+              widget.recipeId,
+              _variationNumber,
+            );
+
+            return variationGroup.toVariationPicker(
+              (variation) => setState(() {
+                setVariation(widget.recipeId, variation.name);
+                _variationNumber += 1;
+              }),
+            );
+          },
         ),
       ),
     );

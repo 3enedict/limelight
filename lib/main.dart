@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 import 'package:limelight/pages/recipes_page.dart';
 import 'package:limelight/data/recipe.dart';
 
-List<RecipeData> recipes = [];
-
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  recipes = await loadAllRecipes();
-
   Paint.enableDithering = true;
-  runApp(const Limelight());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) {
+        var model = RecipeModel();
+        model.load();
+
+        return model;
+      },
+      child: const Limelight(),
+    ),
+  );
 }
 
 class Limelight extends StatelessWidget {

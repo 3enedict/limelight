@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/main.dart';
+import 'package:provider/provider.dart';
+
 import 'package:limelight/gradients.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
+import 'package:limelight/data/recipe.dart';
 
 class VariationSubPage extends StatelessWidget {
   final int recipeId;
@@ -16,8 +18,6 @@ class VariationSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var variationGroup = recipes[recipeId].variationGroups;
-
     return EmptyPage(
       gradient: limelightGradient,
       child: Column(
@@ -27,18 +27,28 @@ class VariationSubPage extends StatelessWidget {
               title: "Variations",
               titleBackground: const AssetImage('assets/Variation.jpg'),
               gradient: limelightGradient,
-              items: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: Center(
-                        child: variationGroup[index].toVariationPicker((_) {}),
-                      ),
-                    );
-                  },
-                  childCount: variationGroup.length,
-                ),
+              items: Consumer<RecipeModel>(
+                builder: (context, recipes, child) {
+                  final recipe = recipes.recipe(recipeId);
+                  final variationGroup = recipe.variationGroups;
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 25),
+                          child: Center(
+                            child: variationGroup[index]
+                                .toVariationPicker((variation) {
+                              setVariation(recipeId, variation.name);
+                            }),
+                          ),
+                        );
+                      },
+                      childCount: variationGroup.length,
+                    ),
+                  );
+                },
               ),
             ),
           ),
