@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:limelight/gradients.dart';
+import 'package:limelight/pages/variation_picker_page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
@@ -19,10 +20,6 @@ class VariationSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final variationGroup = Provider.of<RecipeModel>(context, listen: false)
-        .recipe(recipeId)
-        .variationGroups;
-
     return EmptyPage(
       gradient: limelightGradient,
       child: Column(
@@ -32,22 +29,31 @@ class VariationSubPage extends StatelessWidget {
               title: "Variations",
               titleBackground: const AssetImage('assets/Variation.jpg'),
               gradient: limelightGradient,
-              items: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: Center(
-                        child: variationGroup[index]
-                            .toVariationPicker((variation) {
-                          Provider.of<VariationModel>(context)
-                              .add(recipeId, variation.name);
-                        }),
-                      ),
-                    );
-                  },
-                  childCount: variationGroup.length,
-                ),
+              items: Consumer2<RecipeModel, VariationModel>(
+                builder: (context, recipes, variations, child) {
+                  final variationGroups =
+                      recipes.recipe(recipeId).variationGroups;
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        final variationGroup = variationGroups[index];
+                        return variationGroup.toCompactItem(
+                          () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  VariationPickerPage(
+                                recipeId: recipeId,
+                                variationGroupId: index,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: variationGroups.length,
+                    ),
+                  );
+                },
               ),
             ),
           ),

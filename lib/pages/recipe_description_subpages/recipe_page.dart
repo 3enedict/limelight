@@ -46,12 +46,13 @@ class RecipeSubPage extends StatelessWidget {
                       final variationId = int.parse(location[1]);
                       final instructionGroupId = int.parse(location[2]);
 
-                      final variation = recipe.variationGroups[variationGroupId]
-                          .variations[variationId];
+                      final list =
+                          variations.getVarationIdsForEachGroup(recipeId);
+                      if (list[variationGroupId] == "$variationId") {
+                        final variation = recipe
+                            .variationGroups[variationGroupId]
+                            .variations[variationId];
 
-                      if (variations
-                          .variationList(recipeId)
-                          .contains(variation.name)) {
                         instructions.addAll(
                           variation.instructionGroups[instructionGroupId],
                         );

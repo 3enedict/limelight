@@ -15,12 +15,14 @@ class VariationModel extends ChangeNotifier {
     });
   }
 
-  void add(int recipeId, String variation) {
-    final oldVariations = _variations.elementAtOrNull(recipeId);
-    final newVariations =
-        oldVariations == null ? variation : "$oldVariations:$variation";
+  void add(int recipeId, int variationGroupId, int variationId) {
+    final list = fillPotentialUninitializedVariations(
+      recipeId,
+      variationGroupId,
+    );
 
-    _variations.insert(recipeId, newVariations);
+    list.insert(variationGroupId, "$variationId");
+    _variations.insert(recipeId, list.join(":"));
 
     SharedPreferences.getInstance().then(
       (instance) {
@@ -31,12 +33,28 @@ class VariationModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> variationList(int recipeId) {
-    return (_variations.elementAtOrNull(recipeId) ?? "").split(":");
+  int findUninitializedVariation(
+    int recipeId,
+    int numberOfVariationGroupsInRecipe,
+  ) {
+    final list = getVarationIdsForEachGroup(recipeId);
+    if (list.length < numberOfVariationGroupsInRecipe) return list.length;
+
+    return list.indexWhere((element) => element == "");
   }
 
-  bool variationExists(int recipeId) {
-    return _variations.elementAtOrNull(recipeId) != null;
+  List<String> fillPotentialUninitializedVariations(int recipeId, int end) {
+    final list = getVarationIdsForEachGroup(recipeId);
+
+    for (var i = list.length; i < end; i++) {
+      list.add("");
+    }
+
+    return list;
+  }
+
+  List<String> getVarationIdsForEachGroup(int recipeId) {
+    return (_variations.elementAtOrNull(recipeId) ?? "").split(":");
   }
 }
 

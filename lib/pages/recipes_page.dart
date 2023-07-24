@@ -43,15 +43,19 @@ class RecipesPage extends StatelessWidget {
             return SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  final ask = !variations.variationExists(index);
-                  final widgetOnPress = ask
-                      ? VariationPickerPage(recipeId: index)
-                      : Calendar(recipeId: index);
+                  final uninitializedId = variations.findUninitializedVariation(
+                    index,
+                    recipes.numberOfVariationGroups(index),
+                  );
 
                   return recipes.recipe(index).toItem(
                         fadeTransition(
                           context,
-                          widgetOnPress,
+                          uninitializedId == -1
+                              ? Calendar(recipeId: index)
+                              : VariationPickerPage(
+                                  recipeId: index,
+                                ),
                         ),
                         fadeTransition(
                           context,

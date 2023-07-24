@@ -33,19 +33,22 @@ class IngredientSubPage extends StatelessWidget {
                 builder: (context, recipes, variations, child) {
                   final recipe = recipes.recipe(recipeId);
                   final variationGroups = recipe.variationGroups;
-                  final variationList = variations.variationList(recipeId);
+                  final variationList =
+                      variations.getVarationIdsForEachGroup(recipeId);
 
                   List<CompactItem> ingredients = [];
                   for (var ingredient in recipe.ingredients) {
                     ingredients.add(ingredient.toCompactItem(() {}));
                   }
 
-                  for (var i = 0; i < variationList.length - 1; i++) {
-                    for (var variation in variationGroups[i].variations) {
-                      if (variationList[i] == variation.name) {
-                        for (var ingredient in variation.ingredients) {
-                          ingredients.add(ingredient.toCompactItem(() {}));
-                        }
+                  for (var i = 0; i < variationList.length; i++) {
+                    if (variationList[i] != "") {
+                      final id = int.parse(variationList[i]);
+                      for (var ingredient
+                          in variationGroups[i].variations[id].ingredients) {
+                        ingredients.add(ingredient.toCompactItem(
+                          () {},
+                        ));
                       }
                     }
                   }
