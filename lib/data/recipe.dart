@@ -159,20 +159,3 @@ Future<bool> removeRecipe(String key) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.remove(key);
 }
-
-Future<bool> chechForVariations(int id) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getStringList("Variations for $id") == null;
-}
-
-Future<bool> setVariation(int id, String variation) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final variations = prefs.getStringList("Variations for $id") ?? [];
-
-  return prefs.setStringList("Variations for $id", [...variations, variation]);
-}
-
-Future<List<String>> getVariations(int id) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getStringList("Variations for $id") ?? [];
-}

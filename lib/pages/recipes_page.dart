@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/recipe.dart';
+import 'package:limelight/data/variation.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:limelight/main.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/calendar.dart';
@@ -37,16 +37,19 @@ class RecipesPage extends StatelessWidget {
         padding: 80,
         gradient: limelightGradient,
         keyValue: 1,
-        items: Consumer<RecipeModel>(
-          builder: (context, recipes, child) {
+        items: Consumer2<RecipeModel, VariationModel>(
+          builder: (context, recipes, variations, child) {
             return SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
+                  final ask = !variations.variationExists(index);
+
                   return recipes.recipe(index).toItem(
                         fadeTransition(
                           context,
                           Calendar(
                             recipeId: index,
+                            needToAskForVariations: ask,
                           ),
                         ),
                         fadeTransition(

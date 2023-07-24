@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:limelight/gradients.dart';
+import 'package:limelight/data/variation.dart';
 import 'package:limelight/data/recipe.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
@@ -11,12 +12,10 @@ import 'package:limelight/widgets/page.dart';
 
 class RecipeSubPage extends StatelessWidget {
   final int recipeId;
-  final List<String> variations;
 
   const RecipeSubPage({
     super.key,
     required this.recipeId,
-    required this.variations,
   });
 
   @override
@@ -30,8 +29,8 @@ class RecipeSubPage extends StatelessWidget {
               title: "Recipe",
               titleBackground: const AssetImage('assets/Recipe.jpg'),
               gradient: limelightGradient,
-              items: Consumer<RecipeModel>(
-                builder: (context, recipes, child) {
+              items: Consumer2<RecipeModel, VariationModel>(
+                builder: (context, recipes, variations, child) {
                   final recipe = recipes.recipe(recipeId);
 
                   List<String> instructions = [];
@@ -50,7 +49,9 @@ class RecipeSubPage extends StatelessWidget {
                       final variation = recipe.variationGroups[variationGroupId]
                           .variations[variationId];
 
-                      if (variations.contains(variation.name)) {
+                      if (variations
+                          .variationList(recipeId)
+                          .contains(variation.name)) {
                         instructions.addAll(
                           variation.instructionGroups[instructionGroupId],
                         );

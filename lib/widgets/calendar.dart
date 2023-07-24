@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:limelight/pages/variation_picker_page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/data/recipe.dart';
 import 'package:limelight/widgets/items/calendar_item.dart';
 import 'package:limelight/widgets/items/item.dart';
 
@@ -15,33 +14,22 @@ const double dayMargin = 20;
 
 class Calendar extends StatefulWidget {
   final int recipeId;
+  final bool needToAskForVariations;
 
-  const Calendar({super.key, required this.recipeId});
+  const Calendar({
+    super.key,
+    required this.recipeId,
+    required this.needToAskForVariations,
+  });
 
   @override
   State<Calendar> createState() => CalendarState();
 }
 
 class CalendarState extends State<Calendar> {
-  bool? _needToAskForVariations;
-
-  @override
-  void initState() {
-    super.initState();
-    chechForVariations(widget.recipeId).then(
-      (needToAskForVariations) => setState(() {
-        _needToAskForVariations = needToAskForVariations;
-      }),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (_needToAskForVariations == null) {
-      return const EmptyPage();
-    }
-
-    if (_needToAskForVariations == true) {
+    if (widget.needToAskForVariations) {
       return VariationPickerPage(recipeId: widget.recipeId);
     }
 

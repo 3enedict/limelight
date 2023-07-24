@@ -5,18 +5,31 @@ import 'package:provider/provider.dart';
 import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 import 'package:limelight/pages/recipes_page.dart';
+import 'package:limelight/data/variation.dart';
 import 'package:limelight/data/recipe.dart';
 
 void main() async {
   Paint.enableDithering = true;
   runApp(
-    ChangeNotifierProvider(
-      create: (context) {
-        var model = RecipeModel();
-        model.load();
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) {
+            var model = RecipeModel();
+            model.load();
 
-        return model;
-      },
+            return model;
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            var model = VariationModel();
+            model.load();
+
+            return model;
+          },
+        ),
+      ],
       child: const Limelight(),
     ),
   );

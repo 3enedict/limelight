@@ -1,8 +1,44 @@
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:limelight/gradients.dart';
 import 'package:limelight/data/ingredient.dart';
 import 'package:limelight/widgets/items/compact_item.dart';
+
+class VariationModel extends ChangeNotifier {
+  final List<String> _variations = [];
+
+  void load() {
+    SharedPreferences.getInstance().then((instance) {
+      _variations.addAll(instance.getStringList("Variations") ?? []);
+    });
+  }
+
+  void add(int recipeId, String variation) {
+    final oldVariations = _variations.elementAtOrNull(recipeId);
+    final newVariations =
+        oldVariations == null ? variation : "$oldVariations:$variation";
+
+    _variations.insert(recipeId, newVariations);
+
+    SharedPreferences.getInstance().then(
+      (instance) {
+        instance.setStringList("Variations", _variations);
+      },
+    );
+
+    notifyListeners();
+  }
+
+  List<String> variationList(int recipeId) {
+    return (_variations.elementAtOrNull(recipeId) ?? "").split(":");
+  }
+
+  bool variationExists(int recipeId) {
+    return _variations.elementAtOrNull(recipeId) != null;
+  }
+}
 
 class Variation {
   final String name;
