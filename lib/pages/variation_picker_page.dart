@@ -28,7 +28,6 @@ class VariationPickerPageState extends State<VariationPickerPage> {
         if (_variationNumber > varNum - 1) {
           return Calendar(
             recipeId: widget.recipeId,
-            needToAskForVariations: false,
           );
         }
 

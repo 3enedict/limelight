@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/recipe.dart';
 import 'package:limelight/data/variation.dart';
+import 'package:limelight/pages/variation_picker_page.dart';
 
 import 'package:provider/provider.dart';
 
@@ -43,14 +44,14 @@ class RecipesPage extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   final ask = !variations.variationExists(index);
+                  final widgetOnPress = ask
+                      ? VariationPickerPage(recipeId: index)
+                      : Calendar(recipeId: index);
 
                   return recipes.recipe(index).toItem(
                         fadeTransition(
                           context,
-                          Calendar(
-                            recipeId: index,
-                            needToAskForVariations: ask,
-                          ),
+                          widgetOnPress,
                         ),
                         fadeTransition(
                           context,
