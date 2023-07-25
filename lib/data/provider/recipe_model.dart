@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:limelight/data/json/ingredient.dart';
 
 import 'package:limelight/data/json/recipe.dart';
 import 'package:limelight/data/json/variation.dart';
@@ -9,12 +10,8 @@ import 'package:limelight/data/json/variation_group.dart';
 class RecipeModel extends ChangeNotifier {
   final List<RecipeData> _recipes = [];
 
-  void loadDefaultRecipes() {
-    loadFromAssets('recipes.json');
-  }
-
-  void loadFromAssets(String path) {
-    rootBundle.loadString("assets/$path").then(
+  void load() {
+    rootBundle.loadString("assets/recipes.json").then(
       (jsonData) {
         final parsedJson = jsonDecode(jsonData);
         final recipeData = parsedJson['recipes'] as List<dynamic>?;
@@ -85,5 +82,19 @@ class RecipeModel extends ChangeNotifier {
 
   String variationTime(int recipeId, int variationGroupId, int variationId) {
     return _variation(recipeId, variationGroupId, variationId).time;
+  }
+
+  List<IngredientData> ingredientList(
+    int recipeId,
+    List<(int, int)> variationIds,
+  ) {
+    List<IngredientData> ingredients = _recipe(recipeId).ingredients;
+    for (var (variationGroupId, variationId) in variationIds) {
+      ingredients.addAll(
+        _variation(recipeId, variationGroupId, variationId).ingredients,
+      );
+    }
+
+    return ingredients;
   }
 }

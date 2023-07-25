@@ -86,4 +86,20 @@ class IngredientData {
       onLongPress: () {},
     );
   }
+
+  @override
+  int get hashCode => Object.hash(name, quantity);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IngredientData &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          quantity == other.quantity;
+
+  @override
+  String toString() {
+    return "IngredientData(name: $name, quantity: $quantity)";
+  }
 }
