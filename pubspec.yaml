@@ -4,18 +4,22 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0'
+  sdk: '^3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  fluttericon: ^2.0.0
-  google_fonts: ^5.0.1
-  provider: ^6.0.5
-  shared_preferences: ^2.1.0
+  fluttericon:
+  google_fonts:
+  provider:
+  shared_preferences:
 
 dev_dependencies:
-  flutter_lints: ^2.0.0
+  flutter_lints:
+  flutter_test:
+    sdk: flutter
+  test:
+  test_api:
 
 flutter:
   uses-material-design: true
