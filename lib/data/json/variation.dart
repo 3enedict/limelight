@@ -17,6 +17,12 @@ class Variation {
     required this.instructionGroups,
   });
 
+  Variation.empty({
+    this.name = '',
+    this.time = '',
+  })  : ingredients = [],
+        instructionGroups = [];
+
   factory Variation.fromJson(Map<String, dynamic> data) {
     final name = data['name'] as String;
     final time = data['time'] as String;

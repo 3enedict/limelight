@@ -66,28 +66,28 @@ void main() {
   group('Recipe model: Loading recipes', () {
     test('loading a recipe updates the number of recipes', () {
       final RecipeModel model = RecipeModel();
-      model.loadFromAssets("pasta_with_tomato_sauce.json");
+      model.loadFromAssets("test.json");
 
       model.addListener(() => expect(model.number, 1));
     });
 
     test('loaded recipe\'s name can be accessed correctly', () {
       final RecipeModel model = RecipeModel();
-      model.loadFromAssets("pasta_with_tomato_sauce.json");
+      model.loadFromAssets("test.json");
 
       model.addListener(() => expect(model.name(0), "Pasta with tomato sauce"));
     });
 
     test('loaded recipe\'s difficulty can be accessed correctly', () {
       final RecipeModel model = RecipeModel();
-      model.loadFromAssets("pasta_with_tomato_sauce.json");
+      model.loadFromAssets("test.json");
 
       model.addListener(() => expect(model.difficulty(0), "Easy"));
     });
 
     test('loaded recipe\'s price can be accessed correctly', () {
       final RecipeModel model = RecipeModel();
-      model.loadFromAssets("pasta_with_tomato_sauce.json");
+      model.loadFromAssets("test.json");
 
       model.addListener(() => expect(model.price(0), "\$1"));
     });
@@ -120,6 +120,44 @@ void main() {
       model.add(simpleRecipe);
 
       expect(model.price(0), "\$0.5");
+    });
+  });
+
+  group('Recipe model: Variations', () {
+    test('Requesting the number of VariationGroups works as expected', () {
+      final RecipeModel model = RecipeModel();
+      model.loadFromAssets("test.json");
+
+      model.addListener(() => expect(model.numberOfVariationGroups(0), 3));
+    });
+
+    test('Requesting the name of a VariationGroup works as expected', () {
+      final RecipeModel model = RecipeModel();
+      model.loadFromAssets("test.json");
+
+      model.addListener(() =>
+          expect(model.variationGroupName(0, 1), "Type of base for the sauce"));
+    });
+
+    test('Requesting the number of Variations works as expected', () {
+      final RecipeModel model = RecipeModel();
+      model.loadFromAssets("test.json");
+
+      model.addListener(() => expect(model.numberOfVariations(0, 1), 2));
+    });
+
+    test('Requesting the name of a Variation works as expected', () {
+      final RecipeModel model = RecipeModel();
+      model.loadFromAssets("test.json");
+
+      model.addListener(() => expect(model.variationName(0, 1, 0), "Soffrito"));
+    });
+
+    test('Requesting the time for doing a Variation works as expected', () {
+      final RecipeModel model = RecipeModel();
+      model.loadFromAssets("test.json");
+
+      model.addListener(() => expect(model.variationTime(0, 1, 0), "+10min"));
     });
   });
 }

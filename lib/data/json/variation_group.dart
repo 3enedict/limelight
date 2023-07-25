@@ -13,6 +13,10 @@ class VariationGroup {
     required this.variations,
   });
 
+  VariationGroup.empty({
+    this.groupName = '',
+  }) : variations = [];
+
   factory VariationGroup.fromJson(Map<String, dynamic> data) {
     final groupName = data['groupName'] as String;
 

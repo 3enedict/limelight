@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:limelight/data/json/recipe.dart';
+import 'package:limelight/data/json/variation.dart';
+import 'package:limelight/data/json/variation_group.dart';
 
 class RecipeModel extends ChangeNotifier {
   final List<RecipeData> _recipes = [];
@@ -33,18 +35,55 @@ class RecipeModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  RecipeData _recipe(int recipeId) {
+    return _recipes.elementAtOrNull(recipeId) ?? RecipeData.empty();
+  }
+
+  VariationGroup _variationGroup(int recipeId, int variationGroupId) {
+    return _recipe(recipeId)
+            .variationGroups
+            .elementAtOrNull(variationGroupId) ??
+        VariationGroup.empty();
+  }
+
+  Variation _variation(int recipeId, int variationGroupId, int variationId) {
+    return _variationGroup(recipeId, variationGroupId)
+            .variations
+            .elementAtOrNull(variationId) ??
+        Variation.empty();
+  }
+
   int get number => _recipes.length;
 
   String name(int recipeId) {
-    return (_recipes.elementAtOrNull(recipeId) ?? RecipeData.empty()).name;
+    return _recipe(recipeId).name;
   }
 
   String difficulty(int recipeId) {
-    return (_recipes.elementAtOrNull(recipeId) ?? RecipeData.empty())
-        .difficulty;
+    return _recipe(recipeId).difficulty;
   }
 
   String price(int recipeId) {
-    return (_recipes.elementAtOrNull(recipeId) ?? RecipeData.empty()).price;
+    return _recipe(recipeId).price;
+  }
+
+  int numberOfVariationGroups(int recipeId) {
+    return _recipe(recipeId).variationGroups.length;
+  }
+
+  String variationGroupName(int recipeId, int variationGroupId) {
+    return _variationGroup(recipeId, variationGroupId).groupName;
+  }
+
+  int numberOfVariations(int recipeId, int variationGroupId) {
+    return _variationGroup(recipeId, variationGroupId).variations.length;
+  }
+
+  String variationName(int recipeId, int variationGroupId, int variationId) {
+    return _variation(recipeId, variationGroupId, variationId).name;
+  }
+
+  String variationTime(int recipeId, int variationGroupId, int variationId) {
+    return _variation(recipeId, variationGroupId, variationId).time;
   }
 }
