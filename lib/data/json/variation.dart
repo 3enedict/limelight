@@ -1,62 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:limelight/gradients.dart';
 import 'package:limelight/data/ingredient.dart';
 import 'package:limelight/widgets/items/compact_item.dart';
-
-class VariationModel extends ChangeNotifier {
-  final List<String> _variations = [];
-
-  void load() {
-    SharedPreferences.getInstance().then((instance) {
-      _variations.addAll(instance.getStringList("Variations") ?? []);
-    });
-  }
-
-  void add(int recipeId, int variationGroupId, int variationId) {
-    final list = fillPotentialUninitializedVariations(
-      recipeId,
-      variationGroupId,
-    );
-
-    list.insert(variationGroupId, "$variationId");
-    _variations.insert(recipeId, list.join(":"));
-
-    SharedPreferences.getInstance().then(
-      (instance) {
-        instance.setStringList("Variations", _variations);
-      },
-    );
-
-    notifyListeners();
-  }
-
-  int findUninitializedVariation(
-    int recipeId,
-    int numberOfVariationGroupsInRecipe,
-  ) {
-    final list = getVarationIdsForEachGroup(recipeId);
-    if (list.length < numberOfVariationGroupsInRecipe) return list.length;
-
-    return list.indexWhere((element) => element == "");
-  }
-
-  List<String> fillPotentialUninitializedVariations(int recipeId, int end) {
-    final list = getVarationIdsForEachGroup(recipeId);
-
-    for (var i = list.length; i < end; i++) {
-      list.add("");
-    }
-
-    return list;
-  }
-
-  List<String> getVarationIdsForEachGroup(int recipeId) {
-    return (_variations.elementAtOrNull(recipeId) ?? "").split(":");
-  }
-}
 
 class Variation {
   final String name;

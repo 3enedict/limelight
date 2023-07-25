@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
-import 'package:limelight/data/ingredient.dart';
+import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
 class ShoppingListPage extends StatefulWidget {

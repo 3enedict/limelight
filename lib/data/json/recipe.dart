@@ -1,54 +1,10 @@
-import 'dart:convert';
-import 'dart:async' show Future;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:limelight/data/ingredient.dart';
 import 'package:limelight/data/variation_group.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/items/button_item.dart';
 import 'package:limelight/gradients.dart';
-
-class RecipeModel extends ChangeNotifier {
-  final List<RecipeData> _recipes = [];
-
-  void load() {
-    rootBundle.loadString('assets/recipes.json').then(
-      (jsonData) {
-        final parsedJson = jsonDecode(jsonData);
-        final recipeData = parsedJson['recipes'] as List<dynamic>?;
-        final recipes = recipeData != null
-            ? recipeData
-                .map((reviewData) => RecipeData.fromJson(reviewData))
-                .toList()
-            : <RecipeData>[];
-
-        _recipes.addAll(recipes);
-        notifyListeners();
-      },
-    );
-  }
-
-  void add(RecipeData recipe) {
-    _recipes.add(recipe);
-    notifyListeners();
-  }
-
-  int get number => _recipes.length;
-
-  int numberOfVariationGroups(int id) {
-    return _recipes[id].variationGroups.length;
-  }
-
-  VariationGroup variationGroup(int recipeId, int variationGroupId) {
-    return _recipes[recipeId].variationGroups[variationGroupId];
-  }
-
-  RecipeData recipe(int id) {
-    return _recipes[id];
-  }
-}
 
 class RecipeData {
   final String name;
@@ -142,20 +98,4 @@ class RecipeData {
       backgroundGradient: toSurfaceGradient(gradient),
     );
   }
-}
-
-Future<int?> getRecipe(String key) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final recipeId = prefs.getInt(key);
-  return recipeId;
-}
-
-Future<bool> setRecipe(String key, int id) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.setInt(key, id);
-}
-
-Future<bool> removeRecipe(String key) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.remove(key);
 }

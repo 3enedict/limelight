@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
-
 import 'package:limelight/gradients.dart';
-import 'package:limelight/data/variation.dart';
-import 'package:limelight/data/recipe.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/items/compact_item.dart';
+import 'package:limelight/widgets/items/button_item.dart';
 
 class IngredientSubPage extends StatelessWidget {
   final int recipeId;
@@ -29,39 +25,20 @@ class IngredientSubPage extends StatelessWidget {
               title: "Ingredients",
               titleBackground: const AssetImage('assets/Ingredient.jpg'),
               gradient: limelightGradient,
-              items: Consumer2<RecipeModel, VariationModel>(
-                builder: (context, recipes, variations, child) {
-                  final recipe = recipes.recipe(recipeId);
-                  final variationGroups = recipe.variationGroups;
-                  final variationList =
-                      variations.getVarationIdsForEachGroup(recipeId);
-
-                  List<CompactItem> ingredients = [];
-                  for (var ingredient in recipe.ingredients) {
-                    ingredients.add(ingredient.toCompactItem(() {}));
-                  }
-
-                  for (var i = 0; i < variationList.length; i++) {
-                    if (variationList[i] != "") {
-                      final id = int.parse(variationList[i]);
-                      for (var ingredient
-                          in variationGroups[i].variations[id].ingredients) {
-                        ingredients.add(ingredient.toCompactItem(
-                          () {},
-                        ));
-                      }
-                    }
-                  }
-
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return ingredients[index];
-                      },
-                      childCount: ingredients.length,
-                    ),
-                  );
-                },
+              items: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return ButtonItem(
+                      title: "",
+                      subTitle: "",
+                      info: "",
+                      subInfo: "",
+                      accentGradient: limelightGradient,
+                      backgroundGradient: toSurfaceGradient(limelightGradient),
+                    );
+                  },
+                  childCount: 2,
+                ),
               ),
             ),
           ),

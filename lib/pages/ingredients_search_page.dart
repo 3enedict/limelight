@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/gradient_textfield.dart';
-import 'package:limelight/data/ingredient.dart';
+import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
 class SearchPage extends StatefulWidget {
