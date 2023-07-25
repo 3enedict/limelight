@@ -63,7 +63,7 @@ final normalRecipe = RecipeData(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('Recipe Model', () {
+  group('Recipe model: Loading recipes', () {
     test('loading a recipe updates the number of recipes', () {
       final RecipeModel model = RecipeModel();
       model.loadFromAssets("pasta_with_tomato_sauce.json");
@@ -90,6 +90,36 @@ void main() {
       model.loadFromAssets("pasta_with_tomato_sauce.json");
 
       model.addListener(() => expect(model.price(0), "\$1"));
+    });
+  });
+
+  group('Recipe model: Adding recipes', () {
+    test('adding a recipe updates the number of recipes', () {
+      final RecipeModel model = RecipeModel();
+      model.add(simpleRecipe);
+
+      expect(model.number, 1);
+    });
+
+    test('added recipe\'s name can be accessed correctly', () {
+      final RecipeModel model = RecipeModel();
+      model.add(simpleRecipe);
+
+      expect(model.name(0), "Salad");
+    });
+
+    test('added recipe\'s difficulty can be accessed correctly', () {
+      final RecipeModel model = RecipeModel();
+      model.add(simpleRecipe);
+
+      expect(model.difficulty(0), "Easy");
+    });
+
+    test('added recipe\'s price can be accessed correctly', () {
+      final RecipeModel model = RecipeModel();
+      model.add(simpleRecipe);
+
+      expect(model.price(0), "\$0.5");
     });
   });
 }
