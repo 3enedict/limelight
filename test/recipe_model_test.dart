@@ -166,8 +166,6 @@ final complicatedRecipe = RecipeData(
 );
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   group('Recipe model, adding recipes', () {
     test('adding a recipe updates the number of recipes', () {
       final RecipeModel model = RecipeModel();

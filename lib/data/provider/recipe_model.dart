@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 import 'package:limelight/data/json/ingredient.dart';
 
 import 'package:limelight/data/json/recipe.dart';
