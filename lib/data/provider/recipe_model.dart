@@ -22,7 +22,6 @@ class RecipeModel extends ChangeNotifier {
             : <RecipeData>[];
 
         _recipes.addAll(recipes);
-        notifyListeners();
       },
     );
   }
@@ -32,19 +31,17 @@ class RecipeModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  RecipeData _recipe(int recipeId) {
+  RecipeData recipe(int recipeId) {
     return _recipes.elementAtOrNull(recipeId) ?? RecipeData.empty();
   }
 
-  VariationGroup _variationGroup(int recipeId, int variationGroupId) {
-    return _recipe(recipeId)
-            .variationGroups
-            .elementAtOrNull(variationGroupId) ??
+  VariationGroup variationGroup(int recipeId, int variationGroupId) {
+    return recipe(recipeId).variationGroups.elementAtOrNull(variationGroupId) ??
         VariationGroup.empty();
   }
 
-  Variation _variation(int recipeId, int variationGroupId, int variationId) {
-    return _variationGroup(recipeId, variationGroupId)
+  Variation variation(int recipeId, int variationGroupId, int variationId) {
+    return variationGroup(recipeId, variationGroupId)
             .variations
             .elementAtOrNull(variationId) ??
         Variation.empty();
@@ -53,49 +50,51 @@ class RecipeModel extends ChangeNotifier {
   int get number => _recipes.length;
 
   String name(int recipeId) {
-    return _recipe(recipeId).name;
+    return recipe(recipeId).name;
   }
 
   String difficulty(int recipeId) {
-    return _recipe(recipeId).difficulty;
+    return recipe(recipeId).difficulty;
   }
 
   String price(int recipeId) {
-    return _recipe(recipeId).price;
+    return recipe(recipeId).price;
   }
 
   int numberOfVariationGroups(int recipeId) {
-    return _recipe(recipeId).variationGroups.length;
+    return recipe(recipeId).variationGroups.length;
   }
 
   String variationGroupName(int recipeId, int variationGroupId) {
-    return _variationGroup(recipeId, variationGroupId).groupName;
+    return variationGroup(recipeId, variationGroupId).groupName;
   }
 
   int numberOfVariations(int recipeId, int variationGroupId) {
-    return _variationGroup(recipeId, variationGroupId).variations.length;
+    return variationGroup(recipeId, variationGroupId).variations.length;
   }
 
   String variationName(int recipeId, int variationGroupId, int variationId) {
-    return _variation(recipeId, variationGroupId, variationId).name;
+    return variation(recipeId, variationGroupId, variationId).name;
   }
 
   String variationTime(int recipeId, int variationGroupId, int variationId) {
-    return _variation(recipeId, variationGroupId, variationId).time;
+    return variation(recipeId, variationGroupId, variationId).time;
   }
 
   List<IngredientData> ingredientList(
     int recipeId,
     List<(int, int)> variationIds,
   ) {
-    List<IngredientData> ingredients = _recipe(recipeId).ingredients;
+    List<IngredientData> ingredientList =
+        List.from(recipe(recipeId).ingredients);
+
     for (var (variationGroupId, variationId) in variationIds) {
-      ingredients.addAll(
-        _variation(recipeId, variationGroupId, variationId).ingredients,
+      ingredientList.addAll(
+        variation(recipeId, variationGroupId, variationId).ingredients,
       );
     }
 
-    return ingredients;
+    return ingredientList;
   }
 
   List<String> instructionSet(
@@ -103,7 +102,7 @@ class RecipeModel extends ChangeNotifier {
     int numberOfServings,
     List<(int, int)> variationIds,
   ) {
-    String instructions = _recipe(recipeId).instructions.join("(Enter)");
+    String instructions = recipe(recipeId).instructions.join("(Enter)");
 
     instructions =
         _replaceVariationInstructions(recipeId, instructions, variationIds);
@@ -134,7 +133,7 @@ class RecipeModel extends ChangeNotifier {
 
       if (variationIds.contains((variationGroupId, variationId))) {
         final newInstructions =
-            _variation(recipeId, variationGroupId, variationId)
+            variation(recipeId, variationGroupId, variationId)
                 .instructionGroups[instructionId]
                 .join("(Enter)");
 
@@ -164,7 +163,7 @@ class RecipeModel extends ChangeNotifier {
         "{$instructionId:quantity}",
         _computeIngredientQuantities(
           numberOfServings,
-          _recipe(recipeId).ingredients[instructionId],
+          recipe(recipeId).ingredients[instructionId],
         ),
       );
     }
@@ -192,7 +191,7 @@ class RecipeModel extends ChangeNotifier {
         "{$variationGroupId:$variationId:$instructionId:quantity}",
         _computeIngredientQuantities(
           numberOfServings,
-          _variation(recipeId, variationGroupId, variationId)
+          variation(recipeId, variationGroupId, variationId)
               .ingredients[instructionId],
         ),
       );

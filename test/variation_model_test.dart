@@ -13,9 +13,10 @@ void main() {
   group('Variation model, adding variations', () {
     test('A variation can be added and retrieved', () {
       final VariationModel model = VariationModel();
-      model.set(3, 2, 1);
+      int recipeId = 3;
+      model.set(recipeId, 2, 1);
 
-      expect(model.variationIds(3), [(2, 1)]);
+      expect(model.variationIds(recipeId), [(2, 1)]);
     });
 
     test('If querying for a non-existant variations, return empty list', () {
@@ -28,16 +29,47 @@ void main() {
         'Replacing a variation works as expected (even if multiple places for the id can be found)',
         () {
       final VariationModel model = VariationModel();
-      model.set(3, 3, 2);
-      model.set(3, 2, 2);
+      int recipeId = 3;
+      model.set(recipeId, 3, 2);
+      model.set(recipeId, 2, 2);
 
       //                    <->
       // _variationIds = "3:2:2:2"
       //                      <->
 
-      model.set(3, 2, 1);
+      model.set(recipeId, 2, 1);
 
-      expect(model.variationIds(3), [(3, 2), (2, 1)]);
+      expect(model.variationIds(recipeId), [(3, 2), (2, 1)]);
+    });
+  });
+
+  group('Variation model, missing variations', () {
+    test('Checking for available variations works as expected', () {
+      final VariationModel model = VariationModel();
+
+      int recipeId = 3;
+      int numberOfVariationsInRecipe = 4;
+      model.set(recipeId, 0, 3);
+      model.set(recipeId, 2, 1);
+
+      expect(
+        model.missingVariations(recipeId, numberOfVariationsInRecipe),
+        [1, 3],
+      );
+    });
+
+    test(
+        'If querying missing variations for recipe with none set, return all of them',
+        () {
+      final VariationModel model = VariationModel();
+
+      int recipeId = 3;
+      int numberOfVariationsInRecipe = 4;
+
+      expect(
+        model.missingVariations(recipeId, numberOfVariationsInRecipe),
+        [0, 1, 2, 3],
+      );
     });
   });
 }

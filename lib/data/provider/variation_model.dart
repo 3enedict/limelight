@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VariationModel extends ChangeNotifier {
-  final List<String> _variationIds = [];
+  List<String> _variationIds = [];
+
+  void load() {
+    SharedPreferences.getInstance().then(
+      (instance) {
+        _variationIds = instance.getStringList("Variations") ?? [];
+      },
+    );
+  }
 
   void set(int recipeId, int variationGroupId, int variationId) {
     _growVariationIdsToFit(recipeId);
@@ -34,6 +42,21 @@ class VariationModel extends ChangeNotifier {
     List<(int, int)> ids = [];
     _map(recipeId, (groupId, variationId) {
       ids.add((groupId, variationId));
+      return variationId;
+    });
+
+    return ids;
+  }
+
+  List<int> missingVariations(
+    int recipeId,
+    int numberOfVariationGroupsInRecipe,
+  ) {
+    _growVariationIdsToFit(recipeId);
+
+    List<int> ids = List.generate(numberOfVariationGroupsInRecipe, (id) => id);
+    _map(recipeId, (variationGroupId, variationId) {
+      ids.remove(variationGroupId);
       return variationId;
     });
 

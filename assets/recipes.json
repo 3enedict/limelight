@@ -7,18 +7,18 @@
       "ingredients": [
         {
           "name": "Olive oil",
-          "quantity": "2tbsp of olive oil"
+          "quantity": "2tbsp"
         }
       ],
       "instructions": [
-        "{0:0:0}",
-        "{1:0:0}",
-        "{1:1:0}",
-        "{2:0:0}",
-        "{2:1:0}",
+        "{0:0:0:instruction}",
+        "{1:0:0:instruction}",
+        "{1:1:0:instruction}",
+        "{2:0:0:instruction}",
+        "{2:1:0:instruction}",
         "Salt to taste",
-        "{0:0:1}",
-        "{0:1:0}",
+        "{0:0:1:instruction}",
+        "{0:1:0:instruction}",
         "Drain the pasta, while keeping some of the water that it cooked in.",
         "Mix the drained pasta into the sauce, adding some of the pasta water until everything has a good consistency."
       ],
@@ -32,7 +32,7 @@
               "ingredients": [
                 {
                   "name": "Flour",
-                  "quantity": "100g of flour"
+                  "quantity": "100g"
                 },
                 {
                   "name": "Egg(s)",
@@ -41,7 +41,7 @@
               ],
               "instructionGroups": [
                 [
-                  "Knead {Flour:quantity}, some salt and {Egg(s):quantity} into a smooth dough that springs back to the touch.",
+                  "Knead {0:0:0:quantity}, some salt and {0:0:1:quantity} into a smooth dough that springs back to the touch.",
                   "After waiting for at least 30 minutes, roll out the dough.",
                   "Set the rolled out dough to dry until parchment-like. This should take about an hour or two.",
                   "After having rolled up the dough, cut it into small strips."
@@ -90,8 +90,8 @@
               ],
               "instructionGroups": [
                 [
-                  "Mince {Onion(s):quantity}, {Carrot(s):quantity} and {Celery stick(s):quantity}.",
-                  "Assemble everything in a hot pan with {Olive oil:quantity} and cook until golden brown."
+                  "Mince {1:0:0:quantity}, {1:0:1:quantity} and {1:0:2:quantity}.",
+                  "Assemble everything in a hot pan with {0:quantity} and cook until golden brown."
                 ]
               ]
             },
@@ -110,7 +110,7 @@
               ],
               "instructionGroups": [
                 [
-                  "Mince {Onion(s):quantity} and {Garlic clove(s):quantity}.",
+                  "Mince {1:1:0:quantity} and {1:1:1:quantity}.",
                   "Cook the onions in a hot pan with {Olive oil:quantity} until golden brown.",
                   "Add in the garlic and stir for about 30 seconds."
                 ]
@@ -127,12 +127,12 @@
               "ingredients": [
                 {
                   "name": "Baby tomato(es)",
-                  "quantity": 40
+                  "quantity": 10
                 }
               ],
               "instructionGroups": [
                 [
-                  "Add in about {Baby tomato(es):quantity} to the pan and cover until the skin starts to split.",
+                  "Add in about {2:0:0:quantity} to the pan and cover until the skin starts to split.",
                   "Either mash up the tomatoes or wait for them to cook down to a saucy consistency."
                 ]
               ]
@@ -148,7 +148,7 @@
               ],
               "instructionGroups": [
                 [
-                  "Add in {Can(s) of tomato sauce:quantity} and cook until thickened"
+                  "Add in {2:1:0:quantity} and cook until thickened"
                 ]
               ]
             }

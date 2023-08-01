@@ -240,6 +240,7 @@ void main() {
       final RecipeModel model = RecipeModel();
       model.add(complicatedRecipe);
 
+      final variations = [(0, 0), (1, 1), (2, 0)];
       final List<IngredientData> ingredients = [
         IngredientData(name: "Olive oil", quantity: "2tbsp"),
         IngredientData(name: "Flour", quantity: "100g"),
@@ -249,7 +250,9 @@ void main() {
         IngredientData(name: "Baby tomato(es)", quantity: "15"),
       ];
 
-      final variations = [(0, 0), (1, 1), (2, 0)];
+      // Believe it or not, generating an ingredient list multiple times actually used to be a bug
+      // Cause: it was necessary to deep clone recipe(recipeId).ingredients
+      model.ingredientList(0, variations);
       expect(model.ingredientList(0, variations), ingredients);
     });
 

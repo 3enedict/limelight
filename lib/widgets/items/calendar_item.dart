@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/recipe_model.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
-import 'package:limelight/data/recipe.dart';
 import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/gradients.dart';
@@ -147,4 +148,20 @@ class CalendarItemState extends State<CalendarItem>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+Future<int?> getRecipe(String key) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final recipeId = prefs.getInt(key);
+  return recipeId;
+}
+
+Future<bool> setRecipe(String key, int id) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.setInt(key, id);
+}
+
+Future<bool> removeRecipe(String key) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.remove(key);
 }
