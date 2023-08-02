@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/variation_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/widgets/items/compact_item.dart';
+import 'package:limelight/widgets/item.dart';
 import 'package:limelight/widgets/gradient_box.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
@@ -29,10 +29,10 @@ class VariationPickerPage extends StatelessWidget {
     final variations = Provider.of<VariationModel>(context, listen: false);
 
     int num = recipes.numberOfVariations(recipeId, groupId);
-    List<CompactItem> variationButtons = [];
+    List<Item> variationButtons = [];
     for (var i = 0; i < num; i++) {
       Variation variation = recipes.variation(recipeId, groupId, i);
-      CompactItem item = variation.toCompactItem(
+      Item item = variation.toItem(
         () {
           variations.set(recipeId, groupId, i);
           onPressed!();

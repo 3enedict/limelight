@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/items/item.dart';
+import 'package:limelight/widgets/item.dart';
 
 class ButtonItem extends StatefulWidget {
   final String title;
-  final String subTitle;
-  final String info;
-  final String subInfo;
-  final List<Color> accentGradient;
-  final List<Color> backgroundGradient;
+  final String? subTitle;
+  final String? info;
+  final String? subInfo;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
+  final List<Color>? accentGradient;
+  final List<Color>? backgroundGradient;
 
   const ButtonItem({
     super.key,
     required this.title,
-    required this.subTitle,
-    required this.info,
-    required this.subInfo,
-    required this.accentGradient,
-    required this.backgroundGradient,
+    this.subTitle,
+    this.info,
+    this.subInfo,
+    this.onPressed,
+    this.onLongPress,
+    this.accentGradient,
+    this.backgroundGradient,
   });
 
   @override
@@ -45,8 +49,11 @@ class ButtonItemState extends State<ButtonItem>
       textColor: _enabled ? const Color(0xFF111111) : const Color(0xFFEEEEEE),
       subTextColor:
           _enabled ? const Color(0xFF222222) : const Color(0xFFDDDDDD),
-      onPressed: () => setState(() => _enabled = !_enabled),
-      onLongPress: () {},
+      onPressed: () {
+        setState(() => _enabled = !_enabled);
+        if (widget.onPressed != null) widget.onPressed!();
+      },
+      onLongPress: widget.onLongPress,
     );
   }
 

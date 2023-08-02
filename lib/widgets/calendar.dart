@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:limelight/data/provider/variation_model.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/items/calendar_item.dart';
-import 'package:limelight/widgets/items/item.dart';
+import 'package:limelight/widgets/item.dart';
+import 'package:limelight/widgets/day.dart';
 
 // Always keep numberOfDays even (highlighting current day doesn't work otherwise)
 const int numberOfDays = 15 * 2;
@@ -41,7 +41,6 @@ class Calendar extends StatelessWidget {
         );
 
         if (missing.isNotEmpty) {
-          print(missing);
           return VariationPickerPage(
             recipeId: recipeId,
             groupId: missing[0],

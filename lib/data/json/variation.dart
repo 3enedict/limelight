@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/gradients.dart';
 import 'package:limelight/data/json/ingredient.dart';
-import 'package:limelight/widgets/items/compact_item.dart';
+import 'package:limelight/widgets/item.dart';
 
 class Variation {
   final String name;
@@ -59,14 +58,11 @@ class Variation {
     };
   }
 
-  CompactItem toCompactItem(VoidCallback onPressed) {
-    return CompactItem(
+  Item toItem(VoidCallback onPressed) {
+    return Item(
       title: name,
       info: time,
-      accentGradient: limelightGradient,
-      backgroundGradient: toSurfaceGradient(limelightGradient),
       onPressed: onPressed,
-      onLongPress: () {},
     );
   }
 }

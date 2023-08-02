@@ -5,7 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:limelight/gradients.dart';
 
 class GradientButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
   final List<Color> gradient;
   final double borderRadius;
   final double? height;
@@ -16,7 +17,8 @@ class GradientButton extends StatelessWidget {
 
   const GradientButton({
     super.key,
-    required this.onPressed,
+    this.onPressed,
+    this.onLongPress,
     this.gradient = limelightGradient,
     this.borderRadius = 20,
     this.height,
@@ -55,6 +57,7 @@ class GradientButton extends StatelessWidget {
             ),
           ),
           onPressed: onPressed,
+          onLongPress: onLongPress,
           child: child,
         ),
       ),

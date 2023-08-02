@@ -5,11 +5,10 @@ import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/variation_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/widgets/items/button_item.dart';
-import 'package:limelight/widgets/items/compact_item.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
+import 'package:limelight/widgets/item.dart';
 import 'package:limelight/gradients.dart';
 
 class IngredientSubPage extends StatelessWidget {
@@ -38,8 +37,8 @@ class IngredientSubPage extends StatelessWidget {
                     variations.variationIds(recipeId),
                   );
 
-                  List<CompactItem> items =
-                      ingredients.map((e) => e.toCompactItem(() {})).toList();
+                  List<Item> items =
+                      ingredients.map((e) => e.toItem(() {})).toList();
 
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(

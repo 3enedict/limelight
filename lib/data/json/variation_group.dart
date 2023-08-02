@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/data/json/variation.dart';
-import 'package:limelight/gradients.dart';
-import 'package:limelight/widgets/items/compact_item.dart';
+import 'package:limelight/widgets/item.dart';
 
 class VariationGroup {
   final String groupName;
@@ -40,14 +39,10 @@ class VariationGroup {
     };
   }
 
-  CompactItem toCompactItem(VoidCallback onPressed) {
-    return CompactItem(
+  Item toItem(VoidCallback onPressed) {
+    return Item(
       title: groupName,
-      info: "",
       onPressed: onPressed,
-      onLongPress: () {},
-      accentGradient: limelightGradient,
-      backgroundGradient: toSurfaceGradient(limelightGradient),
     );
   }
 }

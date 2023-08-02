@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:limelight/pages/variation_picker_page.dart';
-import 'package:limelight/transitions.dart';
-import 'package:limelight/widgets/items/compact_item.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:limelight/pages/variation_picker_page.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
 import 'package:limelight/widgets/page.dart';
+import 'package:limelight/widgets/item.dart';
+import 'package:limelight/transitions.dart';
 import 'package:limelight/gradients.dart';
 
 class VariationSubPage extends StatelessWidget {
@@ -32,11 +32,12 @@ class VariationSubPage extends StatelessWidget {
               gradient: limelightGradient,
               items: Consumer<RecipeModel>(
                 builder: (context, recipes, child) {
+                  print(recipes.number);
                   int num = recipes.numberOfVariationGroups(recipeId);
-                  List<CompactItem> items = [];
+                  List<Item> items = [];
                   for (var i = 0; i < num; i++) {
                     final group = recipes.variationGroup(recipeId, i);
-                    items.add(group.toCompactItem(
+                    items.add(group.toItem(
                       () => fadeTransition(
                         context,
                         VariationPickerPage(
@@ -47,6 +48,8 @@ class VariationSubPage extends StatelessWidget {
                       ),
                     ));
                   }
+
+                  print(recipes.number);
 
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(

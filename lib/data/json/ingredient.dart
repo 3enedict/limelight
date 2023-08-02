@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/items/compact_item.dart';
-import 'package:limelight/widgets/items/item.dart';
-import 'package:limelight/widgets/items/button_item.dart';
+import 'package:limelight/widgets/item.dart';
+import 'package:limelight/widgets/button_item.dart';
 import 'package:limelight/gradients.dart';
 
 final leafyGreens = [];
@@ -34,7 +33,6 @@ class IngredientDescription {
       accentGradient: gradient,
       backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
-      onLongPress: () {},
     );
   }
 
@@ -76,14 +74,11 @@ class IngredientData {
     };
   }
 
-  CompactItem toCompactItem(VoidCallback onPressed) {
-    return CompactItem(
+  Item toItem(VoidCallback onPressed) {
+    return Item(
       title: name,
       info: quantity,
-      backgroundGradient: toSurfaceGradient(limelightGradient),
-      accentGradient: limelightGradient,
       onPressed: onPressed,
-      onLongPress: () {},
     );
   }
 

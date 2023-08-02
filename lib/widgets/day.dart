@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:limelight/data/provider/recipe_model.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
-import 'package:limelight/widgets/items/item.dart';
+import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/widgets/calendar.dart';
+import 'package:limelight/widgets/item.dart';
 import 'package:limelight/gradients.dart';
 
 class Day extends StatelessWidget {
@@ -28,7 +28,6 @@ class Day extends StatelessWidget {
 
     return Container(
       color: Colors.transparent,
-      margin: const EdgeInsets.fromLTRB(0, dayMargin / 2, 0, dayMargin / 2),
       padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,20 +55,17 @@ class Day extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                children: [
-                  CalendarItem(
-                    recipeId: recipeId,
-                    recipeKey: "$year/$month/$day/lunch",
-                  ),
-                  CalendarItem(
-                    recipeId: recipeId,
-                    recipeKey: "$year/$month/$day/dinner",
-                  ),
-                ],
-              ),
+            child: Column(
+              children: [
+                CalendarItem(
+                  recipeId: recipeId,
+                  recipeKey: "$year/$month/$day/lunch",
+                ),
+                CalendarItem(
+                  recipeId: recipeId,
+                  recipeKey: "$year/$month/$day/dinner",
+                ),
+              ],
             ),
           ),
         ],
@@ -112,10 +108,11 @@ class CalendarItemState extends State<CalendarItem>
         final recipe = recipes.recipe(_recipeId);
 
         return Item(
-          title: _enabled ? recipe.name : "",
-          subTitle: _enabled ? recipe.difficulty : "",
-          info: _enabled ? recipe.price : "",
-          subInfo: _enabled ? "per serving" : "",
+          title: _enabled ? recipe.name : null,
+          subTitle: _enabled ? recipe.difficulty : null,
+          info: _enabled ? recipe.price : null,
+          subInfo: _enabled ? "per serving" : null,
+          height: 70,
           accentGradient: _enabled
               ? recipe.gradient
               : toBackgroundGradientWithReducedColorChange(limelightGradient),
@@ -129,7 +126,6 @@ class CalendarItemState extends State<CalendarItem>
 
             _enabled = !_enabled;
           }),
-          onLongPress: () {},
         );
       },
     );

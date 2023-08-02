@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/data/json/variation_group.dart';
-import 'package:limelight/widgets/items/item.dart';
-import 'package:limelight/widgets/items/button_item.dart';
+import 'package:limelight/widgets/item.dart';
+import 'package:limelight/widgets/button_item.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipeData {
