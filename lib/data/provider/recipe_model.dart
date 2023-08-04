@@ -32,7 +32,7 @@ class RecipeModel extends ChangeNotifier {
   }
 
   RecipeData recipe(int recipeId) {
-    return _recipes.elementAtOrNull(recipeId) ?? RecipeData.empty();
+    return _recipes.toList().elementAtOrNull(recipeId) ?? RecipeData.empty();
   }
 
   VariationGroup variationGroup(int recipeId, int variationGroupId) {

@@ -22,7 +22,6 @@ class VariationSubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
-      gradient: limelightGradient,
       child: Column(
         children: [
           Expanded(
@@ -32,7 +31,6 @@ class VariationSubPage extends StatelessWidget {
               gradient: limelightGradient,
               items: Consumer<RecipeModel>(
                 builder: (context, recipes, child) {
-                  print(recipes.number);
                   int num = recipes.numberOfVariationGroups(recipeId);
                   List<Item> items = [];
                   for (var i = 0; i < num; i++) {
@@ -48,8 +46,6 @@ class VariationSubPage extends StatelessWidget {
                       ),
                     ));
                   }
-
-                  print(recipes.number);
 
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(

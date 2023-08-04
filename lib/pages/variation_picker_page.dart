@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -25,46 +26,49 @@ class VariationPickerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recipes = Provider.of<RecipeModel>(context, listen: false);
-    final variations = Provider.of<VariationModel>(context, listen: false);
-
-    int num = recipes.numberOfVariations(recipeId, groupId);
-    List<Item> variationButtons = [];
-    for (var i = 0; i < num; i++) {
-      Variation variation = recipes.variation(recipeId, groupId, i);
-      Item item = variation.toItem(
-        () {
-          variations.set(recipeId, groupId, i);
-          onPressed!();
-        },
-      );
-
-      variationButtons.add(item);
-    }
-
     return EmptyPage(
       gradient: limelightGradient,
       child: Center(
         child: GradientBox(
           width: MediaQuery.of(context).size.width - 80,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                child: Text(
-                  recipes.variationGroup(recipeId, groupId).groupName,
-                  style: GoogleFonts.workSans(
-                    fontSize: 14 * MediaQuery.of(context).textScaleFactor * 1.2,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold,
-                    textStyle: const TextStyle(color: Colors.white),
+          child: Consumer2<RecipeModel, VariationModel>(
+            builder: (context, recipes, variations, child) {
+              int num = recipes.numberOfVariations(recipeId, groupId);
+              List<Item> variationButtons = [];
+              for (var i = 0; i < num; i++) {
+                Item item = recipes.variation(recipeId, groupId, i).toItem(
+                  () {
+                    variations.set(recipeId, groupId, i);
+                    if (onPressed != null) onPressed!();
+                  },
+                );
+
+                variationButtons.add(item);
+              }
+
+              final name = recipes.variationGroup(recipeId, groupId).groupName;
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    child: Text(
+                      name,
+                      style: GoogleFonts.workSans(
+                        fontSize:
+                            14 * MediaQuery.of(context).textScaleFactor * 1.2,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        textStyle: const TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              ...variationButtons,
-              const SizedBox(height: 10),
-            ],
+                  ...variationButtons,
+                  const SizedBox(height: 12),
+                ],
+              );
+            },
           ),
         ),
       ),

@@ -13,8 +13,16 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => RecipeModel()),
-        ChangeNotifierProvider(create: (context) => VariationModel()),
+        ChangeNotifierProvider(create: (context) {
+          var model = RecipeModel();
+          model.load();
+          return model;
+        }),
+        ChangeNotifierProvider(create: (context) {
+          var model = VariationModel();
+          model.load();
+          return model;
+        }),
       ],
       child: const Limelight(),
     ),
@@ -26,8 +34,9 @@ class Limelight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<RecipeModel>(context).load();
-    Provider.of<VariationModel>(context).load();
+    // Build providers
+    Provider.of<RecipeModel>(context);
+    Provider.of<VariationModel>(context);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

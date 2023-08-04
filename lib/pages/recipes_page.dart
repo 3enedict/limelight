@@ -31,27 +31,28 @@ class RecipesPage extends StatelessWidget {
         ),
       ),
       child: ItemList(
-          title: 'Recipes',
-          titleBackground: const AssetImage('assets/Recipes.jpg'),
-          padding: 80,
-          gradient: limelightGradient,
-          keyValue: 1,
-          items: Consumer<RecipeModel>(
-            builder: (context, recipes, child) {
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int id) {
-                    return recipes.recipe(id).toItem(
-                          () => fadeTransition(context, Calendar(recipeId: id)),
-                          () => fadeTransition(
-                              context, RecipeDescriptionPage(recipeId: id)),
-                        );
-                  },
-                  childCount: recipes.number,
-                ),
-              );
-            },
-          )),
+        title: 'Recipes',
+        titleBackground: const AssetImage('assets/Recipes.jpg'),
+        padding: 80,
+        gradient: limelightGradient,
+        keyValue: 1,
+        items: Consumer<RecipeModel>(
+          builder: (context, recipes, child) {
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int id) {
+                  return recipes.recipe(id).toItem(
+                        () => fadeTransition(context, Calendar(recipeId: id)),
+                        () => fadeTransition(
+                            context, RecipeDescriptionPage(recipeId: id)),
+                      );
+                },
+                childCount: recipes.number,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
