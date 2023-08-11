@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
+import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/widgets/item.dart';
@@ -59,11 +60,17 @@ class Day extends StatelessWidget {
               children: [
                 CalendarItem(
                   recipeId: recipeId,
-                  recipeKey: "$year/$month/$day/lunch",
+                  year: year,
+                  month: month,
+                  day: day,
+                  meal: 0,
                 ),
                 CalendarItem(
                   recipeId: recipeId,
-                  recipeKey: "$year/$month/$day/dinner",
+                  year: year,
+                  month: month,
+                  day: day,
+                  meal: 1,
                 ),
               ],
             ),
@@ -76,88 +83,55 @@ class Day extends StatelessWidget {
 
 class CalendarItem extends StatefulWidget {
   final int recipeId;
-  final String recipeKey;
+  final int year;
+  final int month;
+  final int day;
+  final int meal;
 
   const CalendarItem({
     super.key,
     required this.recipeId,
-    required this.recipeKey,
+    required this.year,
+    required this.month,
+    required this.day,
+    required this.meal,
   });
 
   @override
   CalendarItemState createState() => CalendarItemState();
 }
 
-class CalendarItemState extends State<CalendarItem>
-    with AutomaticKeepAliveClientMixin {
-  bool _enabled = false;
-  int _recipeId = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    loadRecipe();
-  }
-
+class CalendarItemState extends State<CalendarItem> {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    return Consumer2<RecipeModel, CalendarModel>(
+      builder: (context, recipes, calendar, child) {
+        final recipeId =
+            calendar.get(widget.year, widget.month, widget.day, widget.meal);
 
-    return Consumer<RecipeModel>(
-      builder: (context, recipes, child) {
-        final recipe = recipes.recipe(_recipeId);
+        if (recipeId == null) {
+          return Item(
+            height: 70,
+            accentGradient:
+                toBackgroundGradientWithReducedColorChange(limelightGradient),
+            onPressed: () => setState(() {
+              calendar.set(widget.year, widget.month, widget.day, widget.meal,
+                  widget.recipeId);
+            }),
+          );
+        }
 
+        final recipe = recipes.recipe(recipeId);
         return Item(
-          title: _enabled ? recipe.name : null,
-          subTitle: _enabled ? recipe.difficulty : null,
-          info: _enabled ? recipe.price : null,
-          subInfo: _enabled ? "per serving" : null,
+          title: recipe.name,
+          subTitle: recipe.difficulty,
+          info: recipe.price,
+          subInfo: "per serving",
           height: 70,
-          accentGradient: _enabled
-              ? recipe.gradient
-              : toBackgroundGradientWithReducedColorChange(limelightGradient),
-          backgroundGradient: toSurfaceGradient(limelightGradient),
-          onPressed: () => setState(() {
-            if (_enabled) {
-              removeRecipe(widget.recipeKey);
-              _recipeId = widget.recipeId;
-            }
-            if (!_enabled) setRecipe(widget.recipeKey, widget.recipeId);
-
-            _enabled = !_enabled;
-          }),
+          onPressed: () => calendar.remove(
+              widget.year, widget.month, widget.day, widget.meal),
         );
       },
     );
   }
-
-  void loadRecipe() {
-    getRecipe(widget.recipeKey).then(
-      (recipeId) => setState(
-        () {
-          _recipeId = recipeId ?? widget.recipeId;
-          if (recipeId != null) _enabled = true;
-        },
-      ),
-    );
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-}
-
-Future<int?> getRecipe(String key) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final recipeId = prefs.getInt(key);
-  return recipeId;
-}
-
-Future<bool> setRecipe(String key, int id) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.setInt(key, id);
-}
-
-Future<bool> removeRecipe(String key) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.remove(key);
 }
