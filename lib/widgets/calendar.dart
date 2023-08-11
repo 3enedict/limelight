@@ -10,7 +10,7 @@ import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/item.dart';
 import 'package:limelight/widgets/day.dart';
 
-// Always keep numberOfDays even (highlighting current day doesn't work otherwise)
+// Always keep numberOfDays even. Highlighting current day doesn't work otherwise. *1
 const int numberOfDays = 15 * 2;
 const int mealsPerDay = 2;
 
@@ -66,7 +66,7 @@ class Calendar extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       return Day(
                         date: startDate.add(Duration(days: index)),
-                        currentDay: index == numberOfDays ~/ 2,
+                        currentDay: index == numberOfDays ~/ 2, // *1
                         recipeId: recipeId,
                       );
                     },
