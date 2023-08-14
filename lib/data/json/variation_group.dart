@@ -32,6 +32,10 @@ class VariationGroup {
     );
   }
 
+  Variation variation(int id) {
+    return variations.elementAtOrNull(id) ?? Variation.empty();
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'groupName': groupName,

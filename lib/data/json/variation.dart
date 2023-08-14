@@ -49,6 +49,14 @@ class Variation {
     );
   }
 
+  List<String> instructionGroup(int id) {
+    return instructionGroups.elementAtOrNull(id) ?? [];
+  }
+
+  IngredientData ingredient(int id) {
+    return ingredients.elementAtOrNull(id) ?? IngredientData.empty();
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "name": name,

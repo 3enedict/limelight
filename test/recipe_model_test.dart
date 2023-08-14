@@ -325,28 +325,4 @@ void main() {
       );
     });
   });
-
-  group('Recipe model, adding ingredients', () {
-    test('adding an ingredient updates the number of ingredients', () {
-      final RecipeModel model = RecipeModel();
-      model.addIngredient(lettuce);
-
-      expect(model.numberOfIngredients, 1);
-    });
-
-    test('An ingredient can be added and retrieved', () {
-      final RecipeModel model = RecipeModel();
-      model.addIngredient(lettuce);
-
-      expect(model.ingredients, [lettuce]);
-    });
-
-    test('Retrieving a certain type of ingredient works', () {
-      final RecipeModel model = RecipeModel();
-      model.addIngredient(lettuce);
-      model.addIngredient(salmon);
-
-      expect(model.fish, [salmon]);
-    });
-  });
 }

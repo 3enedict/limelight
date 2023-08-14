@@ -24,6 +24,14 @@ class IngredientDescription {
     required this.gradient,
   });
 
+  IngredientDescription.empty({
+    this.name = '',
+    this.season = '',
+    this.price = '',
+    this.unit = '',
+    this.gradient = limelightGradient,
+  });
+
   factory IngredientDescription.fromJson(Map<String, dynamic> data) {
     final name = data['name'] as String;
     final season = data['season'] as String;
@@ -93,6 +101,11 @@ class IngredientData {
   IngredientData({
     required this.name,
     required this.quantity,
+  });
+
+  IngredientData.empty({
+    this.name = '',
+    this.quantity = '',
   });
 
   factory IngredientData.fromJson(Map<String, dynamic> data) {
