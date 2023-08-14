@@ -21,6 +21,8 @@ var salmon = IngredientDescription(
 );
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Ingredient model, adding ingredients', () {
     test('adding an ingredient updates the number of ingredients', () {
       final IngredientModel model = IngredientModel();
