@@ -21,42 +21,44 @@ class RecipeSubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
+      fab: GradientButton(
+        diameter: 56,
+        gradient: toSurfaceGradient(limelightGradient),
+        onPressed: () => Navigator.of(context).pop(),
+        padding: const EdgeInsets.all(0),
+        child: const Center(
+          child: Icon(
+            Icons.restaurant_menu,
+            color: Colors.white70,
+          ),
+        ),
+      ),
       gradient: limelightGradient,
-      child: Column(
-        children: [
-          Expanded(
-            child: ItemList(
-              title: "Recipe",
-              titleBackground: const AssetImage('assets/Recipe.jpg'),
-              gradient: limelightGradient,
-              items: Consumer2<RecipeModel, VariationModel>(
-                builder: (context, recipes, variations, child) {
-                  final items = recipes
-                      .instructionSet(
-                        recipeId,
-                        3,
-                        variations.variationIds(recipeId),
-                      )
-                      .map((e) => Item(title: e, boldTitle: false))
-                      .toList();
+      child: ItemList(
+        title: "Recipe",
+        titleBackground: const AssetImage('assets/Recipe.jpg'),
+        gradient: limelightGradient,
+        items: Consumer2<RecipeModel, VariationModel>(
+          builder: (context, recipes, variations, child) {
+            final items = recipes
+                .instructionSet(
+                  recipeId,
+                  3,
+                  variations.variationIds(recipeId),
+                )
+                .map((e) => Item(title: e, boldTitle: false))
+                .toList();
 
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return items[index];
-                      },
-                      childCount: items.length,
-                    ),
-                  );
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return items[index];
                 },
+                childCount: items.length,
               ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(10),
-            child: GradientBackButton(),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }

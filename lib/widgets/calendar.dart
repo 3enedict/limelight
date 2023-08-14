@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/pages/variation_picker_page.dart';
 
 import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/variation_model.dart';
+import 'package:limelight/data/provider/recipe_model.dart';
+import 'package:limelight/pages/variation_picker_page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/item.dart';
 import 'package:limelight/widgets/day.dart';
+import 'package:limelight/gradients.dart';
 
 // Always keep numberOfDays even. Highlighting current day doesn't work otherwise. *1
 const int numberOfDays = 15 * 2;
@@ -48,36 +49,33 @@ class Calendar extends StatelessWidget {
         }
 
         return EmptyPage(
-          child: Column(
-            children: [
-              Expanded(
-                child: Fade(
-                  child: ListView.builder(
-                    itemCount: numberOfDays,
-                    itemExtent: itemExtent * 2 + 20,
-                    controller: ScrollController(
-                      initialScrollOffset: scrollOffsetToCurrentDay -
-                          (MediaQuery.of(context).size.height -
-                                  itemExtent -
-                                  15 -
-                                  5) *
-                              (1 / 3),
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Day(
-                        date: startDate.add(Duration(days: index)),
-                        currentDay: index == numberOfDays ~/ 2, // *1
-                        recipeId: recipeId,
-                      );
-                    },
-                  ),
-                ),
+          fab: GradientButton(
+            diameter: 56,
+            gradient: toSurfaceGradient(limelightGradient),
+            onPressed: () => Navigator.of(context).pop(),
+            padding: const EdgeInsets.all(0),
+            child: const Center(
+              child: Icon(
+                Icons.restaurant_menu,
+                color: Colors.white70,
               ),
-              const Padding(
-                padding: EdgeInsets.all(10),
-                child: GradientBackButton(),
-              ),
-            ],
+            ),
+          ),
+          child: ListView.builder(
+            itemCount: numberOfDays,
+            itemExtent: itemExtent * 2 + 20,
+            controller: ScrollController(
+              initialScrollOffset: scrollOffsetToCurrentDay -
+                  (MediaQuery.of(context).size.height - itemExtent - 15 - 5) *
+                      (1 / 3),
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              return Day(
+                date: startDate.add(Duration(days: index)),
+                currentDay: index == numberOfDays ~/ 2, // *1
+                recipeId: recipeId,
+              );
+            },
           ),
         );
       },

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/widgets/calendar.dart';
 import 'package:limelight/widgets/item.dart';
 import 'package:limelight/gradients.dart';
 

@@ -61,7 +61,7 @@ class Fade extends StatelessWidget {
             ],
             stops: const [
               0.0,
-              0.3,
+              0.2,
             ]).createShader(bound);
       },
       blendMode: BlendMode.srcOver,

@@ -22,48 +22,50 @@ class VariationSubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
-      child: Column(
-        children: [
-          Expanded(
-            child: ItemList(
-              title: "Variations",
-              titleBackground: const AssetImage('assets/Variation.jpg'),
-              gradient: limelightGradient,
-              items: Consumer<RecipeModel>(
-                builder: (context, recipes, child) {
-                  int num = recipes.numberOfVariationGroups(recipeId);
-                  List<Item> items = [];
-                  for (var i = 0; i < num; i++) {
-                    final group = recipes.variationGroup(recipeId, i);
-                    items.add(group.toItem(
-                      () => fadeTransition(
-                        context,
-                        VariationPickerPage(
-                          recipeId: recipeId,
-                          groupId: i,
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      ),
-                    ));
-                  }
+      fab: GradientButton(
+        diameter: 56,
+        gradient: toSurfaceGradient(limelightGradient),
+        onPressed: () => Navigator.of(context).pop(),
+        padding: const EdgeInsets.all(0),
+        child: const Center(
+          child: Icon(
+            Icons.restaurant_menu,
+            color: Colors.white70,
+          ),
+        ),
+      ),
+      child: ItemList(
+        title: "Variations",
+        titleBackground: const AssetImage('assets/Variation.jpg'),
+        gradient: limelightGradient,
+        items: Consumer<RecipeModel>(
+          builder: (context, recipes, child) {
+            int num = recipes.numberOfVariationGroups(recipeId);
+            List<Item> items = [];
+            for (var i = 0; i < num; i++) {
+              final group = recipes.variationGroup(recipeId, i);
+              items.add(group.toItem(
+                () => fadeTransition(
+                  context,
+                  VariationPickerPage(
+                    recipeId: recipeId,
+                    groupId: i,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ));
+            }
 
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return items[index];
-                      },
-                      childCount: items.length,
-                    ),
-                  );
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return items[index];
                 },
+                childCount: items.length,
               ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(10),
-            child: GradientBackButton(),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }

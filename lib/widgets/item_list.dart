@@ -38,6 +38,7 @@ class ItemList extends StatelessWidget {
               floating: false,
               expandedHeight: MediaQuery.of(context).size.height * 0.3,
               backgroundColor: toBackgroundGradient(gradient)[0],
+              automaticallyImplyLeading: false,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
                 title: Text(
