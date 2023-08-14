@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:limelight/data/json/ingredient.dart';
 
-import 'package:limelight/data/json/recipe.dart';
-import 'package:limelight/data/json/variation.dart';
 import 'package:limelight/data/json/variation_group.dart';
+import 'package:limelight/data/json/variation.dart';
+import 'package:limelight/data/json/recipe.dart';
+import 'package:limelight/gradients.dart';
 
 class RecipeModel extends ChangeNotifier {
   final List<RecipeData> _recipes = [];
+  final List<IngredientDescription> _leafyGreens = [];
+  final List<IngredientDescription> _vegetables = [];
+  final List<IngredientDescription> _meat = [];
+  final List<IngredientDescription> _fish = [];
 
   void load() {
     rootBundle.loadString("assets/recipes.json").then(
@@ -22,14 +27,56 @@ class RecipeModel extends ChangeNotifier {
             : <RecipeData>[];
 
         _recipes.addAll(recipes);
+
+        _leafyGreens.addAll(_loadDesc(parsedJson, "leafyGreens"));
+        _vegetables.addAll(_loadDesc(parsedJson, "vegetables"));
+        _meat.addAll(_loadDesc(parsedJson, "meat"));
+        _fish.addAll(_loadDesc(parsedJson, "fish"));
       },
     );
+  }
+
+  List<IngredientDescription> _loadDesc(dynamic parsedJson, String key) {
+    final data = parsedJson['leafyGreens'] as List<dynamic>?;
+    return data != null
+        ? data
+            .map((reviewData) => IngredientDescription.fromJson(reviewData))
+            .toList()
+        : <IngredientDescription>[];
   }
 
   void add(RecipeData recipe) {
     _recipes.add(recipe);
     notifyListeners();
   }
+
+  void addIngredient(IngredientDescription ingredient) {
+    switch (ingredient.gradient) {
+      case leafyGreensGradient:
+        _leafyGreens.add(ingredient);
+        break;
+      case vegetablesGradient:
+        _vegetables.add(ingredient);
+        break;
+      case meatGradient:
+        _meat.add(ingredient);
+        break;
+      case fishGradient:
+        _fish.add(ingredient);
+        break;
+    }
+
+    notifyListeners();
+  }
+
+  List<IngredientDescription> get leafyGreens => List.from(_leafyGreens);
+  List<IngredientDescription> get vegetables => List.from(_vegetables);
+  List<IngredientDescription> get meat => List.from(_meat);
+  List<IngredientDescription> get fish => List.from(_fish);
+  List<IngredientDescription> get ingredients => List.from(
+        [..._leafyGreens, ..._vegetables, ..._meat, ..._fish],
+      );
+  int get numberOfIngredients => ingredients.length;
 
   RecipeData recipe(int recipeId) {
     return _recipes.toList().elementAtOrNull(recipeId) ?? RecipeData.empty();

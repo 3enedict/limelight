@@ -5,6 +5,7 @@ import 'package:limelight/data/json/recipe.dart';
 import 'package:limelight/data/json/variation.dart';
 import 'package:limelight/data/json/variation_group.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
+import 'package:limelight/gradients.dart';
 
 final simpleRecipe = RecipeData(
   name: "Fettucine alfredo",
@@ -165,6 +166,22 @@ final complicatedRecipe = RecipeData(
   ],
 );
 
+var lettuce = IngredientDescription(
+  name: "Lettuce",
+  season: "All year",
+  price: "1€",
+  unit: "per head",
+  gradient: leafyGreensGradient,
+);
+
+var salmon = IngredientDescription(
+  name: "Salmon",
+  season: "All year",
+  price: "20€",
+  unit: "per kg",
+  gradient: fishGradient,
+);
+
 void main() {
   group('Recipe model, adding recipes', () {
     test('adding a recipe updates the number of recipes', () {
@@ -306,6 +323,30 @@ void main() {
         model.instructionSet(0, numberOfServings, []),
         instructions,
       );
+    });
+  });
+
+  group('Recipe model, adding ingredients', () {
+    test('adding an ingredient updates the number of ingredients', () {
+      final RecipeModel model = RecipeModel();
+      model.addIngredient(lettuce);
+
+      expect(model.numberOfIngredients, 1);
+    });
+
+    test('An ingredient can be added and retrieved', () {
+      final RecipeModel model = RecipeModel();
+      model.addIngredient(lettuce);
+
+      expect(model.ingredients, [lettuce]);
+    });
+
+    test('Retrieving a certain type of ingredient works', () {
+      final RecipeModel model = RecipeModel();
+      model.addIngredient(lettuce);
+      model.addIngredient(salmon);
+
+      expect(model.fish, [salmon]);
     });
   });
 }

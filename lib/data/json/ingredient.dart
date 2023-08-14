@@ -24,6 +24,44 @@ class IngredientDescription {
     required this.gradient,
   });
 
+  factory IngredientDescription.fromJson(Map<String, dynamic> data) {
+    final name = data['name'] as String;
+    final season = data['season'] as String;
+    final price = data['price'] as String;
+    final unit = data['unit'] as String;
+    final gradient = switch (data['gradient'] as String) {
+      "leafyGreens" => leafyGreensGradient,
+      "vegetables" => vegetablesGradient,
+      "meat" => meatGradient,
+      "fish" => fishGradient,
+      _ => limelightGradient,
+    };
+
+    return IngredientDescription(
+      name: name,
+      season: season,
+      price: price,
+      unit: unit,
+      gradient: gradient,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'season': season,
+      'price': price,
+      'unit': unit,
+      'gradient': switch (gradient) {
+        leafyGreensGradient => "leafyGreens",
+        vegetablesGradient => "vegetables",
+        meatGradient => "meat",
+        fishGradient => "fish",
+        _ => "",
+      },
+    };
+  }
+
   Item toItem(VoidCallback onPressed) {
     return Item(
       title: name,
