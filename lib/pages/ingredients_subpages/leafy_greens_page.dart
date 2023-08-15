@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/widgets/item_list.dart';
-import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
 class LeafyGreensPage extends StatelessWidget {
@@ -13,13 +15,19 @@ class LeafyGreensPage extends StatelessWidget {
       title: 'Leafy greens',
       titleBackground: const AssetImage('assets/Leafy Greeens.jpg'),
       gradient: leafyGreensGradient,
-      items: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return leafyGreens[index].toButtonItem();
-          },
-          childCount: leafyGreens.length,
-        ),
+      items: Consumer<IngredientModel>(
+        builder: (context, ingredients, child) {
+          final leafyGreens = ingredients.leafyGreens;
+
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return leafyGreens[index].toButtonItem();
+              },
+              childCount: leafyGreens.length,
+            ),
+          );
+        },
       ),
     );
   }

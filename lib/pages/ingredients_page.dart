@@ -44,7 +44,12 @@ class IngredientsPageState extends State<IngredientsPage> {
       fab: GradientButton(
         diameter: 56,
         gradient: toSurfaceGradient(gradient),
-        onPressed: () => fadeTransition(context, const SearchPage()),
+        onPressed: () => fadeTransition(
+          context,
+          SearchPage(
+            onSubmitted: (e) {},
+          ),
+        ),
         padding: const EdgeInsets.all(0),
         child: const Center(
           child: Icon(

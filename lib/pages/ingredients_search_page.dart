@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+import 'package:limelight/transitions.dart';
 
+import 'package:limelight/pages/add_ingredient_page.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/gradient_textfield.dart';
@@ -9,7 +10,9 @@ import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/gradients.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final void Function(IngredientDescription) onSubmitted;
+
+  const SearchPage({super.key, required this.onSubmitted});
 
   @override
   State<SearchPage> createState() => SearchPageState();
@@ -58,15 +61,13 @@ class SearchPageState extends State<SearchPage> {
               width: distanceBetweenItems,
             ),
             GradientButton(
-              borderRadius: searchBarHeight / 2,
-              height: searchBarHeight,
+              diameter: searchBarHeight - 4,
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                "Back",
-                style: GoogleFonts.workSans(
-                  fontSize: 14 * MediaQuery.of(context).textScaleFactor * 1.1,
-                  textStyle: const TextStyle(color: Colors.white),
-                ),
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                Icons.chevron_left,
+                color: Color(0xFFDDDDDD),
+                size: 25.0,
               ),
             ),
             SizedBox(
@@ -87,17 +88,30 @@ class SearchPageState extends State<SearchPage> {
             SizedBox(
               width: distanceBetweenItems,
             ),
-            GradientButton(
-              diameter: searchBarHeight,
-              gradient: limelightGradient,
-              onPressed: () {},
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                Icons.check,
-                color: Color(0xFFDDDDDD),
-                size: 25.0,
-              ),
-            ),
+            sortedIngredients.isEmpty
+                ? GradientButton(
+                    diameter: searchBarHeight - 4,
+                    gradient: limelightGradient,
+                    onPressed: () =>
+                        fadeTransition(context, const AddIngredientPage()),
+                    padding: const EdgeInsets.all(0),
+                    child: const Icon(
+                      Icons.add,
+                      color: Color(0xFFDDDDDD),
+                      size: 25.0,
+                    ),
+                  )
+                : GradientButton(
+                    diameter: searchBarHeight - 4,
+                    gradient: limelightGradient,
+                    onPressed: () => widget.onSubmitted(sortedIngredients[0]),
+                    padding: const EdgeInsets.all(0),
+                    child: const Icon(
+                      Icons.check,
+                      color: Color(0xFFDDDDDD),
+                      size: 25.0,
+                    ),
+                  ),
             SizedBox(
               width: distanceBetweenItems,
             ),

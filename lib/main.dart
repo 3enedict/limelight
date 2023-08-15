@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
 
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => RecipeModel()),
+        ChangeNotifierProvider(create: (context) => IngredientModel()),
         ChangeNotifierProvider(create: (context) => VariationModel()),
         ChangeNotifierProvider(create: (context) => CalendarModel()),
       ],
@@ -33,7 +35,7 @@ class Limelight extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Limelight',
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData.dark(useMaterial3: true),
       home: PageView(
         controller: PageController(
           initialPage: 1,
@@ -50,6 +52,7 @@ class Limelight extends StatelessWidget {
 
 void loadModelDataFromLocalFiles(BuildContext context) {
   Provider.of<RecipeModel>(context, listen: false).load();
+  Provider.of<IngredientModel>(context, listen: false).load();
   Provider.of<VariationModel>(context, listen: false).load();
   Provider.of<CalendarModel>(context, listen: false).load();
 }

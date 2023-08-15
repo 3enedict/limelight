@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:limelight/data/json/variation.dart';
 import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/variation_model.dart';
@@ -10,7 +8,6 @@ import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/widgets/item.dart';
 import 'package:limelight/widgets/gradient_box.dart';
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/gradients.dart';
 
 class VariationPickerPage extends StatelessWidget {
   final int recipeId;
@@ -27,7 +24,6 @@ class VariationPickerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
-      gradient: limelightGradient,
       child: Center(
         child: GradientBox(
           width: MediaQuery.of(context).size.width - 80,

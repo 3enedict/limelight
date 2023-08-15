@@ -58,7 +58,12 @@ class IngredientSubPage extends StatelessWidget {
                 child: GradientButton(
                   borderRadius: 23,
                   height: 46,
-                  onPressed: () => fadeTransition(context, const SearchPage()),
+                  onPressed: () => fadeTransition(
+                    context,
+                    SearchPage(
+                      onSubmitted: (e) {},
+                    ),
+                  ),
                   child: const Icon(
                     Icons.add,
                     color: Colors.black,
