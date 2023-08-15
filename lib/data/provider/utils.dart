@@ -9,15 +9,6 @@ List<RecipeData> loadRecipes(dynamic parsedJson) {
       : <RecipeData>[];
 }
 
-List<IngredientDescription> loadIngredients(dynamic parsedJson, String key) {
-  final data = parsedJson[key] as List<dynamic>?;
-  return data != null
-      ? data
-          .map((reviewData) => IngredientDescription.fromJson(reviewData))
-          .toList()
-      : <IngredientDescription>[];
-}
-
 String replaceVariationInstructions(
   String recipeWideInstructions,
   List<(int, int)> enabledVariationIds,

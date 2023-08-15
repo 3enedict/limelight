@@ -1,100 +1,138 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:limelight/data/provider/utils.dart';
 import 'package:limelight/data/json/ingredient.dart';
-import 'package:limelight/gradients.dart';
 
-class IngredientStorage {
-  List<IngredientDescription> leafyGreens = [];
-  List<IngredientDescription> vegetables = [];
-  List<IngredientDescription> meat = [];
-  List<IngredientDescription> fish = [];
+List<List<IngredientDescription>> loadIngredients(dynamic jsonData) {
+  List<List<IngredientDescription>> ingredients = [];
 
-  void load(String jsonData) {
-    final parsedJson = jsonDecode(jsonData);
-
-    leafyGreens = loadIngredients(parsedJson, "leafyGreens");
-    vegetables = loadIngredients(parsedJson, "vegetables");
-    meat = loadIngredients(parsedJson, "meat");
-    fish = loadIngredients(parsedJson, "fish");
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "leafyGreens": leafyGreens,
-      "vegetables": vegetables,
-      "meat": meat,
-      "fish": fish,
-    };
-  }
-
-  void add(IngredientDescription ingredient) {
-    switch (ingredient.gradient) {
-      case leafyGreensGradient:
-        leafyGreens.add(ingredient);
-        break;
-      case vegetablesGradient:
-        vegetables.add(ingredient);
-        break;
-      case meatGradient:
-        meat.add(ingredient);
-        break;
-      case fishGradient:
-        fish.add(ingredient);
-        break;
-    }
-  }
-}
-
-class IngredientModel extends ChangeNotifier {
-  final assetStorage = IngredientStorage();
-  final userStorage = IngredientStorage();
-
-  void load() {
-    rootBundle.loadString("assets/ingredients.json").then(
-          (jsonData) => assetStorage.load(jsonData),
-        );
-
-    getApplicationDocumentsDirectory().then(
-      (dir) => File("${dir.path}/ingredients.json").readAsString().then(
-            (file) => userStorage.load(file),
-          ),
+  final parsedJson = jsonDecode(jsonData);
+  final groups = parsedJson['groups'] as List<dynamic>? ?? [];
+  for (var group in groups) {
+    ingredients.add(
+      List<dynamic>.from(group)
+          .map((e) => IngredientDescription.fromJson(e))
+          .toList(),
     );
   }
 
-  void addIngredient(IngredientDescription ingredient) {
-    userStorage.add(ingredient);
+  return ingredients;
+}
+
+class IngredientModel extends ChangeNotifier {
+  List<List<IngredientDescription>> _assetIngredients = [];
+  List<List<IngredientDescription>> _userIngredients = [];
+  List<(int, int)> _enabled = [];
+
+  bool _deletionMode = false;
+
+  void load() {
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      rootBundle.loadString("assets/ingredients.json").then(
+            (jsonData) => _assetIngredients = loadIngredients(jsonData),
+          );
+
+      getApplicationDocumentsDirectory().then(
+        (dir) => File("${dir.path}/ingredients.json").readAsString().then(
+              (file) => _userIngredients = loadIngredients(file),
+            ),
+      );
+
+      SharedPreferences.getInstance().then((instance) {
+        _enabled = (instance.getStringList("Enabled") ?? []).map(
+          (stringIds) {
+            final ids = stringIds.split(":");
+            return (int.parse(ids[0]), int.parse(ids[1]));
+          },
+        ).toList();
+      });
+    }
+  }
+
+  void add(IngredientDescription ingredient) {
+    while (_userIngredients.elementAtOrNull(ingredient.group) == null) {
+      _userIngredients.add([]);
+    }
+
+    _userIngredients[ingredient.group].add(ingredient);
     notify();
+  }
+
+  void enable(int groupId, int ingredientId) {
+    if (_deletionMode) {
+      if (ingredientId < _assetIngredients.length) {
+        _assetIngredients.removeAt(ingredientId);
+      } else {
+        _userIngredients.removeAt(ingredientId - _assetIngredients.length);
+      }
+
+      notify();
+    } else {
+      _enabled.add((groupId, ingredientId));
+
+      notifyListeners();
+    }
+  }
+
+  void disable(int groupId, int ingredientId) {
+    _enabled.remove((groupId, ingredientId));
+    notifyListeners();
+  }
+
+  bool isEnabled(int groupId, int ingredientId) {
+    return _enabled.contains((groupId, ingredientId));
   }
 
   void notify() {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      getApplicationDocumentsDirectory().then((dir) {
-        final file = File("${dir.path}/ingredients.json");
-        file.writeAsString(jsonEncode(userStorage.toJson()));
+      final data = _userIngredients
+          .map((grp) => grp.map((ingredient) => ingredient.toJson()).toList())
+          .toList();
+
+      getApplicationDocumentsDirectory().then(
+        (dir) {
+          final file = File("${dir.path}/ingredients.json");
+
+          file.writeAsString(
+            jsonEncode({
+              'groups': [data]
+            }),
+          );
+        },
+      );
+
+      SharedPreferences.getInstance().then((instance) {
+        instance.setStringList(
+          "Enabled",
+          _enabled.map((e) => "${e.$1}:${e.$2}").toList(),
+        );
       });
     }
 
     notifyListeners();
   }
 
-  int get numberOfIngredients => ingredients.length;
+  List<IngredientDescription> getGroup(int groupId) {
+    final assetGroup = _assetIngredients.elementAtOrNull(groupId) ?? [];
+    final userGroup = _userIngredients.elementAtOrNull(groupId) ?? [];
 
-  List<IngredientDescription> get leafyGreens =>
-      List.from([...assetStorage.leafyGreens, ...userStorage.leafyGreens]);
-  List<IngredientDescription> get vegetables =>
-      List.from([...assetStorage.vegetables, ...userStorage.vegetables]);
-  List<IngredientDescription> get meat =>
-      List.from([...assetStorage.meat, ...userStorage.meat]);
-  List<IngredientDescription> get fish =>
-      List.from([...assetStorage.fish, ...userStorage.fish]);
+    return List.from([...assetGroup, ...userGroup]);
+  }
 
-  List<IngredientDescription> get ingredients => List.from(
-        [...leafyGreens, ...vegetables, ...meat, ...fish],
-      );
+  IngredientDescription get(int groupId, int ingredientId) {
+    final ingredient = getGroup(groupId).elementAtOrNull(ingredientId);
+    return ingredient ?? IngredientDescription.empty();
+  }
+
+  void toggleDeletionMode() => _deletionMode = !_deletionMode;
+
+  int number(int groupId) {
+    return getGroup(groupId).length;
+  }
 }

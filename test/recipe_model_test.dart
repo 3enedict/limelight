@@ -5,7 +5,6 @@ import 'package:limelight/data/json/recipe.dart';
 import 'package:limelight/data/json/variation.dart';
 import 'package:limelight/data/json/variation_group.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/gradients.dart';
 
 final simpleRecipe = RecipeData(
   name: "Fettucine alfredo",
@@ -164,22 +163,6 @@ final complicatedRecipe = RecipeData(
       ],
     ),
   ],
-);
-
-var lettuce = IngredientDescription(
-  name: "Lettuce",
-  season: "All year",
-  price: "1€",
-  unit: "per head",
-  gradient: leafyGreensGradient,
-);
-
-var salmon = IngredientDescription(
-  name: "Salmon",
-  season: "All year",
-  price: "20€",
-  unit: "per kg",
-  gradient: fishGradient,
 );
 
 void main() {

@@ -27,6 +27,13 @@ const fishGradient = [
   Color(0xFF50C9C3),
 ];
 
+const gradients = [
+  leafyGreensGradient,
+  vegetablesGradient,
+  meatGradient,
+  fishGradient,
+];
+
 List<Color> toBackgroundGradient(List<Color> gradient) {
   return [
     toBackgroundColor(gradient[0], 0.15, 0.2),
