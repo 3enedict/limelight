@@ -23,7 +23,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Ingredient model, adding ingredients', () {
-    test('adding an ingredient updates the number of ingredients', () {
+    test('Adding an ingredient updates the number of ingredients', () {
       final IngredientModel model = IngredientModel();
       model.add(lettuce);
 
@@ -34,48 +34,48 @@ void main() {
       final IngredientModel model = IngredientModel();
       model.add(lettuce);
 
-      expect(model.getGroup(0), [lettuce]);
-    });
-
-    test('Retrieving a certain type of ingredient works', () {
-      final IngredientModel model = IngredientModel();
-      model.add(lettuce);
-      model.add(salmon);
-
-      expect(model.getGroup(3), [salmon]);
+      expect(model.getAll(), [lettuce]);
     });
   });
 
-  group('Ingredient model, tagging ingredients', () {
+  test('Retrieving a certain type of ingredient works', () {
+    final IngredientModel model = IngredientModel();
+    model.add(lettuce);
+    model.add(salmon);
+
+    expect(model.getGroup(3), [salmon]);
+  });
+
+  group('Ingredient model, toggling ingredients', () {
     test('Setting an ingredient as enabled works', () {
       final IngredientModel model = IngredientModel();
       model.add(lettuce);
       model.add(salmon);
 
-      model.enable(3, 0);
+      model.toggle(1);
 
-      expect(model.isEnabled(3, 0), true);
+      expect(model.isEnabled(1), true);
     });
 
-    test('If in "deletion" mode, remove ingredient when enabling it', () {
+    test('Disabling an ingredient works', () {
       final IngredientModel model = IngredientModel();
       model.add(lettuce);
       model.add(salmon);
 
-      model.enable(3, 0);
+      model.toggle(1);
+      model.toggle(1);
 
-      expect(model.isEnabled(3, 0), true);
+      expect(model.isEnabled(1), false);
     });
+  });
 
-    test('If in "deletion" mode, remove ingredient when enabling it', () {
-      final IngredientModel model = IngredientModel();
-      model.add(lettuce);
-      model.add(salmon);
+  test('Deleting an ingredient works', () {
+    final IngredientModel model = IngredientModel();
+    model.add(lettuce);
+    model.add(salmon);
 
-      model.toggleDeletionMode();
-      model.enable(3, 0);
+    model.remove(0);
 
-      expect(model.getGroup(3), []);
-    });
+    expect(model.getAll(), [salmon]);
   });
 }

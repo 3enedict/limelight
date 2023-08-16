@@ -64,22 +64,23 @@ class IngredientsPageState extends State<IngredientsPage> {
       child: IndexedStack(
         index: _currentIndex,
         children: List.generate(
-          names.length,
+          numberOfGroups,
           (int index) => ItemList(
             title: names[index],
             titleBackground: AssetImage(images[index]),
-            gradient: fishGradient,
+            gradient: gradients[index],
             items: Consumer<IngredientModel>(
               builder: (context, ingredients, child) {
+                final groupIds = ingredients.getGroupIds(index);
+
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int listIndex) {
                       return IngredientItem(
-                        groupId: index,
-                        ingredientId: listIndex,
+                        id: groupIds[listIndex],
                       );
                     },
-                    childCount: ingredients.number(index),
+                    childCount: groupIds.length,
                   ),
                 );
               },

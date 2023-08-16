@@ -9,141 +9,137 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:limelight/data/json/ingredient.dart';
 
-List<List<IngredientDescription>> loadIngredients(dynamic jsonData) {
-  List<List<IngredientDescription>> ingredients = [];
-
+List<IngredientDescription> loadIngredients(dynamic jsonData) {
   final parsedJson = jsonDecode(jsonData);
-  final groups = parsedJson['groups'] as List<dynamic>? ?? [];
-  for (var group in groups) {
-    ingredients.add(
-      List<dynamic>.from(group)
-          .map((e) => IngredientDescription.fromJson(e))
-          .toList(),
-    );
-  }
+  final groups = parsedJson['ingredients'] as List<dynamic>? ?? [];
 
-  return ingredients;
+  return groups.map((e) => IngredientDescription.fromJson(e)).toList();
 }
 
 class IngredientModel extends ChangeNotifier {
-  List<List<IngredientDescription>> _assetIngredients = [];
-  List<List<IngredientDescription>> _userIngredients = [];
-  List<(int, int)> _enabled = [];
+  final _ingredients = <IngredientDescription>[];
+  List<String> _enabled = [];
 
-  bool _deletionMode = false;
+  int _numberOfIngredientsFromAssets = 0;
 
   void load() {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      rootBundle.loadString("assets/ingredients.json").then(
-            (jsonData) => _assetIngredients = loadIngredients(jsonData),
-          );
-
-      getApplicationDocumentsDirectory().then(
-        (dir) => File("${dir.path}/ingredients.json").readAsString().then(
-              (file) => _userIngredients = loadIngredients(file),
-            ),
-      );
-
       SharedPreferences.getInstance().then((instance) {
-        _enabled = (instance.getStringList("Enabled") ?? []).map(
-          (stringIds) {
-            final ids = stringIds.split(":");
-            return (int.parse(ids[0]), int.parse(ids[1]));
+        _enabled = instance.getStringList("Enabled") ?? [];
+        final masked = instance.getStringList("Masked") ?? [];
+
+        rootBundle.loadString("assets/ingredients.json").then(
+          (jsonData) {
+            _ingredients.addAll(loadIngredients(jsonData));
+            _ingredients.removeWhere(
+              (element) => masked.contains(element.name),
+            );
+
+            _numberOfIngredientsFromAssets = _ingredients.length;
+
+            getApplicationDocumentsDirectory().then(
+              (dir) => File("${dir.path}/ingredients.json").readAsString().then(
+                (file) {
+                  _ingredients.addAll(loadIngredients(file));
+                  notifyListeners();
+                },
+              ),
+            );
           },
-        ).toList();
+        );
       });
     }
   }
 
   void add(IngredientDescription ingredient) {
-    while (_userIngredients.elementAtOrNull(ingredient.group) == null) {
-      _userIngredients.add([]);
-    }
-
-    _userIngredients[ingredient.group].add(ingredient);
+    _ingredients.add(ingredient);
     notify();
   }
 
-  void enable(int groupId, int ingredientId) {
-    if (_deletionMode) {
-      if (ingredientId < _assetIngredients.length) {
-        _assetIngredients.removeAt(ingredientId);
-      } else {
-        _userIngredients.removeAt(ingredientId - _assetIngredients.length);
-      }
+  void remove(int id) {
+    if (id < _numberOfIngredientsFromAssets) mask(_ingredients[id].name);
+    _ingredients.removeAt(id);
 
-      notify();
-    } else {
-      _enabled.add((groupId, ingredientId));
-
-      notifyListeners();
-    }
+    notify();
   }
 
-  void disable(int groupId, int ingredientId) {
-    _enabled.remove((groupId, ingredientId));
+  void toggle(int id) {
+    final enabled = isEnabled(id);
+
+    if (!enabled) _enabled.add(get(id).name);
+    if (enabled) _enabled.remove(get(id).name);
+
     notifyListeners();
   }
 
-  bool isEnabled(int groupId, int ingredientId) {
-    return _enabled.contains((groupId, ingredientId));
+  bool isEnabled(int id) {
+    return _enabled.contains(get(id).name);
   }
 
   void notify() {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      final data = _userIngredients
-          .map((grp) => grp.map((ingredient) => ingredient.toJson()).toList())
-          .toList();
+      final strippedIngredients = getAll();
+      if (_numberOfIngredientsFromAssets != 0) {
+        strippedIngredients.removeRange(0, _numberOfIngredientsFromAssets - 1);
+      }
+
+      final data = strippedIngredients.map((e) => e.toJson());
 
       getApplicationDocumentsDirectory().then(
         (dir) {
           final file = File("${dir.path}/ingredients.json");
 
           file.writeAsString(
-            jsonEncode({
-              'groups': [data]
-            }),
+            jsonEncode({'ingredients': data}),
           );
         },
       );
 
       SharedPreferences.getInstance().then((instance) {
-        instance.setStringList(
-          "Enabled",
-          _enabled.map((e) => "${e.$1}:${e.$2}").toList(),
-        );
+        instance.setStringList("Enabled", _enabled);
       });
     }
 
     notifyListeners();
   }
 
-  List<IngredientDescription> getAll() {
-    List<IngredientDescription> ingredients = [];
-    for (var group in _assetIngredients) {
-      ingredients.addAll(group);
-    }
+  void mask(String name) {
+    _numberOfIngredientsFromAssets--;
 
-    for (var group in _userIngredients) {
-      ingredients.addAll(group);
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      SharedPreferences.getInstance().then((instance) {
+        final old = (instance.getStringList("Masked") ?? <String>[]);
+        final masked = [...old, name];
+
+        instance.setStringList("Masked", masked);
+      });
     }
+  }
+
+  List<IngredientDescription> getAll() {
+    return List.from(_ingredients);
+  }
+
+  List<IngredientDescription> getGroup(int groupId) {
+    var ingredients = getAll();
+    ingredients.removeWhere((element) => element.group != groupId);
 
     return ingredients;
   }
 
-  List<IngredientDescription> getGroup(int groupId) {
-    final assetGroup = _assetIngredients.elementAtOrNull(groupId) ?? [];
-    final userGroup = _userIngredients.elementAtOrNull(groupId) ?? [];
+  List<int> getGroupIds(int groupId) {
+    List<int> ids = [];
+    for (var i = 0; i < _ingredients.length; i++) {
+      if (_ingredients[i].group == groupId) ids.add(i);
+    }
 
-    return List.from([...assetGroup, ...userGroup]);
+    return ids;
   }
 
-  IngredientDescription get(int groupId, int ingredientId) {
-    final ingredient = getGroup(groupId).elementAtOrNull(ingredientId);
+  IngredientDescription get(int id) {
+    final ingredient = getAll().elementAtOrNull(id);
     return ingredient ?? IngredientDescription.empty();
   }
-
-  void toggleDeletionMode() => _deletionMode = !_deletionMode;
 
   int number(int groupId) {
     return getGroup(groupId).length;

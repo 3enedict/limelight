@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:limelight/data/provider/ingredient_model.dart';
-import 'package:limelight/ingredient_groups.dart';
 
 import 'package:limelight/transitions.dart';
 
+import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/pages/add_ingredient_page.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
@@ -25,21 +24,17 @@ class SearchPage extends StatefulWidget {
 class SearchPageState extends State<SearchPage> {
   String _query = "";
 
-  List<(int, int)> sort(String query) {
-    List<(int, int)> matches = [];
+  List<int> sort(String query) {
+    List<int> matches = [];
 
     String cleanQuery = query.toLowerCase().trim();
     if (cleanQuery == "") return [];
 
-    for (var i = 0; i < numberOfGroups; i++) {
-      var j = 0;
-
-      for (var data in Provider.of<IngredientModel>(context).getGroup(i)) {
-        String ingredient = data.name.toLowerCase().trim();
-
-        if (ingredient.contains(cleanQuery)) matches.add((i, j));
-        j++;
-      }
+    var i = 0;
+    for (var ingredient in Provider.of<IngredientModel>(context).getAll()) {
+      String cleanIngredient = ingredient.name.toLowerCase().trim();
+      if (cleanIngredient.contains(cleanQuery)) matches.add(i);
+      i++;
     }
 
     return matches;
@@ -47,7 +42,7 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<(int, int)> sortedIngredients = sort(_query);
+    List<int> sortedIngredientIds = sort(_query);
 
     double searchBarHeight = 50;
     double distanceBetweenItems = 15;
@@ -55,12 +50,9 @@ class SearchPageState extends State<SearchPage> {
     return EmptyPageWithBottomBar(
       body: ListView.builder(
         reverse: true,
-        itemCount: sortedIngredients.length,
+        itemCount: sortedIngredientIds.length,
         itemBuilder: (BuildContext context, int index) {
-          return IngredientItem(
-            groupId: sortedIngredients[index].$1,
-            ingredientId: sortedIngredients[index].$2,
-          );
+          return IngredientItem(id: sortedIngredientIds[index]);
         },
       ),
       bottomBar: Padding(
@@ -98,7 +90,7 @@ class SearchPageState extends State<SearchPage> {
             SizedBox(
               width: distanceBetweenItems,
             ),
-            sortedIngredients.isEmpty
+            sortedIngredientIds.isEmpty
                 ? GradientButton(
                     diameter: searchBarHeight - 4,
                     gradient: limelightGradient,

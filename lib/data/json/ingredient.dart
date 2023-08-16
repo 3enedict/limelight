@@ -63,6 +63,17 @@ class IngredientDescription {
       onPressed: onPressed,
     );
   }
+
+  @override
+  String toString() {
+    return """IngredientDescription(
+      name: $name, 
+      season: $season,
+      price: $price,
+      unit: $unit,
+      group: $group,
+    )""";
+  }
 }
 
 class IngredientData {
