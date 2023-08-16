@@ -118,6 +118,19 @@ class IngredientModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<IngredientDescription> getAll() {
+    List<IngredientDescription> ingredients = [];
+    for (var group in _assetIngredients) {
+      ingredients.addAll(group);
+    }
+
+    for (var group in _userIngredients) {
+      ingredients.addAll(group);
+    }
+
+    return ingredients;
+  }
+
   List<IngredientDescription> getGroup(int groupId) {
     final assetGroup = _assetIngredients.elementAtOrNull(groupId) ?? [];
     final userGroup = _userIngredients.elementAtOrNull(groupId) ?? [];

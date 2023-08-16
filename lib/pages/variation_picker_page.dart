@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/variation_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/widgets/item.dart';
+import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/gradient_box.dart';
 import 'package:limelight/widgets/page.dart';
 

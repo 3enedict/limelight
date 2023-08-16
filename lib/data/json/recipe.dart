@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/data/json/variation_group.dart';
-import 'package:limelight/widgets/item.dart';
-import 'package:limelight/widgets/button_item.dart';
+import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipeData {
@@ -85,17 +84,6 @@ class RecipeData {
       backgroundGradient: toSurfaceGradient(gradient),
       onPressed: onPressed,
       onLongPress: onLongPress,
-    );
-  }
-
-  ButtonItem toButtonItem() {
-    return ButtonItem(
-      title: name,
-      subTitle: difficulty,
-      info: price,
-      subInfo: "per serving",
-      accentGradient: gradient,
-      backgroundGradient: toSurfaceGradient(gradient),
     );
   }
 }

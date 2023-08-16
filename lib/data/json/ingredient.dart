@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/item.dart';
-import 'package:limelight/widgets/button_item.dart';
+import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/gradients.dart';
 
 class IngredientDescription {
@@ -59,20 +58,9 @@ class IngredientDescription {
       subTitle: season,
       info: price,
       subInfo: unit,
-      accentGradient: gradients[group],
-      backgroundGradient: toSurfaceGradient(gradients[group]),
+      accentGradient: limelightGradient,
+      backgroundGradient: toSurfaceGradient(limelightGradient),
       onPressed: onPressed,
-    );
-  }
-
-  ButtonItem toButtonItem() {
-    return ButtonItem(
-      title: name,
-      subTitle: season,
-      info: price,
-      subInfo: unit,
-      accentGradient: gradients[group],
-      backgroundGradient: toSurfaceGradient(gradients[group]),
     );
   }
 }

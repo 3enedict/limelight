@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/ingredient_groups.dart';
 
 import 'package:limelight/transitions.dart';
 
@@ -6,8 +8,10 @@ import 'package:limelight/pages/add_ingredient_page.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/gradient_textfield.dart';
+import 'package:limelight/widgets/items/ingredient.dart';
 import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/gradients.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   final void Function(IngredientDescription) onSubmitted;
@@ -21,17 +25,20 @@ class SearchPage extends StatefulWidget {
 class SearchPageState extends State<SearchPage> {
   String _query = "";
 
-  List<IngredientDescription> sort(String query) {
-    List<IngredientDescription> matches = [];
+  List<(int, int)> sort(String query) {
+    List<(int, int)> matches = [];
+
     String cleanQuery = query.toLowerCase().trim();
+    if (cleanQuery == "") return [];
 
-    if (cleanQuery != "") {
-      for (var ingredient in vegetables) {
-        String cleanIngredient = ingredient.name.toLowerCase().trim();
+    for (var i = 0; i < numberOfGroups; i++) {
+      var j = 0;
 
-        if (cleanIngredient.contains(cleanQuery)) {
-          matches.add(ingredient);
-        }
+      for (var data in Provider.of<IngredientModel>(context).getGroup(i)) {
+        String ingredient = data.name.toLowerCase().trim();
+
+        if (ingredient.contains(cleanQuery)) matches.add((i, j));
+        j++;
       }
     }
 
@@ -40,7 +47,7 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<IngredientDescription> sortedIngredients = sort(_query);
+    List<(int, int)> sortedIngredients = sort(_query);
 
     double searchBarHeight = 50;
     double distanceBetweenItems = 15;
@@ -50,7 +57,10 @@ class SearchPageState extends State<SearchPage> {
         reverse: true,
         itemCount: sortedIngredients.length,
         itemBuilder: (BuildContext context, int index) {
-          return sortedIngredients[index].toButtonItem();
+          return IngredientItem(
+            groupId: sortedIngredients[index].$1,
+            ingredientId: sortedIngredients[index].$2,
+          );
         },
       ),
       bottomBar: Padding(
@@ -104,7 +114,7 @@ class SearchPageState extends State<SearchPage> {
                 : GradientButton(
                     diameter: searchBarHeight - 4,
                     gradient: limelightGradient,
-                    onPressed: () => widget.onSubmitted(sortedIngredients[0]),
+                    onPressed: () {},
                     padding: const EdgeInsets.all(0),
                     child: const Icon(
                       Icons.check,

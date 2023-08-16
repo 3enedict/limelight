@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/ingredient_groups.dart';
 
 import 'package:limelight/pages/ingredients_search_page.dart';
-import 'package:limelight/pages/ingredients_subpages/leafy_greens_page.dart';
-import 'package:limelight/pages/ingredients_subpages/vegetables_page.dart';
-import 'package:limelight/pages/ingredients_subpages/meat_page.dart';
-import 'package:limelight/pages/ingredients_subpages/fish_page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
+import 'package:limelight/widgets/item_list.dart';
+import 'package:limelight/widgets/items/ingredient.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/transitions.dart';
+import 'package:provider/provider.dart';
 
 class IngredientsPage extends StatefulWidget {
   const IngredientsPage({super.key});
@@ -21,23 +22,10 @@ class IngredientsPage extends StatefulWidget {
 
 class IngredientsPageState extends State<IngredientsPage> {
   int _currentIndex = 0;
-  final _screens = [
-    const LeafyGreensPage(),
-    const VegetablesPage(),
-    const MeatsPage(),
-    const FishPage(),
-  ];
-
-  final _gradients = [
-    leafyGreensGradient,
-    vegetablesGradient,
-    meatGradient,
-    fishGradient,
-  ];
 
   @override
   Widget build(BuildContext context) {
-    final List<Color> gradient = _gradients[_currentIndex];
+    final gradient = gradients[_currentIndex];
 
     return EmptyPage(
       gradient: gradient,
@@ -75,7 +63,30 @@ class IngredientsPageState extends State<IngredientsPage> {
       ),
       child: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: List.generate(
+          names.length,
+          (int index) => ItemList(
+            title: names[index],
+            titleBackground: AssetImage(images[index]),
+            gradient: fishGradient,
+            items: Consumer<IngredientModel>(
+              builder: (context, ingredients, child) {
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int listIndex) {
+                      return IngredientItem(
+                        groupId: index,
+                        ingredientId: listIndex,
+                      );
+                    },
+                    childCount: ingredients.number(index),
+                  ),
+                );
+              },
+            ),
+          ),
+          growable: false,
+        ),
       ),
     );
   }

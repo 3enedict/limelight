@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
-import 'package:limelight/gradients.dart';
 
 import 'package:limelight/widgets/gradient_box.dart';
 import 'package:limelight/widgets/gradient_button.dart';
@@ -82,14 +81,15 @@ class AddIngredientPageState extends State<AddIngredientPage> {
                 child: GradientButton(
                   height: 44,
                   onPressed: () {
-                    Provider.of<IngredientModel>(context, listen: false)
-                        .addIngredient(IngredientDescription(
-                      name: ingredient[0],
-                      season: ingredient[1],
-                      price: ingredient[2],
-                      unit: ingredient[3],
-                      gradient: leafyGreensGradient,
-                    ));
+                    Provider.of<IngredientModel>(context, listen: false).add(
+                      IngredientDescription(
+                        name: ingredient[0],
+                        season: ingredient[1],
+                        price: ingredient[2],
+                        unit: ingredient[3],
+                        group: 0,
+                      ),
+                    );
 
                     Navigator.of(context).pop();
                   },

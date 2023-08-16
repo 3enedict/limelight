@@ -7,7 +7,7 @@ import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/pages/variation_picker_page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/item.dart';
+import 'package:limelight/widgets/items/item.dart';
 import 'package:limelight/widgets/day.dart';
 import 'package:limelight/gradients.dart';
 

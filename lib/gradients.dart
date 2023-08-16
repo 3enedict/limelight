@@ -1,5 +1,3 @@
-library gradients;
-
 import 'package:flutter/material.dart';
 
 const limelightGradient = [
@@ -25,13 +23,6 @@ const meatGradient = [
 const fishGradient = [
   Color(0xFF96DEDA),
   Color(0xFF50C9C3),
-];
-
-const gradients = [
-  leafyGreensGradient,
-  vegetablesGradient,
-  meatGradient,
-  fishGradient,
 ];
 
 List<Color> toBackgroundGradient(List<Color> gradient) {

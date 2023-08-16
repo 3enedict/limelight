@@ -22,21 +22,21 @@ class ShoppingListPageState extends State<ShoppingListPage>
       season: 'Spring and fall',
       price: '\$1.00',
       unit: 'per head',
-      gradient: limelightGradient,
+      group: 0,
     ),
     IngredientDescription(
       name: 'Kale',
       season: 'Fall and winter',
       price: '\$2.00',
       unit: 'per lb',
-      gradient: limelightGradient,
+      group: 0,
     ),
     IngredientDescription(
       name: 'Arugula',
       season: 'Late spring and early fall',
       price: '\$10.00',
       unit: 'per lb',
-      gradient: limelightGradient,
+      group: 0,
     ),
   ];
 
@@ -56,7 +56,7 @@ class ShoppingListPageState extends State<ShoppingListPage>
               season: 'Late spring and early fall',
               price: '\$10.00',
               unit: 'per lb',
-              gradient: limelightGradient,
+              group: 0,
             ),
           );
         },
