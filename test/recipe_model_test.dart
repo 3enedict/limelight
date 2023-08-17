@@ -308,4 +308,23 @@ void main() {
       );
     });
   });
+
+  group('Recipe model, editing', () {
+    test('Editing an ingredient to an existing recipe works', () {
+      final ingredient = IngredientData(name: "Mushroom(s)", quantity: "10");
+      final RecipeModel model = RecipeModel();
+      model.add(complicatedRecipe);
+
+      model.addIngredient(0, ingredient);
+      model.removeIngredient(
+        0,
+        IngredientData(name: "Olive oil", quantity: "2tbsp"),
+      );
+
+      expect(
+        model.recipe(0).ingredients,
+        [ingredient],
+      );
+    });
+  });
 }

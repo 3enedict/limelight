@@ -106,7 +106,10 @@ class SearchPageState extends State<SearchPage> {
                 : GradientButton(
                     diameter: searchBarHeight - 4,
                     gradient: limelightGradient,
-                    onPressed: () {},
+                    onPressed: () => widget.onSubmitted(
+                      Provider.of<IngredientModel>(context)
+                          .get(sortedIngredientIds[0]),
+                    ),
                     padding: const EdgeInsets.all(0),
                     child: const Icon(
                       Icons.check,

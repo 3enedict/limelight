@@ -28,6 +28,22 @@ class RecipeModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeIngredient(int recipeId, IngredientData ingredient) {
+    final recipe = _recipes.elementAtOrNull(recipeId);
+    if (recipe == null) return;
+
+    recipe.ingredients.remove(ingredient);
+    notifyListeners();
+  }
+
+  void addIngredient(int recipeId, IngredientData ingredient) {
+    final recipe = _recipes.elementAtOrNull(recipeId);
+    if (recipe == null) return;
+
+    recipe.ingredients.add(ingredient);
+    notifyListeners();
+  }
+
   List<IngredientData> ingredientList(
     int recipeId,
     List<(int, int)> variationIds,

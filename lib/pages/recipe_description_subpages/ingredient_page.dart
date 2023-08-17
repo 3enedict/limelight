@@ -60,7 +60,7 @@ class IngredientSubPage extends StatelessWidget {
                   onPressed: () => fadeTransition(
                     context,
                     SearchPage(
-                      onSubmitted: (e) {},
+                      onSubmitted: (desc) {},
                     ),
                   ),
                   child: const Icon(
