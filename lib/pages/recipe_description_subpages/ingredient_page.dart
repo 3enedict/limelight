@@ -8,6 +8,7 @@ import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/pages/ingredients_search_page.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/item_list.dart';
+import 'package:limelight/widgets/items/ingredient_data.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/transitions.dart';
 import 'package:limelight/gradients.dart';
@@ -47,7 +48,12 @@ class IngredientSubPage extends StatelessWidget {
             );
 
             var items = List<Widget>.from(
-              ingredients.map((e) => e.toItem(() {})).toList(),
+              ingredients
+                  .map((e) => IngredientDataItem(
+                        recipeId: recipeId,
+                        ingredient: e,
+                      ))
+                  .toList(),
             );
 
             final pad = (MediaQuery.of(context).size.width - 80) / 2;
@@ -60,7 +66,13 @@ class IngredientSubPage extends StatelessWidget {
                   onPressed: () => fadeTransition(
                     context,
                     SearchPage(
-                      onSubmitted: (desc) {},
+                      onSubmitted: (desc) => recipes.addIngredient(
+                        recipeId,
+                        IngredientData(
+                          name: desc.name,
+                          quantity: "1",
+                        ),
+                      ),
                     ),
                   ),
                   child: const Icon(

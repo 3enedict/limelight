@@ -107,7 +107,7 @@ class SearchPageState extends State<SearchPage> {
                     diameter: searchBarHeight - 4,
                     gradient: limelightGradient,
                     onPressed: () => widget.onSubmitted(
-                      Provider.of<IngredientModel>(context)
+                      Provider.of<IngredientModel>(context, listen: false)
                           .get(sortedIngredientIds[0]),
                     ),
                     padding: const EdgeInsets.all(0),
