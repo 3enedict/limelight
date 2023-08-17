@@ -12,13 +12,15 @@ class RecipeModel extends ChangeNotifier {
   List<RecipeData> _recipes = [];
 
   void load() {
-    rootBundle.loadString("assets/recipes.json").then(
-      (jsonData) {
-        final parsedJson = jsonDecode(jsonData);
+    if (_recipes.isEmpty) {
+      rootBundle.loadString("assets/recipes.json").then(
+        (jsonData) {
+          final parsedJson = jsonDecode(jsonData);
 
-        _recipes = loadRecipes(parsedJson);
-      },
-    );
+          _recipes = loadRecipes(parsedJson);
+        },
+      );
+    }
   }
 
   void add(RecipeData recipe) {

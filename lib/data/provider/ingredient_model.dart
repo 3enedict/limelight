@@ -10,6 +10,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:limelight/data/json/ingredient.dart';
 
 List<IngredientDescription> loadIngredients(dynamic jsonData) {
+  if (jsonData == "") return [];
+
   final parsedJson = jsonDecode(jsonData);
   final groups = parsedJson['ingredients'] as List<dynamic>? ?? [];
 
@@ -23,7 +25,8 @@ class IngredientModel extends ChangeNotifier {
   int _numberOfIngredientsFromAssets = 0;
 
   void load() {
-    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+    if (!Platform.environment.containsKey('FLUTTER_TEST') &&
+        _ingredients.isEmpty) {
       SharedPreferences.getInstance().then((instance) {
         _enabled = instance.getStringList("Enabled") ?? [];
         final masked = instance.getStringList("Masked") ?? [];
@@ -77,14 +80,14 @@ class IngredientModel extends ChangeNotifier {
   }
 
   void notify() {
+    final strippedIngredients = getAll();
+    if (_numberOfIngredientsFromAssets != 0) {
+      strippedIngredients.removeRange(0, _numberOfIngredientsFromAssets - 1);
+    }
+
+    final data = strippedIngredients.map((e) => e.toJson()).toList();
+
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      final strippedIngredients = getAll();
-      if (_numberOfIngredientsFromAssets != 0) {
-        strippedIngredients.removeRange(0, _numberOfIngredientsFromAssets - 1);
-      }
-
-      final data = strippedIngredients.map((e) => e.toJson());
-
       getApplicationDocumentsDirectory().then(
         (dir) {
           final file = File("${dir.path}/ingredients.json");

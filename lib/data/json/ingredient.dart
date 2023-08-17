@@ -67,10 +67,10 @@ class IngredientDescription {
   @override
   String toString() {
     return """IngredientDescription(
-      name: $name, 
-      season: $season,
-      price: $price,
-      unit: $unit,
+      name: '$name', 
+      season: '$season',
+      price: '$price',
+      unit: '$unit',
       group: $group,
     )""";
   }

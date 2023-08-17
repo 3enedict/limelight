@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:limelight/gradients.dart';
+import 'package:provider/provider.dart';
+
 import 'package:limelight/data/json/ingredient.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
-
 import 'package:limelight/widgets/gradient_box.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/page.dart';
-import 'package:provider/provider.dart';
+import 'package:limelight/ingredient_groups.dart';
 
 class AddIngredientPage extends StatefulWidget {
   const AddIngredientPage({super.key});
@@ -18,39 +21,66 @@ class AddIngredientPage extends StatefulWidget {
 
 class AddIngredientPageState extends State<AddIngredientPage> {
   List<String> ingredient = ["", "", "", ""];
+  int id = 0;
 
   @override
   Widget build(BuildContext context) {
     var hints = [
-      "Name (lettuce)",
-      "Season (all year)",
-      "Price (1\$)",
-      "Unit (per head)",
+      "Name",
+      "Season",
+      "Price",
+      "Unit",
     ];
 
     var fields = List.generate(
       4,
-      (int index) => TextField(
-        autofocus: true,
-        cursorColor: const Color(0xFFEEEEEE),
-        decoration: InputDecoration(
-          hintText: hints[index],
-          hintStyle: const TextStyle(
-            fontStyle: FontStyle.italic,
-            color: Color(0xFFEEEEEE),
+      (int index) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: TextField(
+          autofocus: true,
+          cursorColor: const Color(0xFFEEEEEE),
+          decoration: InputDecoration(
+            hintText: hints[index],
+            hintStyle: const TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Color(0xFFEEEEEE),
+            ),
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.only(bottom: 4),
           ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.only(bottom: 4),
-        ),
-        expands: false,
-        style: GoogleFonts.workSans(
-          textStyle: const TextStyle(
-            fontStyle: FontStyle.italic,
-            color: Color(0xFFEEEEEE),
+          expands: false,
+          style: GoogleFonts.workSans(
+            textStyle: const TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Color(0xFFEEEEEE),
+            ),
+          ),
+          onChanged: (input) => setState(
+            () => ingredient[index] = input,
           ),
         ),
-        onChanged: (input) => setState(
-          () => ingredient[index] = input,
+      ),
+      growable: true,
+    );
+
+    var groups = List.generate(
+      numberOfGroups,
+      (int index) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: GradientButton(
+          gradient: toSurfaceGradient(gradients[index]),
+          onPressed: () => setState(() => id = index),
+          padding: const EdgeInsets.all(0),
+          width: 70,
+          height: 50,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              gradient: LinearGradient(colors: gradients[index]),
+            ),
+            height: 24,
+            width: 24,
+          ),
         ),
       ),
       growable: true,
@@ -64,7 +94,7 @@ class AddIngredientPageState extends State<AddIngredientPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: Text(
                   "Add ingredient",
                   style: GoogleFonts.workSans(
@@ -76,6 +106,11 @@ class AddIngredientPageState extends State<AddIngredientPage> {
                 ),
               ),
               ...fields,
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: groups,
+              ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: GradientButton(
@@ -87,7 +122,7 @@ class AddIngredientPageState extends State<AddIngredientPage> {
                         season: ingredient[1],
                         price: ingredient[2],
                         unit: ingredient[3],
-                        group: 0,
+                        group: id,
                       ),
                     );
 
