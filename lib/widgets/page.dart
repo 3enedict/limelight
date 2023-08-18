@@ -24,13 +24,17 @@ class EmptyPage extends StatelessWidget {
           end: Alignment.bottomCenter,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 6, 10),
-          child: fab,
+      child: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 6, 10),
+            child: fab,
+          ),
+          body: child,
         ),
-        body: child,
       ),
     );
   }

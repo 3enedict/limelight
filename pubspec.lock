@@ -134,6 +134,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  flutter_persistent_keyboard_height:
+    dependency: "direct main"
+    description:
+      name: flutter_persistent_keyboard_height
+      sha256: "3d30b09397dcaf6a914effbb6c566299f148d282e79b2f27f354c97ad3d49df3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -216,6 +224,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+  keyboard_utils:
+    dependency: transitive
+    description:
+      name: keyboard_utils
+      sha256: a76f5ab7f755a6d85d8e50729a1b7523af3a7dd9d5a262f30ba73c81148e48a8
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.4"
   lints:
     dependency: transitive
     description:

@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_feather_icons: ^2.0.0+1
+  flutter_persistent_keyboard_height: ^1.0.5
   fluttericon:
   google_fonts:
   path_provider: ^2.1.0
