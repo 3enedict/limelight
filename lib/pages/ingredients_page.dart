@@ -1,110 +1,25 @@
 import 'package:flutter/material.dart';
 
-import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:limelight/data/provider/ingredient_model.dart';
-import 'package:limelight/ingredient_groups.dart';
-
-import 'package:limelight/pages/ingredients_search_page.dart';
-import 'package:limelight/widgets/gradient_button.dart';
-import 'package:limelight/widgets/item_list.dart';
-import 'package:limelight/widgets/items/ingredient.dart';
+import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
-import 'package:limelight/transitions.dart';
-import 'package:provider/provider.dart';
 
-class IngredientsPage extends StatefulWidget {
+class IngredientsPage extends StatelessWidget {
   const IngredientsPage({super.key});
 
   @override
-  IngredientsPageState createState() => IngredientsPageState();
-}
-
-class IngredientsPageState extends State<IngredientsPage> {
-  int _currentIndex = 0;
-
-  @override
   Widget build(BuildContext context) {
-    final gradient = gradients[_currentIndex];
-
     return EmptyPage(
-      gradient: gradient,
-      fab: GradientButton(
-        diameter: 56,
-        gradient: toSurfaceGradient(gradient),
-        onPressed: () => fadeTransition(
-          context,
-          SearchPage(
-            onSubmitted: (e) {},
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 15),
+          child: GradientIcon(
+            gradient: toTextGradient(limelightGradient),
+            icon: Icons.expand_less,
           ),
-        ),
-        padding: const EdgeInsets.all(0),
-        child: const Center(
-          child: Icon(
-            Icons.search,
-            color: Colors.white70,
-          ),
-        ),
-      ),
-      bottomNavBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        elevation: 0,
-        showSelectedLabels: true,
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-        items: [
-          bottomNavBarItem(leafyGreensGradient),
-          bottomNavBarItem(vegetablesGradient),
-          bottomNavBarItem(meatGradient),
-          bottomNavBarItem(fishGradient),
-        ],
-      ),
-      child: IndexedStack(
-        index: _currentIndex,
-        children: List.generate(
-          numberOfGroups,
-          (int index) => ItemList(
-            title: names[index],
-            titleBackground: AssetImage(images[index]),
-            gradient: gradients[index],
-            items: Consumer<IngredientModel>(
-              builder: (context, ingredients, child) {
-                final groupIds = ingredients.getGroupIds(index);
-
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int listIndex) {
-                      return IngredientItem(
-                        id: groupIds[listIndex],
-                      );
-                    },
-                    childCount: groupIds.length,
-                  ),
-                );
-              },
-            ),
-          ),
-          growable: false,
         ),
       ),
     );
   }
-}
-
-BottomNavigationBarItem bottomNavBarItem(List<Color> gradient) {
-  return BottomNavigationBarItem(
-    icon: ShaderMask(
-      shaderCallback: (Rect bounds) {
-        return LinearGradient(colors: gradient).createShader(bounds);
-      },
-      blendMode: BlendMode.srcIn,
-      child: const Icon(
-        FontAwesome5.circle,
-      ),
-    ),
-    label: '',
-    backgroundColor: Colors.transparent,
-  );
 }
