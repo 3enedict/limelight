@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_persistent_keyboard_height/flutter_persistent_keyboard_height.dart';
+import 'package:limelight/gradients.dart';
 
 import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/pages/recipes_page.dart';
@@ -18,7 +19,14 @@ class Limelight extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Limelight',
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+        useMaterial3: true,
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: toTextGradient(limelightGradient)[1],
+          selectionColor: modifyColor(limelightGradient[1], 0.4, 0.5),
+          selectionHandleColor: modifyColor(limelightGradient[1], 0.7, 0.7),
+        ),
+      ),
       builder: (context, child) => PersistentKeyboardHeightProvider(
         child: child!,
       ),
