@@ -1,0 +1,19 @@
+{
+  "ingredients": [
+    {
+      "name": "Lettuce",
+      "price": "$1.00",
+      "unit": "per head"
+    },
+    {
+      "name": "Carrot",
+      "price": "$3.00",
+      "unit": "per kg"
+    },
+    {
+      "name": "Salmon",
+      "price": "$20.00",
+      "unit": "per kg"
+    }
+  ]
+}

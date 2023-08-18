@@ -26,6 +26,10 @@ List<Color> toTextGradient(List<Color> gradient) {
   ];
 }
 
+Color textColor() {
+  return toTextGradient(limelightGradient)[1];
+}
+
 Color modifyColor(Color color, double value, double saturation) {
   var hsvColor = HSVColor.fromColor(color);
   hsvColor = hsvColor.withValue(value);

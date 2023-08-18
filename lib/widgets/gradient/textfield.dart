@@ -8,12 +8,14 @@ class GradientTextField extends StatelessWidget {
   final String hintText;
   final double height;
   final double fontSize;
+  final void Function(String)? onChanged;
 
   const GradientTextField({
     super.key,
     required this.hintText,
     this.height = 68,
     this.fontSize = 18,
+    this.onChanged,
   });
 
   @override
@@ -30,12 +32,11 @@ class GradientTextField extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 30),
         child: TextField(
-          cursorColor: const Color(0xFFEEEEEE),
           decoration: InputDecoration.collapsed(
             hintText: hintText,
             hintStyle: TextStyle(
               fontStyle: FontStyle.italic,
-              color: const Color(0xFFEEEEEE),
+              color: textColor(),
               fontSize: fontSize,
             ),
           ),
@@ -43,10 +44,11 @@ class GradientTextField extends StatelessWidget {
           style: GoogleFonts.workSans(
             textStyle: TextStyle(
               fontStyle: FontStyle.italic,
-              color: const Color(0xFFEEEEEE),
+              color: textColor(),
               fontSize: fontSize,
             ),
           ),
+          onChanged: onChanged,
         ),
       ),
     );
