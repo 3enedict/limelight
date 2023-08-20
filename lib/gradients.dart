@@ -14,8 +14,8 @@ List<Color> toBackgroundGradient(List<Color> gradient) {
 
 List<Color> toSurfaceGradient(List<Color> gradient) {
   return [
-    modifyColor(gradient[0], 0.16, 0.1),
-    modifyColor(gradient[1], 0.16, 0.1),
+    modifyColor(gradient[0], 0.14, 0.1),
+    modifyColor(gradient[1], 0.14, 0.1),
   ];
 }
 

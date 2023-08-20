@@ -46,6 +46,7 @@ const ingredients = """
 void main() {
   test('Loading ingredients works', () {
     final IngredientModel model = IngredientModel();
+
     model.loadFromString(ingredients);
 
     expect(model.ingredients, [lettuce, carrot, salmon]);

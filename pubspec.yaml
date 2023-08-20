@@ -15,6 +15,7 @@ dependencies:
   google_fonts:
   path_provider: ^2.1.0
   provider:
+  search_page: ^2.3.0
   shared_preferences:
 
 dev_dependencies:

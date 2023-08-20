@@ -2,18 +2,21 @@
   "ingredients": [
     {
       "name": "Lettuce",
-      "price": "$1.00",
-      "unit": "per head"
+      "season": "All year",
+      "price": "1.00",
+      "unit": "$/head"
     },
     {
       "name": "Carrot",
-      "price": "$3.00",
-      "unit": "per kg"
+      "season": "Fall and winter",
+      "price": "3.00",
+      "unit": "$/kg"
     },
     {
       "name": "Salmon",
-      "price": "$20.00",
-      "unit": "per kg"
+      "season": "All year",
+      "price": "20.00",
+      "unit": "$/kg"
     }
   ]
 }
