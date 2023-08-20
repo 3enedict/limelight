@@ -4,11 +4,13 @@ import 'package:limelight/gradients.dart';
 
 class GradientIcon extends StatelessWidget {
   final List<Color> gradient;
+  final double? size;
   final IconData icon;
 
   const GradientIcon({
     super.key,
     this.gradient = limelightGradient,
+    this.size,
     required this.icon,
   });
 
@@ -21,7 +23,11 @@ class GradientIcon extends StatelessWidget {
           begin: Alignment.topCenter,
         ).createShader(bounds);
       },
-      child: Icon(icon, color: Colors.white),
+      child: Icon(
+        icon,
+        size: size,
+        color: Colors.white,
+      ),
     );
   }
 }

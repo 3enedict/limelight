@@ -14,7 +14,7 @@ class RecipesPage extends StatelessWidget {
       fab: GradientButton(
         gradient: toSurfaceGradient(limelightGradient),
         diameter: 56,
-        onPressed: () => print("Hello"),
+        onPressed: () {},
         child: GradientIcon(
           gradient: toTextGradient(limelightGradient),
           icon: Icons.layers,

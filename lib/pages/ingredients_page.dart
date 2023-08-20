@@ -25,13 +25,15 @@ class IngredientsPage extends StatelessWidget {
                 child: Text(
                   "Search...",
                   style: TextStyle(
-                    fontStyle: FontStyle.italic,
                     color: textColor(),
+                    fontStyle: FontStyle.italic,
                     fontSize: 18,
                   ),
                 ),
               ),
-              onPressed: () => showIngredientSearch(context),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const SearchPage()),
+              ),
             ),
           ),
           Align(

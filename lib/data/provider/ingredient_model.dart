@@ -64,6 +64,8 @@ class IngredientModel extends ChangeNotifier {
     } else {
       _selected.add(name);
     }
+
+    notifyListeners();
   }
 
   List<String> get selected => List.from(_selected);

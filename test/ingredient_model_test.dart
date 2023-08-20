@@ -5,18 +5,21 @@ import 'package:limelight/data/provider/ingredient_model.dart';
 
 var lettuce = IngredientDescription(
   name: "Lettuce",
+  season: "All year",
   price: "\$1.00",
   unit: "per head",
 );
 
 var carrot = IngredientDescription(
   name: "Carrot",
+  season: "Fall",
   price: "\$3.00",
   unit: "per kg",
 );
 
 var salmon = IngredientDescription(
   name: "Salmon",
+  season: "All year",
   price: "\$20.00",
   unit: "per kg",
 );
@@ -26,16 +29,19 @@ const ingredients = """
   "ingredients": [
     {
       "name": "Lettuce",
+      "season": "All year",
       "price": "\$1.00",
       "unit": "per head"
     },
     {
       "name": "Carrot",
+      "season": "Fall",
       "price": "\$3.00",
       "unit": "per kg"
     },
     {
       "name": "Salmon",
+      "season": "All year",
       "price": "\$20.00",
       "unit": "per kg"
     }
