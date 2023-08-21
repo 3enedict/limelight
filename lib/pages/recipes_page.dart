@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/widgets/gradient/button.dart';
+import 'package:limelight/widgets/gradient/circle.dart';
 import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';

@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
+import 'package:limelight/widgets/gradient/circle.dart';
 import 'package:limelight/gradients.dart';
 
 class EmptyPage extends StatelessWidget {
@@ -18,6 +21,14 @@ class EmptyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var random = Random();
+
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    const numberOfCircles = 4;
+
+    final sectionHeight = (height + 2 * width) / numberOfCircles;
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
