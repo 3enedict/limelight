@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:limelight/data/json/ingredient_description.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
 
 import 'package:limelight/widgets/gradient/icon.dart';
@@ -16,26 +17,33 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  var _controller = TextEditingController();
   String _query = "";
-  String _lastEdit = "";
 
   @override
   Widget build(BuildContext context) {
     return Consumer<IngredientModel>(
       builder: (context, ingredients, child) {
-        List<IngredientSearchItem> matches = _query == ""
-            ? []
-            : ingredients
-                .search(_query)
-                .map((e) => IngredientSearchItem(
-                      query: _query,
-                      ingredient: e,
-                    ))
-                .toList();
+        List<IngredientSearchItem> matches = [];
 
-        bool exit = true;
-        if (matches.isNotEmpty) {
-          exit = _lastEdit == matches[0].ingredient.name;
+        if (_query == "") {
+          List<String> selected = ingredients.selected.reversed.toList();
+          matches = List.filled(
+            selected.length,
+            IngredientSearchItem(ingredient: IngredientDescription.empty()),
+          );
+
+          for (var ingredient in ingredients.ingredients) {
+            final index = selected.indexOf(ingredient.name);
+
+            final item = IngredientSearchItem(ingredient: ingredient);
+            if (index != -1) matches[index] = item;
+          }
+        } else {
+          matches = ingredients
+              .search(_query)
+              .map((e) => IngredientSearchItem(query: _query, ingredient: e))
+              .toList();
         }
 
         return EmptyPage(
@@ -52,6 +60,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             title: TextField(
               autofocus: true,
+              controller: _controller,
               keyboardAppearance: Brightness.dark,
               decoration: InputDecoration.collapsed(
                 hintText: 'Search...',
@@ -60,24 +69,32 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               style: GoogleFonts.workSans(
-                  textStyle: TextStyle(color: textColor())),
+                textStyle: TextStyle(color: textColor()),
+              ),
               onChanged: (query) => setState(() => _query = query),
-              onEditingComplete: exit
+              onEditingComplete: _query == ''
                   ? null
                   : () {
-                      setState(() => _lastEdit = matches[0].ingredient.name);
-                      ingredients.select(matches[0].ingredient.name);
+                      if (matches.isNotEmpty) {
+                        ingredients.select(matches[0].ingredient.name);
+                        setState(() => _query = '');
+                        _controller.clear();
+                      }
                     },
-              onSubmitted: exit ? (_) => Navigator.of(context).pop() : null,
+              onSubmitted:
+                  _query == '' ? (_) => Navigator.of(context).pop() : null,
             ),
-            actions: _query != ""
+            actions: _query != ''
                 ? [
                     IconButton(
                       icon: GradientIcon(
                         gradient: toTextGradient(limelightGradient),
                         icon: Icons.clear,
                       ),
-                      onPressed: () => setState(() => _query = ''),
+                      onPressed: () {
+                        setState(() => _query = '');
+                        _controller.clear();
+                      },
                     ),
                   ]
                 : [],

@@ -15,7 +15,7 @@ class IngredientSearchItem extends StatelessWidget {
   const IngredientSearchItem({
     super.key,
     required this.ingredient,
-    required this.query,
+    this.query = '',
   });
 
   @override
