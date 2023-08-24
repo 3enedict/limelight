@@ -63,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
               controller: _controller,
               keyboardAppearance: Brightness.dark,
               decoration: InputDecoration.collapsed(
-                hintText: 'Search...',
+                hintText: 'Select ingredients to cook with',
                 hintStyle: GoogleFonts.workSans(
                   textStyle: TextStyle(color: textColor(), fontSize: 18),
                 ),

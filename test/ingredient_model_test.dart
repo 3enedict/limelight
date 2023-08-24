@@ -75,16 +75,16 @@ void main() {
   test('Tagging an ingredient as selected works', () {
     final IngredientModel model = IngredientModel();
     model.loadFromString(ingredients);
-    model.select("Carrot");
+    model.select(carrot.name);
 
-    expect(model.selected, ["Carrot"]);
+    expect(model.selected, [carrot.name]);
   });
 
   test('Unselecting an ingredient also works', () {
     final IngredientModel model = IngredientModel();
     model.loadFromString(ingredients);
-    model.select("Carrot");
-    model.select("Carrot");
+    model.select(carrot.name);
+    model.select(carrot.name);
 
     expect(model.selected, []);
   });
@@ -103,5 +103,17 @@ void main() {
     model.remove(lettuce.name);
 
     expect(model.ingredients, [carrot, salmon]);
+  });
+
+  test(
+      'Removing a selected ingredient removes it from the list of selected ingredients',
+      () {
+    final IngredientModel model = IngredientModel();
+    model.loadFromString(ingredients);
+
+    model.select(lettuce.name);
+    model.remove(lettuce.name);
+
+    expect(model.selected, []);
   });
 }

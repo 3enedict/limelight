@@ -20,10 +20,6 @@ class IngredientSearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = Provider.of<IngredientModel>(context)
-        .selected
-        .contains(ingredient.name);
-
     final runes = ingredient.name.runes;
     List<TextSpan> name = List.generate(
       runes.length,
@@ -41,79 +37,85 @@ class IngredientSearchItem extends StatelessWidget {
       },
     );
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-      child: GradientButton(
-        gradient: toSurfaceGradient(limelightGradient),
-        padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
-        borderRadius: 15,
-        onPressed: () {
-          Provider.of<IngredientModel>(context, listen: false).select(
-            ingredient.name,
-          );
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: GradientIcon(
-                gradient: isSelected
-                    ? limelightGradient
-                    : toBackgroundGradient(limelightGradient),
-                size: 30,
-                icon: Icons.panorama_fish_eye,
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text.rich(
-                  TextSpan(
-                    children: name,
-                    style: GoogleFonts.workSans(
-                      color: textColor(),
-                      fontSize: 16,
+    return Consumer<IngredientModel>(
+      builder: (context, ingredients, child) {
+        bool isSelected = ingredients.selected.contains(ingredient.name);
+
+        return Dismissible(
+          key: UniqueKey(),
+          onDismissed: (_) => ingredients.remove(ingredient.name),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+            child: GradientButton(
+              gradient: toSurfaceGradient(limelightGradient),
+              padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
+              borderRadius: 15,
+              onPressed: () => ingredients.select(ingredient.name),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: GradientIcon(
+                      gradient: isSelected
+                          ? limelightGradient
+                          : toBackgroundGradient(limelightGradient),
+                      size: 30,
+                      icon: Icons.panorama_fish_eye,
                     ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  ingredient.season,
-                  style: GoogleFonts.workSans(
-                    color: textColor().withOpacity(0.6),
-                    fontStyle: FontStyle.italic,
-                    fontSize: 14,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text.rich(
+                        TextSpan(
+                          children: name,
+                          style: GoogleFonts.workSans(
+                            color: textColor(),
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        ingredient.season,
+                        style: GoogleFonts.workSans(
+                          color: textColor().withOpacity(0.6),
+                          fontStyle: FontStyle.italic,
+                          fontSize: 14,
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
+                  const Expanded(child: SizedBox()),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "\$${ingredient.price}",
+                        style: GoogleFonts.workSans(
+                          color: textColor().withOpacity(0.8),
+                          fontStyle: FontStyle.italic,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(height: 1),
+                      Text(
+                        ingredient.unit,
+                        style: GoogleFonts.workSans(
+                          color: textColor().withOpacity(0.6),
+                          fontStyle: FontStyle.italic,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            const Expanded(child: SizedBox()),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  ingredient.price,
-                  style: GoogleFonts.workSans(
-                    color: textColor().withOpacity(0.8),
-                    fontStyle: FontStyle.italic,
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 1),
-                Text(
-                  ingredient.unit,
-                  style: GoogleFonts.workSans(
-                    color: textColor().withOpacity(0.6),
-                    fontStyle: FontStyle.italic,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

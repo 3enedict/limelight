@@ -43,6 +43,7 @@ class IngredientModel extends ChangeNotifier {
 
   void remove(String name) {
     _ingredients.removeWhere((e) => e.name == name);
+    _selected.remove(name);
     notify();
   }
 
