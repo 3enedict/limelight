@@ -11,11 +11,13 @@ import 'package:provider/provider.dart';
 class IngredientSearchItem extends StatelessWidget {
   final IngredientDescription ingredient;
   final String query;
+  final bool shoppingList;
 
   const IngredientSearchItem({
     super.key,
     required this.ingredient,
     this.query = '',
+    this.shoppingList = false,
   });
 
   @override
@@ -39,7 +41,9 @@ class IngredientSearchItem extends StatelessWidget {
 
     return Consumer<IngredientModel>(
       builder: (context, ingredients, child) {
-        bool isSelected = ingredients.selected.contains(ingredient.name);
+        final isSelected = shoppingList == true
+            ? ingredients.shoppingList.contains(ingredient.name)
+            : ingredients.selected.contains(ingredient.name);
 
         return Dismissible(
           key: UniqueKey(),
@@ -110,6 +114,7 @@ class IngredientSearchItem extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),

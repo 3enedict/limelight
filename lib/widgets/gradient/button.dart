@@ -35,18 +35,16 @@ class GradientButton extends StatelessWidget {
       width: width,
       borderRadius: borderRadius,
       diameter: diameter,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        onLongPress: onLongPress,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          padding: diameter == null ? padding : const EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          customBorder: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(diameter ?? borderRadius),
           ),
+          splashColor: toTextGradient(gradient)[1].withOpacity(0.5),
+          onTap: onPressed,
+          child: child,
         ),
-        child: child,
       ),
     );
   }

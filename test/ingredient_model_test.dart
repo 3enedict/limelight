@@ -89,6 +89,23 @@ void main() {
     expect(model.selected, []);
   });
 
+  test('Adding an ingredient to the shopping list works', () {
+    final IngredientModel model = IngredientModel();
+    model.loadFromString(ingredients);
+    model.addToShoppingList(carrot.name);
+
+    expect(model.shoppingList, [carrot.name]);
+  });
+
+  test('Removing an ingredient from the shopping list also works', () {
+    final IngredientModel model = IngredientModel();
+    model.loadFromString(ingredients);
+    model.addToShoppingList(carrot.name);
+    model.addToShoppingList(carrot.name);
+
+    expect(model.shoppingList, []);
+  });
+
   test('Adding an ingredient works', () {
     final IngredientModel model = IngredientModel();
     model.loadFromString(ingredients);

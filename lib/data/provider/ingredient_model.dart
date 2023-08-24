@@ -12,6 +12,7 @@ import 'package:limelight/data/json/ingredient_description.dart';
 class IngredientModel extends ChangeNotifier {
   List<IngredientDescription> _ingredients = [];
   List<String> _selected = [];
+  List<String> _shoppingList = [];
 
   void load() {
     getApplicationDocumentsDirectory().then(
@@ -33,6 +34,7 @@ class IngredientModel extends ChangeNotifier {
 
     SharedPreferences.getInstance().then((instance) {
       _selected = instance.getStringList("Selected") ?? [];
+      _shoppingList = instance.getStringList("Shopping list") ?? [];
     });
   }
 
@@ -79,6 +81,16 @@ class IngredientModel extends ChangeNotifier {
     notify();
   }
 
+  void addToShoppingList(String name) {
+    if (_shoppingList.contains(name)) {
+      _shoppingList.remove(name);
+    } else {
+      _shoppingList.add(name);
+    }
+
+    notify();
+  }
+
   void notify() {
     final data = _ingredients.map((e) => e.toJson()).toList();
 
@@ -95,6 +107,7 @@ class IngredientModel extends ChangeNotifier {
 
       SharedPreferences.getInstance().then((instance) {
         instance.setStringList("Selected", _selected);
+        instance.setStringList("Shopping list", _shoppingList);
       });
     }
 
@@ -102,6 +115,7 @@ class IngredientModel extends ChangeNotifier {
   }
 
   List<String> get selected => List.from(_selected);
+  List<String> get shoppingList => List.from(_shoppingList);
   List<IngredientDescription> get ingredients => List.from(_ingredients);
 
   // Utilities

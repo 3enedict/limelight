@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
 
 import 'package:limelight/pages/add_ingredient_page.dart';
 import 'package:limelight/pages/search_page.dart';
@@ -7,6 +8,8 @@ import 'package:limelight/widgets/gradient/circle.dart';
 import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
 
 class IngredientsPage extends StatelessWidget {
   const IngredientsPage({super.key});
@@ -24,7 +27,11 @@ class IngredientsPage extends StatelessWidget {
                 height: 66,
                 borderRadius: 66 / 2,
                 onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const SearchPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const SearchPage(
+                      shoppingList: false,
+                    ),
+                  ),
                 ),
                 padding: const EdgeInsets.all(0),
                 child: Row(
@@ -39,18 +46,27 @@ class IngredientsPage extends StatelessWidget {
                       ),
                     ),
                     const Expanded(child: SizedBox()),
-                    IconButton(
+                    GradientIcon(
                       onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const AddIngredientPage(),
                         ),
                       ),
-                      icon: const GradientIcon(
-                        size: 30,
-                        icon: Icons.add,
-                      ),
+                      size: 30,
+                      icon: Icons.add,
                     ),
-                    const SizedBox(width: 8),
+                    GradientIcon(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SearchPage(
+                            shoppingList: true,
+                          ),
+                        ),
+                      ),
+                      size: 27,
+                      icon: UniconsLine.shopping_basket,
+                    ),
+                    const SizedBox(width: 12),
                   ],
                 ),
               ),
@@ -61,7 +77,7 @@ class IngredientsPage extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 15),
                 child: GradientIcon(
                   gradient: toTextGradient(limelightGradient),
-                  icon: Icons.expand_less,
+                  icon: Icons.expand_more,
                 ),
               ),
             ),

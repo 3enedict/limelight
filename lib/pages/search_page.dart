@@ -10,7 +10,12 @@ import 'package:limelight/gradients.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final bool shoppingList;
+
+  const SearchPage({
+    super.key,
+    required this.shoppingList,
+  });
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -27,7 +32,10 @@ class _SearchPageState extends State<SearchPage> {
         List<IngredientSearchItem> matches = [];
 
         if (_query == "") {
-          List<String> selected = ingredients.selected.reversed.toList();
+          List<String> selected = widget.shoppingList
+              ? ingredients.shoppingList.reversed.toList()
+              : ingredients.selected.reversed.toList();
+
           matches = List.filled(
             selected.length,
             IngredientSearchItem(ingredient: IngredientDescription.empty()),
@@ -36,13 +44,18 @@ class _SearchPageState extends State<SearchPage> {
           for (var ingredient in ingredients.ingredients) {
             final index = selected.indexOf(ingredient.name);
 
-            final item = IngredientSearchItem(ingredient: ingredient);
+            final item = IngredientSearchItem(
+                ingredient: ingredient, shoppingList: widget.shoppingList);
             if (index != -1) matches[index] = item;
           }
         } else {
           matches = ingredients
               .search(_query)
-              .map((e) => IngredientSearchItem(query: _query, ingredient: e))
+              .map((e) => IngredientSearchItem(
+                    query: _query,
+                    ingredient: e,
+                    shoppingList: widget.shoppingList,
+                  ))
               .toList();
         }
 
@@ -63,7 +76,9 @@ class _SearchPageState extends State<SearchPage> {
               controller: _controller,
               keyboardAppearance: Brightness.dark,
               decoration: InputDecoration.collapsed(
-                hintText: 'Select ingredients to cook with',
+                hintText: widget.shoppingList
+                    ? 'Add to shopping list'
+                    : 'Select ingredients to cook with',
                 hintStyle: GoogleFonts.workSans(
                   textStyle: TextStyle(color: textColor(), fontSize: 18),
                 ),
@@ -76,7 +91,13 @@ class _SearchPageState extends State<SearchPage> {
                   ? null
                   : () {
                       if (matches.isNotEmpty) {
-                        ingredients.select(matches[0].ingredient.name);
+                        final name = matches[0].ingredient.name;
+                        if (widget.shoppingList) {
+                          ingredients.addToShoppingList(name);
+                        } else {
+                          ingredients.select(name);
+                        }
+
                         setState(() => _query = '');
                         _controller.clear();
                       }

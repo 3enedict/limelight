@@ -163,12 +163,14 @@ class _AddIngredientPageState extends State<AddIngredientPage> {
                       height: 50,
                       width: 150,
                       onPressed: actions[index].$2,
-                      child: Text(
-                        actions[index].$1,
-                        style: GoogleFonts.workSans(
-                          color: toSurfaceGradient(limelightGradient)[1],
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
+                      child: Center(
+                        child: Text(
+                          actions[index].$1,
+                          style: GoogleFonts.workSans(
+                            color: toSurfaceGradient(limelightGradient)[1],
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
