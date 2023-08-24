@@ -14,7 +14,7 @@ class GradientIcon extends StatelessWidget {
     this.gradient = limelightGradient,
     this.onPressed,
     this.size,
-    this.padding = 8,
+    this.padding = 10,
     required this.icon,
   });
 

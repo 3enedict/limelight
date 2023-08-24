@@ -24,8 +24,8 @@ class IngredientsPage extends StatelessWidget {
               child: GradientButton(
                 gradient: toSurfaceGradient(limelightGradient),
                 width: MediaQuery.of(context).size.width - 50 * 2,
-                height: 66,
-                borderRadius: 66 / 2,
+                height: 74,
+                borderRadius: 74 / 2,
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const SearchPage(
@@ -33,16 +33,15 @@ class IngredientsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                padding: const EdgeInsets.all(0),
                 child: Row(
                   children: [
-                    const SizedBox(width: 25),
+                    const SizedBox(width: 30),
                     Text(
                       "Search...",
                       style: TextStyle(
                         color: textColor(),
                         fontStyle: FontStyle.italic,
-                        fontSize: 18,
+                        fontSize: 20,
                       ),
                     ),
                     const Expanded(child: SizedBox()),
@@ -63,10 +62,10 @@ class IngredientsPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      size: 27,
-                      icon: UniconsLine.shopping_basket,
+                      size: 28,
+                      icon: UniconsLine.notes,
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 18),
                   ],
                 ),
               ),

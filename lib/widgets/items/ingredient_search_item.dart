@@ -41,7 +41,7 @@ class IngredientSearchItem extends StatelessWidget {
 
     return Consumer<IngredientModel>(
       builder: (context, ingredients, child) {
-        final isSelected = shoppingList == true
+        final isSelected = shoppingList
             ? ingredients.shoppingList.contains(ingredient.name)
             : ingredients.selected.contains(ingredient.name);
 
@@ -54,7 +54,9 @@ class IngredientSearchItem extends StatelessWidget {
               gradient: toSurfaceGradient(limelightGradient),
               padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
               borderRadius: 15,
-              onPressed: () => ingredients.select(ingredient.name),
+              onPressed: () => shoppingList
+                  ? ingredients.addToShoppingList(ingredient.name)
+                  : ingredients.select(ingredient.name),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -114,7 +116,7 @@ class IngredientSearchItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(width: 20),
                 ],
               ),
             ),
