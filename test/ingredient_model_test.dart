@@ -17,6 +17,13 @@ var carrot = IngredientDescription(
   unit: "per kg",
 );
 
+var porkChops = IngredientDescription(
+  name: "Porc chops",
+  season: "All year",
+  price: "\$12.00",
+  unit: "per kg",
+);
+
 var salmon = IngredientDescription(
   name: "Salmon",
   season: "All year",
@@ -80,5 +87,21 @@ void main() {
     model.select("Carrot");
 
     expect(model.selected, []);
+  });
+
+  test('Adding an ingredient works', () {
+    final IngredientModel model = IngredientModel();
+    model.loadFromString(ingredients);
+    model.add(porkChops);
+
+    expect(model.ingredients, [lettuce, carrot, salmon, porkChops]);
+  });
+
+  test('Removing an ingredient works', () {
+    final IngredientModel model = IngredientModel();
+    model.loadFromString(ingredients);
+    model.remove(lettuce.name);
+
+    expect(model.ingredients, [carrot, salmon]);
   });
 }

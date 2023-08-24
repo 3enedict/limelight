@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-
-import 'package:limelight/widgets/gradient/button.dart';
-import 'package:limelight/widgets/gradient/icon.dart';
-import 'package:limelight/widgets/page.dart';
-import 'package:limelight/widgets/textfield.dart';
-import 'package:limelight/gradients.dart';
+import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
-const units = [
-  "per kg",
-  "per lb",
-  "per head",
-  "per unit",
-];
+import 'package:limelight/data/json/ingredient_description.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/widgets/gradient/container.dart';
+import 'package:limelight/widgets/gradient/button.dart';
+import 'package:limelight/widgets/gradient/icon.dart';
+import 'package:limelight/widgets/textfield.dart';
+import 'package:limelight/widgets/page.dart';
+import 'package:limelight/gradients.dart';
 
 class AddIngredientPage extends StatefulWidget {
   const AddIngredientPage({super.key});
@@ -24,37 +21,55 @@ class AddIngredientPage extends StatefulWidget {
 }
 
 class _AddIngredientPageState extends State<AddIngredientPage> {
+  final nameController = TextEditingController();
+  final seasonController = TextEditingController();
+  final priceController = TextEditingController();
   final unitController = TextEditingController();
+
+  IngredientDescription ingredient = IngredientDescription.empty();
   int? selectedUnit;
 
   @override
   void dispose() {
+    nameController.dispose();
+    seasonController.dispose();
+    priceController.dispose();
     unitController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    const units = [
+      "per kg",
+      "per lb",
+      "per head",
+      "per unit",
+    ];
+
+    final actions = [
+      ("Cancel", () => Navigator.of(context).pop()),
+      (
+        "Add",
+        () {
+          final ingredient = IngredientDescription(
+            name: nameController.text,
+            season: seasonController.text,
+            price: priceController.text,
+            unit: unitController.text,
+          );
+
+          Provider.of<IngredientModel>(context, listen: false).add(ingredient);
+          Navigator.of(context).pop();
+        }
+      ),
+    ];
+
     return EmptyPage(
       resizeToAvoidBottomInset: true,
       child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: modifyColor(limelightGradient[1], 0.08, 0.1),
-                spreadRadius: 0,
-                blurRadius: 3,
-                offset: const Offset(1, 1),
-              ),
-            ],
-            gradient: LinearGradient(
-              colors: toSurfaceGradient(limelightGradient),
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
+        child: GradientContainer(
+          gradient: toSurfaceGradient(limelightGradient),
           width: MediaQuery.of(context).size.width - 20 * 2,
           child: ListView(
             shrinkWrap: true,
@@ -72,25 +87,29 @@ class _AddIngredientPageState extends State<AddIngredientPage> {
               const SizedBox(height: 2),
               Divider(color: textColor().withOpacity(0.2)),
               const SizedBox(height: 15),
-              const CustomTextField(
+              CustomTextField(
                 label: "Name",
                 icon: UniconsLine.tag_alt,
                 hint: "Lime zest",
+                controller: nameController,
               ),
               const SizedBox(height: 15),
-              const CustomTextField(
+              CustomTextField(
                 label: "Season",
                 icon: UniconsLine.snowflake,
                 hint: "Winter",
+                controller: seasonController,
               ),
               const SizedBox(height: 15),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: CustomTextField(
                       label: "Price",
                       icon: UniconsLine.dollar_sign,
                       hint: "1.00",
+                      controller: priceController,
+                      keyboardType: TextInputType.number,
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -135,37 +154,26 @@ class _AddIngredientPageState extends State<AddIngredientPage> {
               const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GradientButton(
-                    gradient: limelightGradient.reversed.toList(),
-                    borderRadius: 100,
-                    height: 50,
-                    width: 150,
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      "Cancel",
-                      style: GoogleFonts.workSans(
-                        color: toSurfaceGradient(limelightGradient)[1],
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
+                children: List.generate(
+                  actions.length,
+                  (int index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: GradientButton(
+                      borderRadius: 100,
+                      height: 50,
+                      width: 150,
+                      onPressed: actions[index].$2,
+                      child: Text(
+                        actions[index].$1,
+                        style: GoogleFonts.workSans(
+                          color: toSurfaceGradient(limelightGradient)[1],
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  GradientButton(
-                    borderRadius: 100,
-                    height: 50,
-                    width: 150,
-                    child: Text(
-                      "Add",
-                      style: GoogleFonts.workSans(
-                        color: toSurfaceGradient(limelightGradient)[1],
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),

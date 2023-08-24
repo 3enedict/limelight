@@ -36,6 +36,16 @@ class IngredientModel extends ChangeNotifier {
     });
   }
 
+  void add(IngredientDescription ingredient) {
+    _ingredients.add(ingredient);
+    notify();
+  }
+
+  void remove(String name) {
+    _ingredients.removeWhere((e) => e.name == name);
+    notify();
+  }
+
   List<IngredientDescription> search(String rawQuery) {
     List<IngredientDescription> results = [];
     List<List<IngredientDescription>> secondaryResults = [];
@@ -65,11 +75,32 @@ class IngredientModel extends ChangeNotifier {
       _selected.add(name);
     }
 
+    notify();
+  }
+
+  void notify() {
+    final data = _ingredients.map((e) => e.toJson()).toList();
+
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      getApplicationDocumentsDirectory().then(
+        (dir) {
+          final file = File("${dir.path}/ingredients.json");
+
+          file.writeAsString(
+            jsonEncode({'ingredients': data}),
+          );
+        },
+      );
+
+      SharedPreferences.getInstance().then((instance) {
+        instance.setStringList("Selected", _selected);
+      });
+    }
+
     notifyListeners();
   }
 
   List<String> get selected => List.from(_selected);
-
   List<IngredientDescription> get ingredients => List.from(_ingredients);
 
   // Utilities

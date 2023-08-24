@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/gradients.dart';
-import 'package:limelight/widgets/page.dart';
+import 'package:limelight/widgets/gradient/container.dart';
 
 class GradientButton extends StatelessWidget {
   final List<Color> gradient;
@@ -29,30 +29,16 @@ class GradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(diameter ?? borderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: modifyColor(gradient[1], 0.08, 0.1),
-            spreadRadius: 0,
-            blurRadius: 3,
-            offset: const Offset(0.5, 0.5),
-          ),
-        ],
-        gradient: LinearGradient(
-          colors: gradient,
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-      ),
-      height: diameter ?? height,
-      width: diameter ?? width,
+    return GradientContainer(
+      gradient: gradient,
+      height: height,
+      width: width,
+      borderRadius: borderRadius,
+      diameter: diameter,
       child: ElevatedButton(
         onPressed: onPressed,
         onLongPress: onLongPress,
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.grey,
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           padding: diameter == null ? padding : const EdgeInsets.all(0),

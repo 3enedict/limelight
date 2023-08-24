@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/gradients.dart';
@@ -9,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final String? hint;
   final Widget? suffixIcon;
   final TextEditingController? controller;
+  final TextInputType? keyboardType;
 
   const CustomTextField({
     super.key,
@@ -17,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.hint,
     this.suffixIcon,
     this.controller,
+    this.keyboardType,
   });
 
   @override
@@ -34,6 +37,7 @@ class CustomTextField extends StatelessWidget {
         const SizedBox(height: 8),
         TextField(
           controller: controller,
+          keyboardType: keyboardType,
           style: TextStyle(
             color: textColor(),
             fontWeight: FontWeight.w400,
