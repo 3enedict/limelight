@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:limelight/gradients.dart';
 
-final random = Random();
-final dimRand = random.nextDouble();
-final dxRand = random.nextDouble();
-final dyRand = random.nextDouble();
-
 class GradientCircle extends CustomPainter {
   final Offset center;
   GradientCircle({required this.center});
@@ -52,6 +47,8 @@ class Circles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final random = Random();
+
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     const numberOfCircles = 4;
@@ -67,10 +64,10 @@ class Circles extends StatelessWidget {
             ...List.generate(
               numberOfCircles,
               (int index) {
-                final dim = width + dimRand * width;
-                final dx = -width + dxRand * width * 3;
+                final dim = width + random.nextDouble() * width;
+                final dx = -width + random.nextDouble() * width * 3;
 
-                final rSecHeight = dyRand * sectionHeight;
+                final rSecHeight = random.nextDouble() * sectionHeight;
                 final dy = -width + rSecHeight + sectionHeight * index;
 
                 return CustomPaint(

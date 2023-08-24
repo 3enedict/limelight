@@ -9,6 +9,7 @@ class EmptyPage extends StatelessWidget {
   final List<Color> gradient;
   final PreferredSizeWidget? appBar;
   final Widget? fab;
+  final bool resizeToAvoidBottomInset;
   final Widget? child;
 
   const EmptyPage({
@@ -16,19 +17,12 @@ class EmptyPage extends StatelessWidget {
     this.gradient = limelightGradient,
     this.appBar,
     this.fab,
+    this.resizeToAvoidBottomInset = false,
     this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    var random = Random();
-
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    const numberOfCircles = 4;
-
-    final sectionHeight = (height + 2 * width) / numberOfCircles;
-
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -43,7 +37,7 @@ class EmptyPage extends StatelessWidget {
             : const EdgeInsets.all(0),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
           appBar: appBar,
           floatingActionButton: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 6, 10),
