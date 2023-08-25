@@ -44,7 +44,6 @@ class Limelight extends StatelessWidget {
       ),
       home: PageView(
         scrollDirection: Axis.vertical,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
         children: const [
           IngredientsPage(),
           RecipesPage(),
