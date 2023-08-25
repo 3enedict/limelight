@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:limelight/data/provider/ingredient_model.dart';
 
-import 'package:limelight/pages/add_ingredient_page.dart';
+import 'package:limelight/pages/ingredient_editor_page.dart';
 import 'package:limelight/pages/search_page.dart';
 import 'package:limelight/widgets/gradient/button.dart';
 import 'package:limelight/widgets/gradient/circle.dart';
 import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
-import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 class IngredientsPage extends StatelessWidget {
@@ -48,7 +46,7 @@ class IngredientsPage extends StatelessWidget {
                     GradientIcon(
                       onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const AddIngredientPage(),
+                          builder: (context) => const IngredientEditorPage(),
                         ),
                       ),
                       size: 30,

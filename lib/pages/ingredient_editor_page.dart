@@ -13,14 +13,16 @@ import 'package:limelight/widgets/textfield.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 
-class AddIngredientPage extends StatefulWidget {
-  const AddIngredientPage({super.key});
+class IngredientEditorPage extends StatefulWidget {
+  final String? name;
+
+  const IngredientEditorPage({super.key, this.name});
 
   @override
-  State<AddIngredientPage> createState() => _AddIngredientPageState();
+  State<IngredientEditorPage> createState() => _IngredientEditorPageState();
 }
 
-class _AddIngredientPageState extends State<AddIngredientPage> {
+class _IngredientEditorPageState extends State<IngredientEditorPage> {
   final nameController = TextEditingController();
   final seasonController = TextEditingController();
   final priceController = TextEditingController();
@@ -59,11 +61,28 @@ class _AddIngredientPageState extends State<AddIngredientPage> {
             unit: unitController.text,
           );
 
-          Provider.of<IngredientModel>(context, listen: false).add(ingredient);
+          final model = Provider.of<IngredientModel>(context, listen: false);
+          if (widget.name != null) model.remove(widget.name!);
+          model.add(ingredient);
+
           Navigator.of(context).pop();
         }
       ),
     ];
+
+    if (widget.name != null && ingredient == IngredientDescription.empty()) {
+      setState(() {
+        final model = Provider.of<IngredientModel>(context, listen: false);
+        ingredient = model.ingredients[model.ingredients.indexWhere(
+          (element) => element.name == widget.name,
+        )];
+
+        nameController.text = ingredient.name;
+        seasonController.text = ingredient.season;
+        priceController.text = ingredient.price;
+        unitController.text = ingredient.unit;
+      });
+    }
 
     return EmptyPage(
       resizeToAvoidBottomInset: true,

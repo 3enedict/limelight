@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:limelight/data/json/ingredient_description.dart';
-import 'package:limelight/data/provider/ingredient_model.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import 'package:limelight/data/json/ingredient_description.dart';
+import 'package:limelight/pages/ingredient_editor_page.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/widgets/gradient/button.dart';
 import 'package:limelight/widgets/gradient/icon.dart';
-import 'package:provider/provider.dart';
 
 class IngredientSearchItem extends StatelessWidget {
   final IngredientDescription ingredient;
@@ -57,6 +59,13 @@ class IngredientSearchItem extends StatelessWidget {
               onPressed: () => shoppingList
                   ? ingredients.addToShoppingList(ingredient.name)
                   : ingredients.select(ingredient.name),
+              onLongPress: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => IngredientEditorPage(
+                    name: ingredient.name,
+                  ),
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -43,6 +43,7 @@ class GradientButton extends StatelessWidget {
           ),
           splashColor: toTextGradient(gradient)[1].withOpacity(0.5),
           onTap: onPressed,
+          onLongPress: onLongPress,
           child: child,
         ),
       ),
