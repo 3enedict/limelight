@@ -4,7 +4,7 @@ import 'package:limelight/data/json/ingredient_description.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
 
 import 'package:limelight/widgets/gradient/icon.dart';
-import 'package:limelight/widgets/items/ingredient_search_item.dart';
+import 'package:limelight/widgets/ingredient_search_item.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 import 'package:provider/provider.dart';

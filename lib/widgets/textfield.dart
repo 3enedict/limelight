@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/gradients.dart';
@@ -11,6 +10,9 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final bool autofocus;
+  final FocusNode? focusNode;
+  final void Function(String)? onSubmitted;
 
   const CustomTextField({
     super.key,
@@ -20,6 +22,9 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.controller,
     this.keyboardType,
+    this.autofocus = false,
+    this.focusNode,
+    this.onSubmitted,
   });
 
   @override
@@ -36,8 +41,11 @@ class CustomTextField extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextField(
+          focusNode: focusNode,
+          autofocus: autofocus,
           controller: controller,
           keyboardType: keyboardType,
+          onSubmitted: onSubmitted,
           style: TextStyle(
             color: textColor(),
             fontWeight: FontWeight.w400,

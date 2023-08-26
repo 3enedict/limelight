@@ -8,8 +8,8 @@ import 'package:limelight/data/json/ingredient_description.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/widgets/gradient/container.dart';
 import 'package:limelight/widgets/gradient/button.dart';
-import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/widgets/textfield.dart';
+import 'package:limelight/widgets/dropdown.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 
@@ -28,8 +28,21 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
   final priceController = TextEditingController();
   final unitController = TextEditingController();
 
+  late FocusNode seasonFocusNode;
+  late FocusNode priceFocusNode;
+  late FocusNode unitFocusNode;
+
   IngredientDescription ingredient = IngredientDescription.empty();
   int? selectedUnit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    seasonFocusNode = FocusNode();
+    priceFocusNode = FocusNode();
+    unitFocusNode = FocusNode();
+  }
 
   @override
   void dispose() {
@@ -37,6 +50,11 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
     seasonController.dispose();
     priceController.dispose();
     unitController.dispose();
+
+    seasonFocusNode.dispose();
+    priceFocusNode.dispose();
+    unitFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -87,116 +105,90 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
     return EmptyPage(
       resizeToAvoidBottomInset: true,
       child: Center(
-        child: GradientContainer(
-          gradient: toSurfaceGradient(limelightGradient),
-          width: MediaQuery.of(context).size.width - 20 * 2,
-          child: ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.fromLTRB(25, 20, 25, 25),
-            children: [
-              Text(
-                "Ingredient",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.workSans(
-                  color: textColor(),
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Divider(color: textColor().withOpacity(0.2)),
-              const SizedBox(height: 15),
-              CustomTextField(
-                label: "Name",
-                icon: UniconsLine.tag_alt,
-                hint: "Lime zest",
-                controller: nameController,
-              ),
-              const SizedBox(height: 15),
-              CustomTextField(
-                label: "Season",
-                icon: UniconsLine.snowflake,
-                hint: "Winter",
-                controller: seasonController,
-              ),
-              const SizedBox(height: 15),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomTextField(
-                      label: "Price",
-                      icon: UniconsLine.dollar_sign,
-                      hint: "1.00",
-                      controller: priceController,
-                      keyboardType: TextInputType.number,
-                    ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: GradientContainer(
+            gradient: toSurfaceGradient(limelightGradient),
+            child: ListView(
+              shrinkWrap: true,
+              reverse: true, // Automatically scroll to the bottom
+              padding: const EdgeInsets.fromLTRB(25, 20, 25, 25),
+              children: [
+                Text(
+                  "Ingredient",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.workSans(
+                    color: textColor(),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
                   ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: CustomTextField(
-                      label: "Unit",
-                      icon: UniconsLine.ruler,
-                      hint: units[0],
-                      controller: unitController,
-                      suffixIcon: PopupMenuButton<int>(
-                        color: toSurfaceGradient(limelightGradient)[1],
-                        initialValue: selectedUnit,
-                        onSelected: (int item) => setState(
-                          () {
-                            unitController.text = units[item];
-                            selectedUnit = item;
-                          },
-                        ),
-                        itemBuilder: (BuildContext context) {
-                          return List<PopupMenuEntry<int>>.generate(
-                            units.length,
-                            (int index) => PopupMenuItem<int>(
-                              value: index,
-                              child: Text(
-                                units[index],
-                                style: GoogleFonts.openSans(
-                                  textStyle: TextStyle(color: textColor()),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        child: GradientIcon(
-                          gradient: toTextGradient(limelightGradient),
-                          icon: Icons.expand_more,
-                        ),
+                ),
+                const SizedBox(height: 2),
+                Divider(color: textColor().withOpacity(0.2)),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  label: "Name",
+                  icon: UniconsLine.tag_alt,
+                  hint: "Lime zest",
+                  controller: nameController,
+                  autofocus: true,
+                  onSubmitted: (_) => seasonFocusNode.requestFocus(),
+                ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  label: "Season",
+                  icon: UniconsLine.snowflake,
+                  hint: "Winter",
+                  controller: seasonController,
+                  focusNode: seasonFocusNode,
+                  onSubmitted: (_) => priceFocusNode.requestFocus(),
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        label: "Price",
+                        icon: UniconsLine.dollar_sign,
+                        hint: "1.00",
+                        controller: priceController,
+                        keyboardType: TextInputType.number,
+                        focusNode: priceFocusNode,
+                        onSubmitted: (_) {},
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  actions.length,
-                  (int index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: GradientButton(
-                      borderRadius: 100,
-                      height: 50,
-                      width: 150,
-                      onPressed: actions[index].$2,
-                      child: Center(
-                        child: Text(
-                          actions[index].$1,
-                          style: GoogleFonts.workSans(
-                            color: toSurfaceGradient(limelightGradient)[1],
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                    const SizedBox(width: 20),
+                    const CustomDropdownButton(list: units),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    actions.length,
+                    (int index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: GradientButton(
+                        borderRadius: 100,
+                        height: 50,
+                        width: 150,
+                        onPressed: actions[index].$2,
+                        child: Center(
+                          child: Text(
+                            actions[index].$1,
+                            style: GoogleFonts.workSans(
+                              color: toSurfaceGradient(limelightGradient)[1],
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ].reversed.toList(),
+            ),
           ),
         ),
       ),
