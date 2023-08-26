@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
-import 'package:limelight/data/json/ingredient_description.dart';
-import 'package:limelight/data/provider/ingredient_model.dart';
-import 'package:limelight/widgets/gradient/container.dart';
-import 'package:limelight/widgets/gradient/button.dart';
 import 'package:limelight/widgets/gradient/icon.dart';
-import 'package:limelight/widgets/textfield.dart';
-import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 
-class CustomDropdownButton extends StatefulWidget {
+class CustomDropdown extends StatefulWidget {
   final List<String> list;
-  const CustomDropdownButton({super.key, required this.list});
+  final String label;
+  final FocusNode? focusNode;
+
+  const CustomDropdown({
+    super.key,
+    required this.list,
+    required this.label,
+    this.focusNode,
+  });
 
   @override
-  State<CustomDropdownButton> createState() => _CustomDropdownButtonState();
+  State<CustomDropdown> createState() => _CustomDropdownState();
 }
 
-class _CustomDropdownButtonState extends State<CustomDropdownButton> {
+class _CustomDropdownState extends State<CustomDropdown> {
   late String dropdownValue;
 
   @override
@@ -37,43 +38,60 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          " Unit",
+          " ${widget.label}",
           style: TextStyle(
             color: textColor().withOpacity(0.5),
             fontWeight: FontWeight.w300,
           ),
         ),
         const SizedBox(height: 8),
-        DropdownMenu<String>(
-          inputDecorationTheme: InputDecorationTheme(
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: BorderSide(
-                color: textColor().withOpacity(0.3),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: BorderSide(
-                color: textColor().withOpacity(0.5),
-              ),
-            ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(color: textColor().withOpacity(0.3)),
           ),
-          trailingIcon: GradientIcon(
-            icon: Icons.expand_more,
-            gradient: toTextGradient(limelightGradient),
+          child: Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 15, 14, 15),
+                child: GradientIcon(
+                  icon: UniconsLine.ruler,
+                  size: 22,
+                ),
+              ),
+              Expanded(
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    autofocus: true,
+                    isExpanded: true,
+                    elevation: 0,
+                    focusNode: widget.focusNode,
+                    style: GoogleFonts.openSans(
+                      color: textColor(),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    dropdownColor: toBackgroundGradient(limelightGradient)[0],
+                    value: dropdownValue,
+                    icon: GradientIcon(
+                      gradient: toTextGradient(limelightGradient),
+                      icon: Icons.expand_more,
+                    ),
+                    onChanged: (String? value) => setState(
+                      () => dropdownValue = value!,
+                    ),
+                    items: widget.list
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
           ),
-          width: 100,
-          textStyle: GoogleFonts.openSans(color: textColor()),
-          onSelected: (String? value) => setState(() => dropdownValue = value!),
-          dropdownMenuEntries: widget.list.map<DropdownMenuEntry<String>>(
-            (String value) {
-              return DropdownMenuEntry<String>(
-                value: value,
-                label: value,
-              );
-            },
-          ).toList(),
         ),
       ],
     );
