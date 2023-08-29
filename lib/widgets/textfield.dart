@@ -37,9 +37,10 @@ class CustomTextField extends StatelessWidget {
           style: TextStyle(
             color: textColor().withOpacity(0.5),
             fontWeight: FontWeight.w300,
+            fontSize: 13,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 5),
         TextField(
           focusNode: focusNode,
           autofocus: autofocus,
@@ -65,13 +66,10 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
             prefixIcon: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 14, 0),
-              child: GradientIcon(
-                icon: icon,
-                size: 22,
-              ),
+              padding: const EdgeInsets.all(15),
+              child: GradientIcon(icon: icon, size: 22),
             ),
-            contentPadding: const EdgeInsets.fromLTRB(0, 15, 20, 15),
+            contentPadding: const EdgeInsets.all(0),
             hintText: hint,
             hintStyle: TextStyle(
               color: textColor().withOpacity(0.8),

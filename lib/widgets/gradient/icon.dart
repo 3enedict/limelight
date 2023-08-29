@@ -6,6 +6,7 @@ class GradientIcon extends StatelessWidget {
   final List<Color> gradient;
   final VoidCallback? onPressed;
   final double? size;
+  final double? weight;
   final double padding;
   final IconData icon;
 
@@ -14,6 +15,7 @@ class GradientIcon extends StatelessWidget {
     this.gradient = limelightGradient,
     this.onPressed,
     this.size,
+    this.weight,
     this.padding = 10,
     required this.icon,
   });
@@ -27,7 +29,7 @@ class GradientIcon extends StatelessWidget {
           begin: Alignment.topCenter,
         ).createShader(bounds);
       },
-      child: Icon(icon, size: size, color: Colors.white),
+      child: Icon(icon, size: size, color: Colors.white, weight: weight),
     );
 
     if (onPressed != null) {

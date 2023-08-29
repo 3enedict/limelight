@@ -62,7 +62,7 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
             child: ListView(
               shrinkWrap: true,
               reverse: true, // Automatically scroll to the bottom
-              padding: const EdgeInsets.fromLTRB(25, 20, 25, 25),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
               children: [
                 Text(
                   "Ingredient",
@@ -70,12 +70,12 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                   style: GoogleFonts.workSans(
                     color: textColor(),
                     fontWeight: FontWeight.w600,
-                    fontSize: 24,
+                    fontSize: 20,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Divider(color: textColor().withOpacity(0.2)),
-                const SizedBox(height: 15),
+                const SizedBox(height: 12),
                 CustomTextField(
                   label: "Name",
                   icon: UniconsLine.tag_alt,
@@ -84,7 +84,7 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                   onSubmitted: (_) => seasonFocusNode.requestFocus(),
                   onChanged: (name) => ingredient.name = name,
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 12),
                 CustomTextField(
                   label: "Season",
                   icon: UniconsLine.snowflake,
@@ -94,7 +94,7 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                   onSubmitted: (_) => priceFocusNode.requestFocus(),
                   onChanged: (season) => ingredient.season = season,
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
@@ -127,9 +127,9 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: GradientButton(
+                          outlineBorder: true,
                           height: 50,
                           borderRadius: 100,
-                          gradient: toLighterSurfaceGradient(limelightGradient),
                           onPressed: () => Navigator.of(context).pop(),
                           child: Center(
                             child: Text(

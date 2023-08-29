@@ -10,6 +10,7 @@ class GradientButton extends StatelessWidget {
   final double borderRadius;
   final double? diameter;
   final EdgeInsetsGeometry? padding;
+  final bool outlineBorder;
   final VoidCallback? onPressed;
   final VoidCallback? onLongPress;
   final Widget child;
@@ -22,6 +23,7 @@ class GradientButton extends StatelessWidget {
     this.borderRadius = 20,
     this.diameter,
     this.padding,
+    this.outlineBorder = false,
     this.onPressed,
     this.onLongPress,
     required this.child,
@@ -29,25 +31,39 @@ class GradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final button = TextButton(
+      style: TextButton.styleFrom(
+        elevation: 0,
+        padding: const EdgeInsets.all(0),
+        foregroundColor: textColor().withOpacity(0.25),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(diameter ?? borderRadius),
+        ),
+      ),
+      onPressed: onPressed,
+      onLongPress: onLongPress,
+      child: child,
+    );
+
+    if (outlineBorder) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(diameter ?? borderRadius),
+          border: Border.all(color: textColor().withOpacity(0.5)),
+        ),
+        height: diameter ?? height,
+        width: diameter ?? width,
+        child: button,
+      );
+    }
+
     return GradientContainer(
       gradient: gradient,
       height: height,
       width: width,
       borderRadius: borderRadius,
       diameter: diameter,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          elevation: 0,
-          padding: const EdgeInsets.all(0),
-          foregroundColor: textColor().withOpacity(0.25),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(diameter ?? borderRadius),
-          ),
-        ),
-        onPressed: onPressed,
-        onLongPress: onLongPress,
-        child: child,
-      ),
+      child: button,
     );
   }
 }

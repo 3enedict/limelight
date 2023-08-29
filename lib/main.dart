@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_persistent_keyboard_height/flutter_persistent_keyboard_height.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/pages/ingredients_page.dart';
+import 'package:limelight/pages/settings_page.dart';
 import 'package:limelight/pages/recipes_page.dart';
 import 'package:limelight/gradients.dart';
 
@@ -43,10 +43,16 @@ class Limelight extends StatelessWidget {
         child: child!,
       ),
       home: PageView(
-        scrollDirection: Axis.vertical,
-        children: const [
-          IngredientsPage(),
-          RecipesPage(),
+        controller: PageController(initialPage: 1),
+        children: [
+          const SettingsPage(),
+          PageView(
+            scrollDirection: Axis.vertical,
+            children: const [
+              IngredientsPage(),
+              RecipesPage(),
+            ],
+          ),
         ],
       ),
     );

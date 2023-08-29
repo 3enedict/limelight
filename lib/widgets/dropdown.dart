@@ -44,7 +44,7 @@ class CustomDropdownState extends State<CustomDropdown> {
             fontWeight: FontWeight.w300,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 5),
         PopupMenuButton<String>(
           initialValue: currentValue,
           color: toSurfaceGradient(limelightGradient)[0],
@@ -83,7 +83,7 @@ class CustomDropdownState extends State<CustomDropdown> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 15, 14, 15),
+                  padding: const EdgeInsets.fromLTRB(12, 12, 10, 12),
                   child: GradientIcon(
                     icon: widget.icon,
                     size: 22,
@@ -94,6 +94,7 @@ class CustomDropdownState extends State<CustomDropdown> {
                   style: GoogleFonts.openSans(
                     color: textColor(),
                     fontWeight: FontWeight.w400,
+                    fontSize: 13,
                   ),
                 ),
                 const Expanded(child: SizedBox()),
@@ -101,7 +102,7 @@ class CustomDropdownState extends State<CustomDropdown> {
                   gradient: toTextGradient(limelightGradient),
                   icon: Icons.expand_more,
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 11),
               ],
             ),
           ),
