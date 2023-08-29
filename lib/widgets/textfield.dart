@@ -6,25 +6,25 @@ import 'package:limelight/gradients.dart';
 class CustomTextField extends StatelessWidget {
   final String label;
   final IconData icon;
-  final String? hint;
-  final Widget? suffixIcon;
-  final TextEditingController? controller;
-  final TextInputType? keyboardType;
+  final String hint;
+  final String? text;
   final bool autofocus;
   final FocusNode? focusNode;
+  final TextInputType? keyboardType;
   final void Function(String)? onSubmitted;
+  final void Function(String)? onChanged;
 
   const CustomTextField({
     super.key,
     required this.label,
     required this.icon,
-    this.hint,
-    this.suffixIcon,
-    this.controller,
-    this.keyboardType,
+    required this.hint,
+    this.text,
     this.autofocus = false,
     this.focusNode,
+    this.keyboardType,
     this.onSubmitted,
+    this.onChanged,
   });
 
   @override
@@ -43,9 +43,10 @@ class CustomTextField extends StatelessWidget {
         TextField(
           focusNode: focusNode,
           autofocus: autofocus,
-          controller: controller,
           keyboardType: keyboardType,
           onSubmitted: onSubmitted,
+          onChanged: onChanged,
+          controller: TextEditingController(text: text),
           style: TextStyle(
             color: textColor(),
             fontWeight: FontWeight.w400,
@@ -69,10 +70,6 @@ class CustomTextField extends StatelessWidget {
                 icon: icon,
                 size: 22,
               ),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: suffixIcon,
             ),
             contentPadding: const EdgeInsets.fromLTRB(0, 15, 20, 15),
             hintText: hint,

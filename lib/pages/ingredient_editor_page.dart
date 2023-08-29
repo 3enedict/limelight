@@ -23,17 +23,10 @@ class IngredientEditorPage extends StatefulWidget {
 }
 
 class _IngredientEditorPageState extends State<IngredientEditorPage> {
-  final nameController = TextEditingController();
-  final seasonController = TextEditingController();
-  final priceController = TextEditingController();
-  final unitController = TextEditingController();
-
   late FocusNode seasonFocusNode;
   late FocusNode priceFocusNode;
-  late FocusNode unitFocusNode;
 
   IngredientDescription ingredient = IngredientDescription.empty();
-  int? selectedUnit;
 
   @override
   void initState() {
@@ -41,66 +34,26 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
 
     seasonFocusNode = FocusNode();
     priceFocusNode = FocusNode();
-    unitFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    seasonController.dispose();
-    priceController.dispose();
-    unitController.dispose();
-
     seasonFocusNode.dispose();
     priceFocusNode.dispose();
-    unitFocusNode.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const units = [
-      "per kg",
-      "per lb",
-      "per head",
-      "per unit",
-    ];
-
+    const units = ["per kg", "per unit"];
     final actions = [
       ("Cancel", () => Navigator.of(context).pop()),
-      (
-        "Add",
-        () {
-          final ingredient = IngredientDescription(
-            name: nameController.text,
-            season: seasonController.text,
-            price: priceController.text,
-            unit: unitController.text,
-          );
-
-          final model = Provider.of<IngredientModel>(context, listen: false);
-          if (widget.name != null) model.remove(widget.name!);
-          model.add(ingredient);
-
-          Navigator.of(context).pop();
-        }
-      ),
+      ("Add", () => addIngredient(context)),
     ];
 
-    if (widget.name != null && ingredient == IngredientDescription.empty()) {
-      setState(() {
-        final model = Provider.of<IngredientModel>(context, listen: false);
-        ingredient = model.ingredients[model.ingredients.indexWhere(
-          (element) => element.name == widget.name,
-        )];
-
-        nameController.text = ingredient.name;
-        seasonController.text = ingredient.season;
-        priceController.text = ingredient.price;
-        unitController.text = ingredient.unit;
-      });
-    }
+    loadIngredientFromModel(context);
+    if (ingredient.unit == '') ingredient.unit = units[0];
 
     return EmptyPage(
       resizeToAvoidBottomInset: true,
@@ -130,17 +83,19 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                   label: "Name",
                   icon: UniconsLine.tag_alt,
                   hint: "Lime zest",
-                  controller: nameController,
+                  text: ingredient.name,
                   onSubmitted: (_) => seasonFocusNode.requestFocus(),
+                  onChanged: (name) => ingredient.name = name,
                 ),
                 const SizedBox(height: 15),
                 CustomTextField(
                   label: "Season",
                   icon: UniconsLine.snowflake,
                   hint: "Winter",
-                  controller: seasonController,
+                  text: ingredient.season,
                   focusNode: seasonFocusNode,
                   onSubmitted: (_) => priceFocusNode.requestFocus(),
+                  onChanged: (season) => ingredient.season = season,
                 ),
                 const SizedBox(height: 15),
                 Row(
@@ -150,18 +105,19 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                         label: "Price",
                         icon: UniconsLine.dollar_sign,
                         hint: "1.00",
-                        controller: priceController,
-                        keyboardType: TextInputType.number,
+                        text: ingredient.price,
                         focusNode: priceFocusNode,
-                        onSubmitted: (_) => unitFocusNode.requestFocus(),
+                        keyboardType: TextInputType.number,
+                        onChanged: (price) => ingredient.price = price,
                       ),
                     ),
                     const SizedBox(width: 20),
                     Expanded(
                       child: CustomDropdown(
-                        list: units,
                         label: "Unit",
-                        focusNode: unitFocusNode,
+                        values: units,
+                        icon: UniconsLine.ruler,
+                        onChanged: (unit) => ingredient.unit = unit,
                       ),
                     ),
                   ],
@@ -198,5 +154,24 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
         ),
       ),
     );
+  }
+
+  void loadIngredientFromModel(BuildContext context) {
+    if (widget.name != null && ingredient == IngredientDescription.empty()) {
+      setState(() {
+        final model = Provider.of<IngredientModel>(context, listen: false);
+        ingredient = model.ingredients[model.ingredients.indexWhere(
+          (element) => element.name == widget.name,
+        )];
+      });
+    }
+  }
+
+  void addIngredient(BuildContext context) {
+    final model = Provider.of<IngredientModel>(context, listen: false);
+    if (widget.name != null) model.remove(widget.name!);
+    model.add(ingredient);
+
+    Navigator.of(context).pop();
   }
 }

@@ -1,5 +1,5 @@
 class IngredientDescription implements Comparable<IngredientDescription> {
-  final String name, season, price, unit;
+  String name, season, price, unit;
 
   IngredientDescription({
     required this.name,
