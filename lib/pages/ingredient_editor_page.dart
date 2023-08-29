@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
@@ -47,10 +48,6 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
   @override
   Widget build(BuildContext context) {
     const units = ["per kg", "per unit"];
-    final actions = [
-      ("Cancel", () => Navigator.of(context).pop()),
-      ("Add", () => addIngredient(context)),
-    ];
 
     loadIngredientFromModel(context);
     if (ingredient.unit == '') ingredient.unit = units[0];
@@ -125,28 +122,43 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                 const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    actions.length,
-                    (int index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: GradientButton(
-                        borderRadius: 100,
-                        height: 50,
-                        width: 150,
-                        onPressed: actions[index].$2,
-                        child: Center(
-                          child: Text(
-                            actions[index].$1,
-                            style: GoogleFonts.workSans(
-                              color: toSurfaceGradient(limelightGradient)[1],
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: GradientButton(
+                          height: 50,
+                          borderRadius: 100,
+                          gradient: toLighterSurfaceGradient(limelightGradient),
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Center(
+                            child: Text(
+                              "Cancel",
+                              style: GoogleFonts.workSans(
+                                color: textColor(),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: GradientButton(
+                        diameter: 50,
+                        gradient: limelightGradient,
+                        onPressed: () => addIngredient(context),
+                        child: Center(
+                          child: GradientIcon(
+                            gradient: toSurfaceGradient(limelightGradient),
+                            icon: Icons.add,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ].reversed.toList(),
             ),

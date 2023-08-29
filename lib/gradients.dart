@@ -19,6 +19,13 @@ List<Color> toSurfaceGradient(List<Color> gradient) {
   ];
 }
 
+List<Color> toLighterSurfaceGradient(List<Color> gradient) {
+  return [
+    modifyColor(gradient[0], 0.16, 0.1),
+    modifyColor(gradient[1], 0.16, 0.1),
+  ];
+}
+
 List<Color> toTextGradient(List<Color> gradient) {
   return [
     modifyColor(gradient[0], 0.8, 0.1),
