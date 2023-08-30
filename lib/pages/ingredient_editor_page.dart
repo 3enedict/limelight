@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
@@ -47,10 +48,11 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
 
   @override
   Widget build(BuildContext context) {
-    const units = ["per kg", "per unit"];
+    final preferences = Provider.of<PreferencesModel>(context, listen: false);
+    final unitList = units[preferences.unitSystem] ?? ["per unit"];
 
     loadIngredientFromModel(context);
-    if (ingredient.unit == '') ingredient.unit = units[0];
+    if (ingredient.unit == '') ingredient.unit = unitList[0];
 
     return EmptyPage(
       resizeToAvoidBottomInset: true,
@@ -112,7 +114,7 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                     Expanded(
                       child: CustomDropdown(
                         label: "Unit",
-                        values: units,
+                        values: unitList,
                         icon: UniconsLine.ruler,
                         onChanged: (unit) => ingredient.unit = unit,
                       ),

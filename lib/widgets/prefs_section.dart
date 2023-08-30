@@ -6,7 +6,7 @@ import 'package:limelight/widgets/gradient/icon.dart';
 
 class Section extends StatelessWidget {
   final String label;
-  final List<Preference> preferences;
+  final List<Widget> preferences;
   final List<Color> gradient;
 
   const Section({
@@ -18,17 +18,18 @@ class Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var items = List<Widget>.from(preferences);
+    List<Widget> items = preferences;
 
     for (var i = items.length - 1; i > 0; i--) {
       items.insert(
-          i,
-          Divider(
-            color: textColor().withOpacity(0.2),
-            indent: 10,
-            endIndent: 10,
-            height: 0,
-          ));
+        i,
+        Divider(
+          color: textColor().withOpacity(0.2),
+          indent: 10,
+          endIndent: 10,
+          height: 0,
+        ),
+      );
     }
 
     return Padding(
@@ -59,9 +60,10 @@ class Section extends StatelessWidget {
   }
 }
 
-class Preference extends StatefulWidget {
+class Preference extends StatelessWidget {
   final IconData icon;
   final String text;
+  final String? selected;
   final List<String> values;
   final void Function(String) onChanged;
 
@@ -69,26 +71,23 @@ class Preference extends StatefulWidget {
     super.key,
     required this.icon,
     required this.text,
+    this.selected,
     required this.values,
     required this.onChanged,
   });
 
   @override
-  State<Preference> createState() => PreferenceState();
-}
-
-class PreferenceState extends State<Preference> {
-  int _id = 0;
-
-  @override
   Widget build(BuildContext context) {
+    String value = values[0];
+    if (selected != null) value = selected!;
+
     return TextButton(
       onPressed: () => showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           backgroundColor: toSurfaceGradient(limelightGradient)[0],
           title: Text(
-            widget.text,
+            text,
             style: GoogleFonts.openSans(
               textStyle: TextStyle(
                 color: textColor(),
@@ -97,11 +96,11 @@ class PreferenceState extends State<Preference> {
           ),
           content: ListView.builder(
             shrinkWrap: true,
-            itemCount: widget.values.length,
+            itemCount: values.length,
             itemBuilder: (BuildContext context, int index) {
               return TextButton(
                 onPressed: () {
-                  setState(() => _id = index);
+                  onChanged(values[index]);
                   Navigator.of(context).pop();
                 },
                 style: TextButton.styleFrom(
@@ -114,7 +113,7 @@ class PreferenceState extends State<Preference> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 15, 10),
                       child: GradientIcon(
-                        gradient: index == _id
+                        gradient: values[index] == value
                             ? limelightGradient
                             : toTextGradient(limelightGradient)
                                 .map((e) => e.withOpacity(0.8))
@@ -123,7 +122,7 @@ class PreferenceState extends State<Preference> {
                       ),
                     ),
                     Text(
-                      widget.values[index],
+                      values[index],
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(color: textColor()),
                       ),
@@ -147,13 +146,13 @@ class PreferenceState extends State<Preference> {
         children: [
           Padding(
             padding: const EdgeInsets.all(18),
-            child: GradientIcon(icon: widget.icon),
+            child: GradientIcon(icon: icon),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.text,
+                text,
                 style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                     color: textColor(),
@@ -161,7 +160,7 @@ class PreferenceState extends State<Preference> {
                 ),
               ),
               Text(
-                widget.values[_id],
+                value,
                 style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                     color: textColor().withOpacity(0.6),

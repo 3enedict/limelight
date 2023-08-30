@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
+
+import 'package:limelight/data/provider/preferences_model.dart';
+import 'package:limelight/widgets/prefs_section.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
-import 'package:limelight/widgets/prefs_section.dart';
-import 'package:unicons/unicons.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -33,18 +36,28 @@ class SettingsPage extends StatelessWidget {
             gradient: toSurfaceGradient(limelightGradient),
             label: "General",
             preferences: [
-              Preference(
-                icon: UniconsLine.ruler,
-                text: "Unit system",
-                values: const ["International", "Imperial"],
-                onChanged: (_) {},
+              Consumer<PreferencesModel>(
+                builder: (context, preferences, child) {
+                  return Preference(
+                    icon: UniconsLine.ruler,
+                    text: "Unit system",
+                    selected: preferences.unitSystem,
+                    values: const ["International", "Imperial"],
+                    onChanged: (str) => preferences.setUnitSystem(str),
+                  );
+                },
               ),
-              Preference(
-                icon: UniconsLine.dollar_sign,
-                text: "Currency",
-                values: const ["Euro", "Dollar"],
-                onChanged: (_) {},
-              )
+              Consumer<PreferencesModel>(
+                builder: (context, preferences, child) {
+                  return Preference(
+                    icon: UniconsLine.dollar_sign,
+                    text: "Currency",
+                    selected: preferences.currency,
+                    values: const ["Euro", "Dollar"],
+                    onChanged: (str) => preferences.setCurrency(str),
+                  );
+                },
+              ),
             ],
           )
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:provider/provider.dart';
 
 import 'package:limelight/data/json/ingredient_description.dart';
@@ -167,11 +168,14 @@ class ItemInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final preferences = Provider.of<PreferencesModel>(context, listen: false);
+    final symbol = currencySymbols[preferences.currency];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          "\$$price",
+          "$symbol$price",
           style: GoogleFonts.workSans(
             color: textColor().withOpacity(0.8),
             fontStyle: FontStyle.italic,
