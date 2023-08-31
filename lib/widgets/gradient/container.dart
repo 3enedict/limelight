@@ -6,7 +6,7 @@ class GradientContainer extends StatelessWidget {
   final List<Color> gradient;
   final double? height;
   final double? width;
-  final double borderRadius;
+  final double? borderRadius;
   final double? diameter;
   final Widget child;
 
@@ -15,7 +15,7 @@ class GradientContainer extends StatelessWidget {
     this.gradient = limelightGradient,
     this.height,
     this.width,
-    this.borderRadius = 20,
+    this.borderRadius,
     this.diameter,
     required this.child,
   });
@@ -24,7 +24,7 @@ class GradientContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(diameter ?? borderRadius),
+        borderRadius: BorderRadius.circular(diameter ?? borderRadius ?? 0),
         boxShadow: [
           BoxShadow(
             color: modifyColor(gradient[1], 0.08, 0.1),

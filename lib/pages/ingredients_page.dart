@@ -69,7 +69,7 @@ class SearchBar extends StatelessWidget {
                   style: TextStyle(
                     color: textColor(),
                     fontStyle: FontStyle.italic,
-                    fontSize: 22,
+                    fontSize: 24,
                   ),
                 ),
                 const Expanded(child: SizedBox()),
@@ -98,7 +98,7 @@ class SearchBarIcons extends StatelessWidget {
               builder: (context) => const IngredientEditorPage(),
             ),
           ),
-          size: 29,
+          size: 30,
           icon: UniconsLine.plus,
         ),
         GradientIcon(
@@ -111,7 +111,7 @@ class SearchBarIcons extends StatelessWidget {
               ),
             ),
           ),
-          size: 29,
+          size: 30,
           icon: UniconsLine.notes,
         ),
       ],
