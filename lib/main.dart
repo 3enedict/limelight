@@ -43,16 +43,16 @@ class Limelight extends StatelessWidget {
         ),
       ),
       home: PageView(
-        controller: PageController(initialPage: 1),
+        scrollDirection: Axis.vertical,
         children: [
-          const SettingsPage(),
           PageView(
-            scrollDirection: Axis.vertical,
+            controller: PageController(initialPage: 1),
             children: const [
+              SettingsPage(),
               IngredientsPage(),
-              RecipesPage(),
             ],
           ),
+          const RecipesPage(),
         ],
       ),
     );
