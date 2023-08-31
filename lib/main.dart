@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/pages/settings_page.dart';
 import 'package:limelight/pages/recipes_page.dart';
@@ -15,6 +16,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => IngredientModel()),
+        ChangeNotifierProvider(create: (context) => RecipeModel()),
         ChangeNotifierProvider(create: (context) => PreferencesModel()),
       ],
       child: const Limelight(),
@@ -28,7 +30,6 @@ class Limelight extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     loadModelDataFromLocalFiles(context);
-    print("This shouldn't appear more than once");
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -60,5 +61,6 @@ class Limelight extends StatelessWidget {
 
 void loadModelDataFromLocalFiles(BuildContext context) {
   Provider.of<IngredientModel>(context, listen: false).load();
+  Provider.of<RecipeModel>(context, listen: false).load();
   Provider.of<PreferencesModel>(context, listen: false).load();
 }
