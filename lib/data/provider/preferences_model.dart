@@ -36,7 +36,6 @@ class PreferencesModel extends ChangeNotifier {
   void setCurrency(String currency) {
     _currency = currency;
     notifyListeners();
-    print(_currency);
 
     SharedPreferences.getInstance().then(
       (instance) => instance.setString("Currency", currency),

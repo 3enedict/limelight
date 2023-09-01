@@ -33,7 +33,7 @@ class Section extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -86,6 +86,7 @@ class Preference extends StatelessWidget {
         context: context,
         builder: (BuildContext context) => AlertDialog(
           backgroundColor: toSurfaceGradient(limelightGradient)[0],
+          elevation: 0,
           title: Text(
             text,
             style: GoogleFonts.openSans(
@@ -94,43 +95,45 @@ class Preference extends StatelessWidget {
               ),
             ),
           ),
-          content: ListView.builder(
-            shrinkWrap: true,
-            itemCount: values.length,
-            itemBuilder: (BuildContext context, int index) {
-              return TextButton(
-                onPressed: () {
-                  onChanged(values[index]);
-                  Navigator.of(context).pop();
-                },
-                style: TextButton.styleFrom(
-                  elevation: 0,
-                  padding: const EdgeInsets.all(0),
-                  foregroundColor: textColor().withOpacity(0.25),
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 15, 10),
-                      child: GradientIcon(
-                        gradient: values[index] == value
-                            ? limelightGradient
-                            : toTextGradient(limelightGradient)
-                                .map((e) => e.withOpacity(0.8))
-                                .toList(),
-                        icon: Icons.panorama_fish_eye,
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: values.length,
+              itemBuilder: (BuildContext context, int index) {
+                return TextButton(
+                  onPressed: () {
+                    onChanged(values[index]);
+                    Navigator.of(context).pop();
+                  },
+                  style: TextButton.styleFrom(
+                    elevation: 0,
+                    padding: const EdgeInsets.all(0),
+                    foregroundColor: textColor().withOpacity(0.25),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 14, 10),
+                        child: GradientIcon(
+                          gradient: values[index] == value
+                              ? limelightGradient
+                              : [Colors.transparent, Colors.transparent],
+                          icon: Icons.panorama_fish_eye,
+                          size: 20,
+                        ),
                       ),
-                    ),
-                    Text(
-                      values[index],
-                      style: GoogleFonts.openSans(
-                        textStyle: TextStyle(color: textColor()),
+                      Text(
+                        values[index],
+                        style: GoogleFonts.openSans(
+                          textStyle: TextStyle(color: textColor()),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -138,9 +141,6 @@ class Preference extends StatelessWidget {
         elevation: 0,
         padding: const EdgeInsets.all(0),
         foregroundColor: textColor().withOpacity(0.25),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
       ),
       child: Row(
         children: [

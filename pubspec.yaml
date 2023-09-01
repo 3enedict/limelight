@@ -9,16 +9,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_feather_icons: ^2.0.0+1
-  flutter_persistent_keyboard_height: ^1.0.5
-  fluttericon:
   google_fonts:
-  keep_keyboard_popup_menu: ^2.0.5
-  path_provider: ^2.1.0
+  path_provider:
   provider:
-  search_page: ^2.3.0
   shared_preferences:
-  unicons: ^2.1.1
+  flutter_feather_icons:
+  fluttericon:
+  unicons:
 
 dev_dependencies:
   flutter_lints:

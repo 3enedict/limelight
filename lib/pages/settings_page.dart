@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:limelight/widgets/gradient/container.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
@@ -15,17 +16,24 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
-      appBar: AppBar(
-        backgroundColor: toBackgroundGradient(limelightGradient)[0],
-        elevation: 4,
-        shadowColor: Colors.black,
-        title: Text(
-          " Settings",
-          style: GoogleFonts.openSans(
-            textStyle: TextStyle(
-              color: textColor(),
-              fontSize: 28,
-              fontWeight: FontWeight.w600,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120),
+        child: GradientContainer(
+          gradient: toSurfaceGradient(limelightGradient),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12, top: 5),
+              child: Text(
+                "Settings",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.openSans(
+                  textStyle: TextStyle(
+                    color: textColor(),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -59,7 +67,7 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
             ],
-          )
+          ),
         ],
       ),
     );
