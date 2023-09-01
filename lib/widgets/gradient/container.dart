@@ -23,6 +23,7 @@ class GradientContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(diameter ?? borderRadius ?? 0),
         boxShadow: [
