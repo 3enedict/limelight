@@ -20,18 +20,19 @@ class SettingsPage extends StatelessWidget {
         preferredSize: const Size.fromHeight(120),
         child: GradientContainer(
           gradient: toSurfaceGradient(limelightGradient),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12, top: 5),
-              child: Text(
-                "Settings",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.openSans(
-                  textStyle: TextStyle(
-                    color: textColor(),
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                  ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: 20,
+              top: 20 + MediaQuery.of(context).padding.top,
+            ),
+            child: Text(
+              "Settings",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.openSans(
+                textStyle: TextStyle(
+                  color: textColor(),
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),

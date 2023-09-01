@@ -1,8 +1,6 @@
-import 'dart:math';
-
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/gradient/circle.dart';
 import 'package:limelight/gradients.dart';
 
 class EmptyPage extends StatelessWidget {
@@ -35,15 +33,18 @@ class EmptyPage extends StatelessWidget {
         padding: appBar == null
             ? EdgeInsets.only(top: MediaQuery.of(context).padding.top)
             : const EdgeInsets.all(0),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-          appBar: appBar,
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 6, 10),
-            child: fab,
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+            appBar: appBar,
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 6, 10),
+              child: fab,
+            ),
+            body: child,
           ),
-          body: child,
         ),
       ),
     );
