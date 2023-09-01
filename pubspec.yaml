@@ -13,6 +13,7 @@ dependencies:
   flutter_persistent_keyboard_height: ^1.0.5
   fluttericon:
   google_fonts:
+  keep_keyboard_popup_menu: ^2.0.5
   path_provider: ^2.1.0
   provider:
   search_page: ^2.3.0

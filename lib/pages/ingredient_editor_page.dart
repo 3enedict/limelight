@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:limelight/data/provider/preferences_model.dart';
-import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
+import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/data/json/ingredient_description.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/widgets/gradient/container.dart';
 import 'package:limelight/widgets/gradient/button.dart';
+import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/widgets/textfield.dart';
-import 'package:limelight/widgets/dropdown.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 
@@ -58,9 +57,10 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
       resizeToAvoidBottomInset: true,
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
           child: GradientContainer(
             gradient: toSurfaceGradient(limelightGradient),
+            borderRadius: 20,
             child: ListView(
               shrinkWrap: true,
               reverse: true, // Automatically scroll to the bottom
@@ -71,22 +71,23 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.workSans(
                     color: textColor(),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Divider(color: textColor().withOpacity(0.2)),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 CustomTextField(
                   label: "Name",
                   icon: UniconsLine.tag_alt,
                   hint: "Lime zest",
                   text: ingredient.name,
+                  autofocus: true,
                   onSubmitted: (_) => seasonFocusNode.requestFocus(),
                   onChanged: (name) => ingredient.name = name,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 CustomTextField(
                   label: "Season",
                   icon: UniconsLine.snowflake,
@@ -96,71 +97,105 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                   onSubmitted: (_) => priceFocusNode.requestFocus(),
                   onChanged: (season) => ingredient.season = season,
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        label: "Price",
-                        icon: UniconsLine.dollar_sign,
-                        hint: "1.00",
-                        text: ingredient.price,
-                        focusNode: priceFocusNode,
-                        keyboardType: TextInputType.number,
-                        onChanged: (price) => ingredient.price = price,
+                const SizedBox(height: 8),
+                CustomTextField(
+                  label: "Price",
+                  icon: UniconsLine.dollar_sign,
+                  hint: "1.00",
+                  text: ingredient.price,
+                  focusNode: priceFocusNode,
+                  keyboardType: TextInputType.number,
+                  onChanged: (price) => ingredient.price = price,
+                  suffix: PopupMenuButton<String>(
+                    initialValue: ingredient.unit,
+                    color: toSurfaceGradient(limelightGradient)[0],
+                    itemBuilder: (context) => List.generate(
+                      unitList.length,
+                      (int index) => PopupMenuItem(
+                        onTap: () {
+                          setState(() => ingredient.unit = unitList[index]);
+                        },
+                        child: Text(
+                          unitList[index],
+                          style: GoogleFonts.workSans(
+                            textStyle: TextStyle(color: textColor()),
+                          ),
+                        ),
                       ),
+                      growable: false,
                     ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: CustomDropdown(
-                        label: "Unit",
-                        values: unitList,
-                        icon: UniconsLine.ruler,
-                        onChanged: (unit) => ingredient.unit = unit,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: GradientButton(
-                          outlineBorder: true,
-                          height: 50,
-                          borderRadius: 100,
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Center(
-                            child: Text(
-                              "Cancel",
-                              style: GoogleFonts.workSans(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            VerticalDivider(
+                                color: textColor().withOpacity(0.2)),
+                            const SizedBox(width: 2),
+                            Text(
+                              ingredient.unit,
+                              style: GoogleFonts.openSans(
                                 color: textColor(),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            GradientIcon(
+                              gradient: toTextGradient(limelightGradient),
+                              icon: Icons.expand_more,
+                            ),
+                            const SizedBox(width: 14),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: GradientButton(
+                            outlineBorder: true,
+                            height: 50,
+                            borderRadius: 100,
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Center(
+                              child: Text(
+                                "Cancel",
+                                style: GoogleFonts.workSans(
+                                  color: textColor(),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: GradientButton(
-                        diameter: 50,
-                        gradient: limelightGradient,
-                        onPressed: () => addIngredient(context),
-                        child: Center(
-                          child: GradientIcon(
-                            gradient: toSurfaceGradient(limelightGradient),
-                            icon: Icons.add,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: GradientButton(
+                          diameter: 50,
+                          gradient: limelightGradient,
+                          onPressed: () => addIngredient(context),
+                          child: Center(
+                            child: GradientIcon(
+                              gradient: toSurfaceGradient(limelightGradient),
+                              icon: Icons.add,
+                              size: 28,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ].reversed.toList(),
             ),

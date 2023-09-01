@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final IconData icon;
   final String hint;
   final String? text;
+  final Widget? suffix;
   final bool autofocus;
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
     required this.icon,
     required this.hint,
     this.text,
+    this.suffix,
     this.autofocus = false,
     this.focusNode,
     this.keyboardType,
@@ -37,10 +39,10 @@ class CustomTextField extends StatelessWidget {
           style: TextStyle(
             color: textColor().withOpacity(0.5),
             fontWeight: FontWeight.w300,
-            fontSize: 13,
+            fontSize: 14,
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 4),
         TextField(
           focusNode: focusNode,
           autofocus: autofocus,
@@ -66,9 +68,10 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
             prefixIcon: Padding(
-              padding: const EdgeInsets.all(15),
-              child: GradientIcon(icon: icon, size: 22),
+              padding: const EdgeInsets.fromLTRB(17, 16, 14, 16),
+              child: GradientIcon(icon: icon, size: 23),
             ),
+            suffixIcon: suffix,
             contentPadding: const EdgeInsets.all(0),
             hintText: hint,
             hintStyle: TextStyle(

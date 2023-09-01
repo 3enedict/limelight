@@ -60,7 +60,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 9),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: GradientContainer(
                       gradient: toLighterSurfaceGradient(limelightGradient),
                       borderRadius: 10,
@@ -69,12 +69,12 @@ class _SearchPageState extends State<SearchPage> {
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(13, 0, 10, 0),
+                              padding: const EdgeInsets.fromLTRB(15, 0, 13, 0),
                               child: GradientIcon(
                                 gradient: toTextGradient(limelightGradient)
                                     .map((e) => e.withOpacity(0.6))
                                     .toList(),
-                                size: 18,
+                                size: 19,
                                 icon: FeatherIcons.search,
                               ),
                             ),
@@ -88,15 +88,11 @@ class _SearchPageState extends State<SearchPage> {
                                   hintStyle: GoogleFonts.workSans(
                                     textStyle: TextStyle(
                                       color: textColor().withOpacity(0.8),
-                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
                                 style: GoogleFonts.workSans(
-                                  textStyle: TextStyle(
-                                    color: textColor(),
-                                    fontSize: 14,
-                                  ),
+                                  textStyle: TextStyle(color: textColor()),
                                 ),
                                 onChanged: (query) =>
                                     setState(() => _query = query),
@@ -125,7 +121,7 @@ class _SearchPageState extends State<SearchPage> {
                                               .toList(),
                                       onPressed: () => clear(),
                                       padding: 0,
-                                      size: 18,
+                                      size: 19,
                                       icon: FeatherIcons.x,
                                     ),
                                   )

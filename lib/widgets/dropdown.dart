@@ -44,7 +44,7 @@ class CustomDropdownState extends State<CustomDropdown> {
             fontWeight: FontWeight.w300,
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 4),
         PopupMenuButton<String>(
           initialValue: currentValue,
           color: toSurfaceGradient(limelightGradient)[0],
@@ -57,20 +57,11 @@ class CustomDropdownState extends State<CustomDropdown> {
                 setState(() => currentValue = value);
                 if (widget.onChanged != null) widget.onChanged!(value);
               },
-              child: Row(
-                children: [
-                  GradientIcon(
-                    icon: widget.icon,
-                    size: 22,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    widget.values[index],
-                    style: GoogleFonts.workSans(
-                      textStyle: TextStyle(color: textColor()),
-                    ),
-                  ),
-                ],
+              child: Text(
+                widget.values[index],
+                style: GoogleFonts.workSans(
+                  textStyle: TextStyle(color: textColor()),
+                ),
               ),
             ),
             growable: false,
@@ -94,15 +85,14 @@ class CustomDropdownState extends State<CustomDropdown> {
                   style: GoogleFonts.openSans(
                     color: textColor(),
                     fontWeight: FontWeight.w400,
-                    fontSize: 13,
                   ),
                 ),
-                const Expanded(child: SizedBox()),
+                const SizedBox(width: 4),
                 GradientIcon(
                   gradient: toTextGradient(limelightGradient),
                   icon: Icons.expand_more,
                 ),
-                const SizedBox(width: 11),
+                const SizedBox(width: 8),
               ],
             ),
           ),
