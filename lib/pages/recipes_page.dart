@@ -9,6 +9,7 @@ import 'package:limelight/widgets/gradient/button.dart';
 import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:unicons/unicons.dart';
 
 class RecipesPage extends StatelessWidget {
   const RecipesPage({super.key});
@@ -70,7 +71,7 @@ class RecipesPage extends StatelessWidget {
                   i,
                   Divider(
                     color: textColor().withOpacity(0.2),
-                    indent: 55,
+                    indent: 40,
                     endIndent: 20,
                     height: 0,
                   ),
@@ -117,7 +118,7 @@ class RecipesPage extends StatelessWidget {
                   i,
                   Divider(
                     color: textColor().withOpacity(0.2),
-                    indent: 55,
+                    indent: 40,
                     endIndent: 20,
                     height: 0,
                   ),
@@ -148,15 +149,6 @@ class RecipesPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                fab: GradientButton(
-                  gradient: toLighterSurfaceGradient(limelightGradient),
-                  diameter: 56,
-                  onPressed: () {},
-                  child: GradientIcon(
-                    gradient: toTextGradient(limelightGradient),
-                    icon: Icons.layers,
-                  ),
-                ),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
                   child: Column(
@@ -175,6 +167,63 @@ class RecipesPage extends StatelessWidget {
                           items: instructions,
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 25, 30, 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: GradientButton(
+                                outlineBorder: true,
+                                height: 50,
+                                borderRadius: 100,
+                                onPressed: () {},
+                                child: Center(
+                                  child: Text(
+                                    "Variations",
+                                    style: GoogleFonts.workSans(
+                                      color: textColor(),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: GradientButton(
+                                diameter: 52,
+                                gradient:
+                                    toLighterSurfaceGradient(limelightGradient),
+                                onPressed: () {},
+                                child: const Center(
+                                  child: GradientIcon(
+                                    gradient: limelightGradient,
+                                    icon: UniconsLine.clipboard_notes,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: GradientButton(
+                                diameter: 50,
+                                gradient: limelightGradient,
+                                onPressed: () {},
+                                child: Center(
+                                  child: GradientIcon(
+                                    gradient: toSurfaceGradient(
+                                      limelightGradient,
+                                    ),
+                                    icon: UniconsLine.calender,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
