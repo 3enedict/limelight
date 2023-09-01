@@ -155,6 +155,39 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Fettucine alfredo",
+      "difficulty": "Moderate",
+      "price": "$1.0",
+      "ingredients": [
+        {
+          "name": "Egg(s)",
+          "quantity": "0.8"
+        },
+        {
+          "name": "Flour",
+          "quantity": "100g"
+        },
+        {
+          "name": "Parmesan",
+          "quantity": "A good handful"
+        },
+        {
+          "name": "Butter",
+          "quantity": "A good knob"
+        }
+      ],
+      "instructions": [
+        "Knead {1:quantity}, some salt and {0:quantity} into a smooth dough that springs back to the touch.",
+        "After waiting for at least 30 minutes, roll out the dough.",
+        "Set the rolled out dough to dry until parchment-like. This should take about an hour or two.",
+        "After having rolled up the dough, cut it into small strips.",
+        "Finely grate {2:quantity}.",
+        "Cook the pasta in a small amount of boiling water.",
+        "Put {3:quantity} in a cold pan and stir your cooked pasta, some of the water, and your parmesan."
+      ],
+      "variationGroups": []
     }
   ]
 }
