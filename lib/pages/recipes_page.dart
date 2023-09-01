@@ -36,10 +36,7 @@ class RecipesPage extends StatelessWidget {
                       (e) => Row(
                         children: [
                           const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 20,
-                            ),
+                            padding: EdgeInsets.fromLTRB(0, 12, 20, 12),
                             child: GradientIcon(
                               icon: Icons.panorama_fish_eye,
                               size: 20,
@@ -88,7 +85,7 @@ class RecipesPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Padding(
-                            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                            padding: EdgeInsets.fromLTRB(0, 12, 20, 12),
                             child: GradientIcon(
                               icon: Icons.panorama_fish_eye,
                               size: 20,
@@ -165,55 +162,17 @@ class RecipesPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        " Ingredients",
-                        style: GoogleFonts.openSans(
-                          textStyle: TextStyle(
-                            color: textColor().withOpacity(0.5),
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 7),
                       Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Fade(
-                            child: GradientContainer(
-                              gradient: toSurfaceGradient(limelightGradient),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Wrap(children: ingredients),
-                              ),
-                            ),
-                          ),
+                        child: CustomList(
+                          label: "Ingredients",
+                          items: ingredients,
                         ),
                       ),
                       const SizedBox(height: 14),
-                      Text(
-                        " Instructions",
-                        style: GoogleFonts.openSans(
-                          textStyle: TextStyle(
-                            color: textColor().withOpacity(0.5),
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 7),
                       Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Fade(
-                            child: GradientContainer(
-                              gradient: toSurfaceGradient(limelightGradient),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Wrap(children: instructions),
-                              ),
-                            ),
-                          ),
+                        child: CustomList(
+                          label: "Instructions",
+                          items: instructions,
                         ),
                       ),
                     ],
@@ -260,6 +219,82 @@ class Fade extends StatelessWidget {
       },
       blendMode: BlendMode.srcOver,
       child: child,
+    );
+  }
+}
+
+class CustomList extends StatelessWidget {
+  final String label;
+  final List<Widget> items;
+
+  const CustomList({
+    super.key,
+    required this.label,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          backgroundColor: toSurfaceGradient(limelightGradient)[0],
+          elevation: 0,
+          title: Text(
+            label,
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(
+                color: textColor(),
+              ),
+            ),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView(
+              shrinkWrap: true,
+              children: items,
+            ),
+          ),
+        ),
+      ),
+      style: TextButton.styleFrom(
+        elevation: 0,
+        padding: const EdgeInsets.all(0),
+        foregroundColor: textColor().withOpacity(0.25),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            " $label",
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(
+                color: textColor().withOpacity(0.5),
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ),
+          const SizedBox(height: 7),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Fade(
+                child: GradientContainer(
+                  gradient: toSurfaceGradient(limelightGradient),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 20,
+                    ),
+                    child: Wrap(children: items),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
