@@ -42,11 +42,12 @@ class RecipeDescriptionBox extends StatelessWidget {
           CustomText(text: " $label", opacity: 0.5, weight: FontWeight.w300),
           const SizedBox(height: 7),
           Flexible(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Fade(
-                child: GradientContainer(
-                  gradient: toSurfaceGradient(limelightGradient),
+            child: GradientContainer(
+              gradient: toSurfaceGradient(limelightGradient),
+              borderRadius: 20,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Fade(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 5,
