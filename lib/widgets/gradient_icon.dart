@@ -7,7 +7,8 @@ class GradientIcon extends StatelessWidget {
   final VoidCallback? onPressed;
   final double? size;
   final double? weight;
-  final double padding;
+  final double buttonPadding;
+  final EdgeInsetsGeometry padding;
   final IconData icon;
 
   const GradientIcon({
@@ -16,7 +17,8 @@ class GradientIcon extends StatelessWidget {
     this.onPressed,
     this.size,
     this.weight,
-    this.padding = 10,
+    this.buttonPadding = 10,
+    this.padding = const EdgeInsets.all(0),
     required this.icon,
   });
 
@@ -38,12 +40,15 @@ class GradientIcon extends StatelessWidget {
         splashColor: toTextGradient(gradient)[1].withOpacity(0.25),
         onTap: onPressed,
         child: Padding(
-          padding: EdgeInsets.all(padding),
+          padding: EdgeInsets.all(buttonPadding),
           child: gradientIcon,
         ),
       );
     }
 
-    return gradientIcon;
+    return Padding(
+      padding: padding,
+      child: gradientIcon,
+    );
   }
 }

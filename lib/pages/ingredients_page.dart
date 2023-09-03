@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:limelight/data/provider/ingredient_model.dart';
 
+import 'package:unicons/unicons.dart';
+import 'package:provider/provider.dart';
+
+import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/pages/ingredient_editor_page.dart';
+import 'package:limelight/widgets/gradient_button.dart';
+import 'package:limelight/widgets/gradient_circle.dart';
+import 'package:limelight/widgets/gradient_icon.dart';
+import 'package:limelight/widgets/custom_text.dart';
 import 'package:limelight/pages/search_page.dart';
-import 'package:limelight/widgets/gradient/button.dart';
-import 'package:limelight/widgets/gradient/circle.dart';
-import 'package:limelight/widgets/gradient/icon.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
-import 'package:provider/provider.dart';
-import 'package:unicons/unicons.dart';
+import 'package:limelight/main.dart';
 
 class IngredientsPage extends StatelessWidget {
   const IngredientsPage({super.key});
@@ -51,29 +54,25 @@ class SearchBar extends StatelessWidget {
         child: GradientButton(
           gradient: toSurfaceGradient(limelightGradient),
           borderRadius: 100,
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => SearchPage(
-                searchHint: 'Select ingredients to cook with',
-                getSelected: (newModel) => newModel.selected,
-                selectIngredient: (name) => model.select(name),
-              ),
+          onPressed: () => goto(
+            context,
+            SearchPage(
+              searchHint: 'Select ingredients to cook with',
+              getSelected: (newModel) => newModel.selected,
+              selectIngredient: (name) => model.select(name),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 12, 18, 12),
+          child: const Padding(
+            padding: EdgeInsets.fromLTRB(30, 12, 18, 12),
             child: Row(
               children: [
-                Text(
-                  "Search...",
-                  style: TextStyle(
-                    color: textColor(),
-                    fontStyle: FontStyle.italic,
-                    fontSize: 24,
-                  ),
+                CustomText(
+                  text: "Search...",
+                  style: FontStyle.italic,
+                  size: 24,
                 ),
-                const Expanded(child: SizedBox()),
-                const SearchBarIcons(),
+                Expanded(child: SizedBox()),
+                SearchBarIcons(),
               ],
             ),
           ),
@@ -89,6 +88,7 @@ class SearchBarIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<IngredientModel>(context, listen: false);
+    const size = 30.0;
 
     return Row(
       children: [
@@ -98,7 +98,7 @@ class SearchBarIcons extends StatelessWidget {
               builder: (context) => const IngredientEditorPage(),
             ),
           ),
-          size: 30,
+          size: size,
           icon: UniconsLine.plus,
         ),
         GradientIcon(
@@ -111,7 +111,7 @@ class SearchBarIcons extends StatelessWidget {
               ),
             ),
           ),
-          size: 30,
+          size: size,
           icon: UniconsLine.notes,
         ),
       ],

@@ -4,13 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
-import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/data/json/ingredient_description.dart';
+import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
-import 'package:limelight/widgets/gradient/container.dart';
-import 'package:limelight/widgets/gradient/button.dart';
-import 'package:limelight/widgets/gradient/icon.dart';
-import 'package:limelight/widgets/textfield.dart';
+import 'package:limelight/widgets/gradient_container.dart';
+import 'package:limelight/widgets/custom_textfield.dart';
+import 'package:limelight/widgets/gradient_button.dart';
+import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 
@@ -28,22 +28,6 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
   late FocusNode priceFocusNode;
 
   IngredientDescription ingredient = IngredientDescription.empty();
-
-  @override
-  void initState() {
-    super.initState();
-
-    seasonFocusNode = FocusNode();
-    priceFocusNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    seasonFocusNode.dispose();
-    priceFocusNode.dispose();
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,5 +206,19 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
     model.add(ingredient);
 
     Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    seasonFocusNode = FocusNode();
+    priceFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    seasonFocusNode.dispose();
+    priceFocusNode.dispose();
+    super.dispose();
   }
 }

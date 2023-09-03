@@ -15,6 +15,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        // Don't forget to call load() if need be in loadModelDataFromLocalFiles() at the bottom of this file
         ChangeNotifierProvider(create: (context) => IngredientModel()),
         ChangeNotifierProvider(create: (context) => RecipeModel()),
         ChangeNotifierProvider(create: (context) => PreferencesModel()),
@@ -63,4 +64,8 @@ void loadModelDataFromLocalFiles(BuildContext context) {
   Provider.of<IngredientModel>(context, listen: false).load();
   Provider.of<RecipeModel>(context, listen: false).load();
   Provider.of<PreferencesModel>(context, listen: false).load();
+}
+
+void goto(BuildContext context, Widget widget) {
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget));
 }

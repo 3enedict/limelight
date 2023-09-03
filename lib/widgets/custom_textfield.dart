@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/gradient/icon.dart';
+import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/gradients.dart';
 
 class CustomTextField extends StatelessWidget {

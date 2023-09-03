@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:limelight/data/provider/preferences_model.dart';
+import 'package:limelight/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
 
 import 'package:limelight/data/json/ingredient_description.dart';
-import 'package:limelight/pages/ingredient_editor_page.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/pages/ingredient_editor_page.dart';
+import 'package:limelight/widgets/gradient_button.dart';
+import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/gradients.dart';
-import 'package:limelight/widgets/gradient/button.dart';
-import 'package:limelight/widgets/gradient/icon.dart';
+import 'package:limelight/main.dart';
 
 class IngredientSearchItem extends StatelessWidget {
   final String query;
@@ -28,6 +30,7 @@ class IngredientSearchItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<IngredientModel>(context, listen: false);
+    final editor = IngredientEditorPage(name: ingredient.name);
 
     return Dismissible(
       key: UniqueKey(),
@@ -39,13 +42,7 @@ class IngredientSearchItem extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
           borderRadius: 15,
           onPressed: () => selectIngredient(ingredient.name),
-          onLongPress: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => IngredientEditorPage(
-                name: ingredient.name,
-              ),
-            ),
-          ),
+          onLongPress: () => goto(context, editor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -66,8 +63,6 @@ class IngredientSearchItem extends StatelessWidget {
   }
 }
 
-// Utils
-
 class LeadingCircle extends StatelessWidget {
   final List<String> Function(IngredientModel) getSelected;
   final String name;
@@ -80,21 +75,19 @@ class LeadingCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Consumer<IngredientModel>(
-        builder: (context, ingredients, child) {
-          final isSelected = getSelected(ingredients).contains(name);
+    return Consumer<IngredientModel>(
+      builder: (context, ingredients, child) {
+        final isSelected = getSelected(ingredients).contains(name);
 
-          return GradientIcon(
-            gradient: isSelected
-                ? limelightGradient
-                : toBackgroundGradient(limelightGradient),
-            size: 30,
-            icon: Icons.panorama_fish_eye, // (aka circle)
-          );
-        },
-      ),
+        return GradientIcon(
+          gradient: isSelected
+              ? limelightGradient
+              : toBackgroundGradient(limelightGradient),
+          padding: const EdgeInsets.all(20),
+          size: 30,
+          icon: Icons.panorama_fish_eye, // (aka circle)
+        );
+      },
     );
   }
 }
@@ -143,14 +136,12 @@ class ItemTitle extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 2),
-        Text(
-          season,
-          style: GoogleFonts.workSans(
-            color: textColor().withOpacity(0.6),
-            fontStyle: FontStyle.italic,
-            fontSize: 14,
-          ),
-        )
+        CustomText(
+          text: season,
+          opacity: 0.6,
+          style: FontStyle.italic,
+          size: 14,
+        ),
       ],
     );
   }
@@ -174,22 +165,18 @@ class ItemInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(
-          "$symbol$price",
-          style: GoogleFonts.workSans(
-            color: textColor().withOpacity(0.8),
-            fontStyle: FontStyle.italic,
-            fontSize: 13,
-          ),
+        CustomText(
+          text: "$symbol$price",
+          opacity: 0.8,
+          style: FontStyle.italic,
+          size: 13,
         ),
         const SizedBox(height: 1),
-        Text(
-          unit,
-          style: GoogleFonts.workSans(
-            color: textColor().withOpacity(0.6),
-            fontStyle: FontStyle.italic,
-            fontSize: 12,
-          ),
+        CustomText(
+          text: unit,
+          opacity: 0.6,
+          style: FontStyle.italic,
+          size: 12,
         ),
       ],
     );

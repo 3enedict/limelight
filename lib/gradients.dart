@@ -6,31 +6,31 @@ const limelightGradient = [
 ];
 
 List<Color> toBackgroundGradient(List<Color> gradient) {
-  return [
-    modifyColor(gradient[0], 0.10, 0.1),
-    modifyColor(gradient[1], 0.10, 0.1),
-  ];
+  return List.generate(
+    2,
+    (int index) => modifyColor(gradient[index], 0.10, 0.1),
+  );
 }
 
 List<Color> toSurfaceGradient(List<Color> gradient) {
-  return [
-    modifyColor(gradient[0], 0.13, 0.1),
-    modifyColor(gradient[1], 0.13, 0.1),
-  ];
+  return List.generate(
+    2,
+    (int index) => modifyColor(gradient[index], 0.13, 0.1),
+  );
 }
 
 List<Color> toLighterSurfaceGradient(List<Color> gradient) {
-  return [
-    modifyColor(gradient[0], 0.2, 0.08),
-    modifyColor(gradient[1], 0.2, 0.08),
-  ];
+  return List.generate(
+    2,
+    (int index) => modifyColor(gradient[index], 0.2, 0.08),
+  );
 }
 
 List<Color> toTextGradient(List<Color> gradient) {
-  return [
-    modifyColor(gradient[0], 0.8, 0.1),
-    modifyColor(gradient[1], 0.8, 0.1),
-  ];
+  return List.generate(
+    2,
+    (int index) => modifyColor(gradient[index], 0.8, 0.1),
+  );
 }
 
 Color textColor() {

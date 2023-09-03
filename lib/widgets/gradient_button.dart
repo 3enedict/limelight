@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/gradients.dart';
-import 'package:limelight/widgets/gradient/container.dart';
+import 'package:limelight/widgets/gradient_container.dart';
 
 class GradientButton extends StatelessWidget {
   final List<Color> gradient;
