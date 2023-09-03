@@ -12,87 +12,102 @@ class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
-      child: Column(
+      child: Stack(
         children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CustomText(
-                  text: 'Saturday',
-                  alignement: TextAlign.center,
-                  size: 20,
-                  weight: FontWeight.w600,
-                ),
-                const SizedBox(height: 25),
-                Row(
+          Align(
+            alignment: Alignment.topLeft,
+            child: GradientIcon(
+              onPressed: () => Navigator.of(context).pop(),
+              gradient: toTextGradient(limelightGradient),
+              padding: const EdgeInsets.all(5),
+              icon: Icons.chevron_left,
+            ),
+          ),
+          Column(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GradientIcon(
-                      gradient: toTextGradient(limelightGradient),
-                      padding: const EdgeInsets.all(15),
-                      icon: Icons.chevron_left,
+                    const CustomText(
+                      text: 'Saturday',
+                      alignement: TextAlign.center,
+                      size: 20,
+                      weight: FontWeight.w600,
                     ),
-                    Expanded(
-                      child: Column(
-                        children: List.generate(
-                          2,
-                          (_) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: GradientContainer(
-                              gradient: toSurfaceGradient(limelightGradient),
-                              borderRadius: 20,
-                              child: const Row(
-                                children: [
-                                  GradientIcon(
-                                    padding: EdgeInsets.all(15),
-                                    icon: Icons.panorama_fish_eye,
+                    const SizedBox(height: 25),
+                    Row(
+                      children: [
+                        GradientIcon(
+                          gradient: toTextGradient(limelightGradient),
+                          padding: const EdgeInsets.all(15),
+                          icon: Icons.chevron_left,
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: List.generate(
+                              2,
+                              (_) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: GradientContainer(
+                                  gradient:
+                                      toSurfaceGradient(limelightGradient),
+                                  borderRadius: 20,
+                                  child: const Row(
+                                    children: [
+                                      GradientIcon(
+                                        padding: EdgeInsets.all(15),
+                                        icon: Icons.panorama_fish_eye,
+                                      ),
+                                      CustomText(text: 'Recipe unavailable'),
+                                    ],
                                   ),
-                                  CustomText(text: 'Recipe unavailable'),
-                                ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    GradientIcon(
-                      gradient: toTextGradient(limelightGradient),
-                      padding: const EdgeInsets.all(15),
-                      icon: Icons.chevron_right,
+                        GradientIcon(
+                          gradient: toTextGradient(limelightGradient),
+                          padding: const EdgeInsets.all(15),
+                          icon: Icons.chevron_right,
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                  60,
-                  (int index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: GradientContainer(
-                      gradient: toSurfaceGradient(limelightGradient),
-                      borderRadius: 15,
-                      child: const Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CustomText(text: 'Mon'),
-                            SizedBox(height: 5),
-                            CustomText(text: '27')
-                          ],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      60,
+                      (int index) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: GradientContainer(
+                          gradient: toSurfaceGradient(limelightGradient),
+                          borderRadius: 15,
+                          child: const Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomText(text: 'Mon'),
+                                SizedBox(height: 5),
+                                CustomText(text: '27'),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),
