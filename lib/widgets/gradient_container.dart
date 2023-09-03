@@ -31,7 +31,7 @@ class GradientContainer extends StatelessWidget {
             color: modifyColor(gradient[1], 0.08, 0.1),
             spreadRadius: 0,
             blurRadius: 3,
-            offset: const Offset(1, 1),
+            offset: const Offset(2, 2),
           ),
         ],
         gradient: LinearGradient(

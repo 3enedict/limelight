@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/widgets/gradient_appbar.dart';
-import 'package:limelight/widgets/recipe_description_items.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 import 'package:limelight/data/provider/recipe_model.dart';
+import 'package:limelight/widgets/recipe_description_items.dart';
 import 'package:limelight/widgets/recipe_description_box.dart';
+import 'package:limelight/widgets/gradient_appbar.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/widgets/custom_text.dart';
+import 'package:limelight/pages/calendar_page.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/main.dart';
 
-class RecipesPage extends StatelessWidget {
+class RecipesPage extends StatefulWidget {
   const RecipesPage({super.key});
+
+  @override
+  State<RecipesPage> createState() => _RecipesPageState();
+}
+
+class _RecipesPageState extends State<RecipesPage> {
+  int _pageId = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +33,7 @@ class RecipesPage extends StatelessWidget {
           children: [
             Expanded(
               child: PageView(
+                onPageChanged: (id) => setState(() => _pageId = id),
                 children: List.generate(
                   recipes.number,
                   (int index) {
@@ -36,21 +46,32 @@ class RecipesPage extends StatelessWidget {
                           weight: FontWeight.w700,
                         ),
                       ),
-                      child: generateContent(context, index, recipes),
+                      child: Content(recipeId: index, recipes: recipes),
                     );
                   },
                 ),
               ),
             ),
-            generateActionButtons(),
+            ActionButtons(recipeId: _pageId, recipes: recipes),
           ],
         );
       },
     );
   }
+}
 
-  Widget generateContent(
-      BuildContext context, int recipeId, RecipeModel recipes) {
+class Content extends StatelessWidget {
+  final int recipeId;
+  final RecipeModel recipes;
+
+  const Content({
+    super.key,
+    required this.recipeId,
+    required this.recipes,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
       child: Column(
@@ -76,8 +97,20 @@ class RecipesPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget generateActionButtons() {
+class ActionButtons extends StatelessWidget {
+  final int recipeId;
+  final RecipeModel recipes;
+
+  const ActionButtons({
+    super.key,
+    required this.recipeId,
+    required this.recipes,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: toBackgroundGradient(limelightGradient)[1],
       child: Padding(
@@ -86,7 +119,7 @@ class RecipesPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GradientButton(
-              diameter: 52,
+              diameter: 54,
               gradient: toLighterSurfaceGradient(limelightGradient),
               onPressed: () {},
               child: Center(
@@ -98,7 +131,7 @@ class RecipesPage extends StatelessWidget {
             ),
             const SizedBox(width: 51 / 2),
             GradientButton(
-              diameter: 52,
+              diameter: 54,
               gradient: toLighterSurfaceGradient(limelightGradient),
               onPressed: () {},
               child: const Center(
@@ -111,10 +144,10 @@ class RecipesPage extends StatelessWidget {
             ),
             const SizedBox(width: 51 / 2),
             GradientButton(
-              diameter: 50,
+              diameter: 53,
               gradient:
                   limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
-              onPressed: () {},
+              onPressed: () => goto(context, const CalendarPage()),
               child: Center(
                 child: GradientIcon(
                   gradient: toSurfaceGradient(limelightGradient),
