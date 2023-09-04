@@ -161,6 +161,11 @@ class _CalendarPageState extends State<CalendarPage> {
                         gradient: index == _pageId
                             ? toLighterSurfaceGradient(limelightGradient)
                             : toSurfaceGradient(limelightGradient),
+                        borderGradient: index == 31
+                            ? limelightGradient
+                                .map((e) => e.withOpacity(0.8))
+                                .toList()
+                            : null,
                         borderRadius: 15,
                         height: 84,
                         width: 74,

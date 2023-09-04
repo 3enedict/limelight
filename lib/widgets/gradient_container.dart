@@ -4,6 +4,7 @@ import 'package:limelight/gradients.dart';
 
 class GradientContainer extends StatelessWidget {
   final List<Color> gradient;
+  final List<Color>? borderGradient;
   final double? height;
   final double? width;
   final double? borderRadius;
@@ -13,6 +14,7 @@ class GradientContainer extends StatelessWidget {
   const GradientContainer({
     super.key,
     this.gradient = limelightGradient,
+    this.borderGradient,
     this.height,
     this.width,
     this.borderRadius,
@@ -35,14 +37,31 @@ class GradientContainer extends StatelessWidget {
           ),
         ],
         gradient: LinearGradient(
-          colors: gradient,
+          colors: borderGradient ?? gradient,
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
       ),
       height: diameter ?? height,
       width: diameter ?? width,
-      child: child,
+      child: borderGradient == null
+          ? child
+          : Padding(
+              padding: const EdgeInsets.all(1),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    diameter ?? borderRadius ?? 0,
+                  ),
+                  gradient: LinearGradient(
+                    colors: gradient,
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+                child: child,
+              ),
+            ),
     );
   }
 }
