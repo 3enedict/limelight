@@ -147,7 +147,7 @@ class ActionButtons extends StatelessWidget {
               diameter: 53,
               gradient:
                   limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
-              onPressed: () => goto(context, const CalendarPage()),
+              onPressed: () => goto(context, CalendarPage(recipeId: recipeId)),
               child: Center(
                 child: GradientIcon(
                   gradient: toSurfaceGradient(limelightGradient),

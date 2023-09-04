@@ -1,13 +1,15 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:limelight/gradients.dart';
 
-import 'package:limelight/widgets/custom_text.dart';
-import 'package:limelight/widgets/flat_button.dart';
+import 'package:provider/provider.dart';
+
+import 'package:limelight/data/provider/calendar_model.dart';
+import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/widgets/gradient_container.dart';
 import 'package:limelight/widgets/gradient_icon.dart';
+import 'package:limelight/widgets/custom_text.dart';
+import 'package:limelight/widgets/flat_button.dart';
 import 'package:limelight/widgets/page.dart';
+import 'package:limelight/gradients.dart';
 
 final date = DateTime.now();
 final aMonthAgo = date.subtract(const Duration(days: 31));
@@ -23,7 +25,9 @@ const weekdays = [
 ];
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
+  final int recipeId;
+
+  const CalendarPage({super.key, required this.recipeId});
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -52,6 +56,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final recipes = Provider.of<RecipeModel>(context);
+
     return EmptyPage(
       child: Column(
         children: [
@@ -101,22 +107,53 @@ class _CalendarPageState extends State<CalendarPage> {
                           child: Column(
                             children: List.generate(
                               2,
-                              (_) => Padding(
+                              (int meal) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 5),
-                                child: GradientContainer(
-                                  gradient:
-                                      toSurfaceGradient(limelightGradient),
-                                  borderRadius: 20,
-                                  child: const Row(
-                                    children: [
-                                      GradientIcon(
-                                        padding: EdgeInsets.all(15),
-                                        icon: Icons.panorama_fish_eye,
+                                child: Consumer<CalendarModel>(
+                                  builder: (context, calendar, child) {
+                                    final day =
+                                        aMonthAgo.add(Duration(days: index));
+
+                                    final id = calendar.get(
+                                        day.year, day.month, day.day, meal);
+
+                                    return FlatButton(
+                                      onPressed: () {
+                                        if (id == null ||
+                                            id != widget.recipeId) {
+                                          calendar.set(
+                                            day.year,
+                                            day.month,
+                                            day.day,
+                                            meal,
+                                            widget.recipeId,
+                                          );
+                                        } else {
+                                          calendar.remove(day.year, day.month,
+                                              day.day, meal);
+                                        }
+                                      },
+                                      child: GradientContainer(
+                                        gradient: toSurfaceGradient(
+                                            limelightGradient),
+                                        borderRadius: 20,
+                                        child: Row(
+                                          children: [
+                                            const GradientIcon(
+                                              padding: EdgeInsets.all(15),
+                                              icon: Icons.panorama_fish_eye,
+                                            ),
+                                            CustomText(
+                                              text: id == null
+                                                  ? ''
+                                                  : recipes.name(id),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      CustomText(text: 'Recipe unavailable'),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),

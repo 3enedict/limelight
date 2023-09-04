@@ -38,8 +38,11 @@ class GradientContainer extends StatelessWidget {
         ],
         gradient: LinearGradient(
           colors: borderGradient ?? gradient,
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+          begin:
+              borderGradient == null ? Alignment.centerLeft : Alignment.topLeft,
+          end: borderGradient == null
+              ? Alignment.centerRight
+              : Alignment.bottomRight,
         ),
       ),
       height: diameter ?? height,
