@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/calendar_model.dart';
 
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
@@ -130,17 +131,33 @@ class ActionButtons extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 51 / 2),
-            GradientButton(
-              diameter: 54,
-              gradient: toLighterSurfaceGradient(limelightGradient),
-              onPressed: () {},
-              child: const Center(
-                child: GradientIcon(
-                  gradient: limelightGradient,
-                  icon: UniconsLine.clipboard_notes,
-                  size: 27,
-                ),
-              ),
+            Consumer<CalendarModel>(
+              builder: (context, calendar, child) {
+                final enabled = calendar.mealList.contains(recipeId);
+                print(calendar.mealList);
+
+                return GradientButton(
+                  diameter: enabled ? 53 : 54,
+                  gradient: enabled
+                      ? limelightGradient
+                          .map((e) => e.withOpacity(0.8))
+                          .toList()
+                      : toLighterSurfaceGradient(limelightGradient),
+                  onPressed: enabled
+                      ? () => calendar.removeFromList(recipeId)
+                      : () => calendar.add(recipeId),
+                  // onLongPress: () =>  goto(context, MealList()),
+                  child: Center(
+                    child: GradientIcon(
+                      gradient: enabled
+                          ? toSurfaceGradient(limelightGradient)
+                          : limelightGradient,
+                      icon: UniconsLine.clipboard_notes,
+                      size: 27,
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(width: 51 / 2),
             GradientButton(
