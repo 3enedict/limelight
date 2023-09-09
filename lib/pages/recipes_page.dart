@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
+import 'package:limelight/widgets/flat_button.dart';
 
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
@@ -134,10 +135,9 @@ class ActionButtons extends StatelessWidget {
             Consumer<CalendarModel>(
               builder: (context, calendar, child) {
                 final enabled = calendar.mealList.contains(recipeId);
-                print(calendar.mealList);
 
                 return GradientButton(
-                  diameter: enabled ? 53 : 54,
+                  diameter: 54,
                   gradient: enabled
                       ? limelightGradient
                           .map((e) => e.withOpacity(0.8))
@@ -146,7 +146,73 @@ class ActionButtons extends StatelessWidget {
                   onPressed: enabled
                       ? () => calendar.removeFromList(recipeId)
                       : () => calendar.add(recipeId),
-                  // onLongPress: () =>  goto(context, MealList()),
+                  onLongPress: () => showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      final items = List<Widget>.from(calendar.list
+                          .map(
+                            (e) => Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 12, 20, 12),
+                                  child: GradientIcon(
+                                      icon: Icons.panorama_fish_eye, size: 20),
+                                ),
+                                CustomText(text: recipes.name(e)),
+                                const Expanded(child: SizedBox()),
+                                const CustomText(
+                                  text: '1',
+                                  opacity: 0.6,
+                                  weight: FontWeight.w400,
+                                ),
+                              ],
+                            ),
+                          )
+                          .toList());
+
+                      return Dialog(
+                        backgroundColor:
+                            toSurfaceGradient(limelightGradient)[1],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 0,
+                        insetPadding: const EdgeInsets.all(20),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                                child: CustomText(
+                                  text: "Meals",
+                                  alignement: TextAlign.center,
+                                  size: 20,
+                                  weight: FontWeight.w600,
+                                ),
+                              ),
+                              Flexible(
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  children: addDividers(items),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: FlatButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  borderRadius: 10,
+                                  child: const CustomText(text: 'Done'),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                   child: Center(
                     child: GradientIcon(
                       gradient: enabled

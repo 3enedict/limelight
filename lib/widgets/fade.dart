@@ -22,14 +22,12 @@ class Fade extends StatelessWidget {
             end: FractionalOffset.topCenter,
             begin: FractionalOffset.bottomCenter,
             colors: [
-              color,
-              color.withAlpha(120),
+              color.withAlpha(220),
               color.withAlpha(0),
             ],
             stops: const [
               0.0,
-              0.05,
-              0.2,
+              0.3,
             ]).createShader(bound);
       },
       blendMode: BlendMode.srcOver,

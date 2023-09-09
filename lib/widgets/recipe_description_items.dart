@@ -12,7 +12,6 @@ List<Widget> addDividers(List<Widget> items) {
       Divider(
         color: textColor().withOpacity(0.2),
         indent: 40,
-        endIndent: 20,
         height: 0,
       ),
     );
@@ -42,7 +41,6 @@ List<Widget> generateIngredients(int recipeId, RecipeModel recipes) {
           opacity: 0.6,
           weight: FontWeight.w400,
         ),
-        const SizedBox(width: 20),
       ],
     ));
   }
@@ -69,7 +67,7 @@ List<Widget> generateInstructions(int recipeId, RecipeModel recipes) {
         Flexible(
           child: CustomText(
             text: instruction,
-            padding: const EdgeInsets.fromLTRB(0, 10, 20, 10),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             alignement: TextAlign.justify,
             size: 13,
             weight: FontWeight.w300,
