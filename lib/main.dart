@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/variation_model.dart';
 
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => RecipeModel()),
         ChangeNotifierProvider(create: (context) => CalendarModel()),
         ChangeNotifierProvider(create: (context) => PreferencesModel()),
+        ChangeNotifierProvider(create: (context) => VariationModel()),
       ],
       child: const Limelight(),
     ),
@@ -67,6 +69,7 @@ void loadModelDataFromLocalFiles(BuildContext context) {
   Provider.of<RecipeModel>(context, listen: false).load();
   Provider.of<CalendarModel>(context, listen: false).load();
   Provider.of<PreferencesModel>(context, listen: false).load();
+  Provider.of<VariationModel>(context, listen: false).load();
 }
 
 void goto(BuildContext context, Widget widget) {

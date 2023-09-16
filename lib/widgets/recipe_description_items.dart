@@ -20,11 +20,12 @@ List<Widget> addDividers(List<Widget> items) {
   return items;
 }
 
-List<Widget> generateIngredients(int recipeId, RecipeModel recipes) {
-  var ingredientList = recipes.ingredientList(
-    recipeId,
-    generateVariations(recipes, recipeId),
-  );
+List<Widget> generateIngredients(
+  int recipeId,
+  RecipeModel recipes,
+  List<(int, int)> variations,
+) {
+  var ingredientList = recipes.ingredientList(recipeId, variations);
 
   List<Widget> ingredients = [];
   for (var ingredient in ingredientList) {
@@ -48,12 +49,12 @@ List<Widget> generateIngredients(int recipeId, RecipeModel recipes) {
   return addDividers(ingredients);
 }
 
-List<Widget> generateInstructions(int recipeId, RecipeModel recipes) {
-  var instructionList = recipes.instructionSet(
-    recipeId,
-    3,
-    generateVariations(recipes, recipeId),
-  );
+List<Widget> generateInstructions(
+  int recipeId,
+  RecipeModel recipes,
+  List<(int, int)> variations,
+) {
+  var instructionList = recipes.instructionSet(recipeId, 3, variations);
 
   List<Widget> instructions = [];
   for (var instruction in instructionList) {
@@ -78,12 +79,4 @@ List<Widget> generateInstructions(int recipeId, RecipeModel recipes) {
   }
 
   return addDividers(instructions);
-}
-
-// This is a temporary measure...
-List<(int, int)> generateVariations(RecipeModel recipes, int recipeId) {
-  return List.generate(
-    recipes.numberOfVariationGroups(recipeId),
-    (int groupId) => (groupId, 0),
-  );
 }

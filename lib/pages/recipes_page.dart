@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
+import 'package:limelight/data/provider/variation_model.dart';
+import 'package:limelight/widgets/custom_divider.dart';
 import 'package:limelight/widgets/flat_button.dart';
+import 'package:limelight/widgets/preference.dart';
 
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
@@ -76,26 +79,32 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height / 2.5,
-            ),
-            child: RecipeDescriptionBox(
-              label: "Ingredients",
-              items: generateIngredients(recipeId, recipes),
-            ),
-          ),
-          const SizedBox(height: 14),
-          Expanded(
-            child: RecipeDescriptionBox(
-              label: "Instructions",
-              items: generateInstructions(recipeId, recipes),
-            ),
-          ),
-        ],
+      child: Consumer<VariationModel>(
+        builder: (context, variations, child) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height / 2.5,
+                ),
+                child: RecipeDescriptionBox(
+                  label: "Ingredients",
+                  items: generateIngredients(
+                      recipeId, recipes, variations.variationIds(recipeId)),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Expanded(
+                child: RecipeDescriptionBox(
+                  label: "Instructions",
+                  items: generateInstructions(
+                      recipeId, recipes, variations.variationIds(recipeId)),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -123,7 +132,99 @@ class ActionButtons extends StatelessWidget {
             GradientButton(
               diameter: 54,
               gradient: toLighterSurfaceGradient(limelightGradient),
-              onPressed: () {},
+              onPressed: () => showDialog<String>(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    backgroundColor: toSurfaceGradient(limelightGradient)[1],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 0,
+                    insetPadding: const EdgeInsets.all(20),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                            child: CustomText(
+                              text: "Variations",
+                              alignement: TextAlign.center,
+                              size: 20,
+                              weight: FontWeight.w600,
+                            ),
+                          ),
+                          Flexible(
+                            child: Consumer<VariationModel>(
+                              builder: (context, variations, child) {
+                                List<Widget> variationList = [];
+                                final num =
+                                    recipes.numberOfVariationGroups(recipeId);
+
+                                for (var i = 0; i < num; i++) {
+                                  int selected = 0;
+                                  for (var id
+                                      in variations.variationIds(recipeId)) {
+                                    if (id.$1 == i) selected = id.$2;
+                                  }
+
+                                  List<String> names = [];
+
+                                  for (var j = 0;
+                                      j <
+                                          recipes.numberOfVariations(
+                                              recipeId, i);
+                                      j++) {
+                                    names.add(
+                                        recipes.variationName(recipeId, i, j));
+                                  }
+
+                                  variationList.add(
+                                    Preference(
+                                      icon: Icons.panorama_fish_eye,
+                                      text: recipes.variationGroupName(
+                                          recipeId, i),
+                                      selected: names[selected],
+                                      values: names,
+                                      onChanged: (str) => variations.set(
+                                          recipeId, i, names.indexOf(str)),
+                                    ),
+                                  );
+                                }
+
+                                for (var i = variationList.length - 1;
+                                    i > 0;
+                                    i--) {
+                                  variationList.insert(
+                                    i,
+                                    const CustomDivider(indent: 10),
+                                  );
+                                }
+
+                                return ListView(
+                                  shrinkWrap: true,
+                                  children: variationList,
+                                );
+                              },
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: FlatButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              borderRadius: 10,
+                              child: const CustomText(text: 'Done'),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
               child: Center(
                 child: GradientIcon(
                   gradient: toTextGradient(limelightGradient),
@@ -156,7 +257,9 @@ class ActionButtons extends StatelessWidget {
                                 const Padding(
                                   padding: EdgeInsets.fromLTRB(0, 12, 20, 12),
                                   child: GradientIcon(
-                                      icon: Icons.panorama_fish_eye, size: 20),
+                                    icon: Icons.panorama_fish_eye,
+                                    size: 20,
+                                  ),
                                 ),
                                 CustomText(text: recipes.name(e)),
                                 const Expanded(child: SizedBox()),
