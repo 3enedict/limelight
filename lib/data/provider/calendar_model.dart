@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CalendarModel extends ChangeNotifier {
   final Map<String, int> _mealIds = {};
-  final List<int> _mealList = [];
+  List<int> _mealList = [];
 
   void load() {
     SharedPreferences.getInstance().then(
@@ -26,6 +26,7 @@ class CalendarModel extends ChangeNotifier {
 
   void loadMealList(String meals) {
     List<String> list = meals.split(":");
+    _mealList = []; // Prevents hot reload reusing previous mealList
 
     for (var item in list) {
       if (item != '') _mealList.add(int.parse(item));
@@ -43,12 +44,19 @@ class CalendarModel extends ChangeNotifier {
   }
 
   void add(int recipeId) {
-    if (!_mealList.contains(recipeId)) _mealList.add(recipeId);
+    _fillMealListTo(recipeId);
+    _mealList[recipeId] = _mealList[recipeId] + 1;
     _saveList();
   }
 
+  void addIfNone(int recipeId) {
+    _fillMealListTo(recipeId);
+    if (_mealList[recipeId] == 0) _mealList[recipeId] = 1;
+  }
+
   void removeFromList(int recipeId) {
-    _mealList.remove(recipeId);
+    _fillMealListTo(recipeId);
+    _mealList[recipeId] = _mealList[recipeId] - 1;
     _saveList();
   }
 
@@ -58,7 +66,11 @@ class CalendarModel extends ChangeNotifier {
 
   List<int> get mealList => List.from(_mealList);
 
-  List<int> get list => [...mealList, ..._mealIds.values.toList()];
+  void _fillMealListTo(int recipeId) {
+    while (_mealList.length < recipeId + 1) {
+      _mealList.add(0);
+    }
+  }
 
   void _saveCalendar() {
     SharedPreferences.getInstance().then(

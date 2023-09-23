@@ -233,100 +233,129 @@ class ActionButtons extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 51 / 2),
-            Consumer<CalendarModel>(
-              builder: (context, calendar, child) {
-                final enabled = calendar.mealList.contains(recipeId);
+            GradientButton(
+              diameter: 54,
+              gradient: toLighterSurfaceGradient(limelightGradient),
+              onPressed: () {
+                Provider.of<CalendarModel>(context, listen: false)
+                    .addIfNone(recipeId);
 
-                return GradientButton(
-                  diameter: 54,
-                  gradient: enabled
-                      ? limelightGradient
-                          .map((e) => e.withOpacity(0.8))
-                          .toList()
-                      : toLighterSurfaceGradient(limelightGradient),
-                  onPressed: enabled
-                      ? () => calendar.removeFromList(recipeId)
-                      : () => calendar.add(recipeId),
-                  onLongPress: () => showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      final items = List<Widget>.from(calendar.list
-                          .map(
-                            (e) => Row(
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Consumer<CalendarModel>(
+                      builder: (context, calendar, child) {
+                        if (calendar.mealList[recipeId] == 0) {
+                          Navigator.of(context).pop();
+                        }
+
+                        List<Widget> items = [];
+                        for (var i = 0; i < calendar.mealList.length; i++) {
+                          final num = calendar.mealList[i];
+
+                          if (num != 0) {
+                            items.add(
+                              Row(
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 12, 20, 12),
+                                    child: GradientIcon(
+                                      icon: Icons.panorama_fish_eye,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  CustomText(text: recipes.name(i)),
+                                  const Expanded(child: SizedBox()),
+                                  CustomText(
+                                    text: '$num',
+                                    opacity: 0.6,
+                                    weight: FontWeight.w400,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        }
+
+                        return Dialog(
+                          backgroundColor:
+                              toSurfaceGradient(limelightGradient)[1],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          elevation: 0,
+                          insetPadding: const EdgeInsets.all(20),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 12, 20, 12),
-                                  child: GradientIcon(
-                                    icon: Icons.panorama_fish_eye,
+                                  padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                                  child: CustomText(
+                                    text: "Meals",
+                                    alignement: TextAlign.center,
                                     size: 20,
+                                    weight: FontWeight.w600,
                                   ),
                                 ),
-                                CustomText(text: recipes.name(e)),
-                                const Expanded(child: SizedBox()),
-                                const CustomText(
-                                  text: '1',
-                                  opacity: 0.6,
-                                  weight: FontWeight.w400,
+                                Flexible(
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    children: addDividers(items),
+                                  ),
                                 ),
+                                Stack(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GradientIcon(
+                                          onPressed: () =>
+                                              calendar.removeFromList(recipeId),
+                                          gradient:
+                                              toTextGradient(limelightGradient),
+                                          icon: Icons.remove,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        GradientIcon(
+                                          onPressed: () =>
+                                              calendar.add(recipeId),
+                                          gradient:
+                                              toTextGradient(limelightGradient),
+                                          icon: Icons.add,
+                                        ),
+                                      ],
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: FlatButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        borderRadius: 10,
+                                        child: const CustomText(text: 'Done'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
                               ],
                             ),
-                          )
-                          .toList());
-
-                      return Dialog(
-                        backgroundColor:
-                            toSurfaceGradient(limelightGradient)[1],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        elevation: 0,
-                        insetPadding: const EdgeInsets.all(20),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-                                child: CustomText(
-                                  text: "Meals",
-                                  alignement: TextAlign.center,
-                                  size: 20,
-                                  weight: FontWeight.w600,
-                                ),
-                              ),
-                              Flexible(
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  children: addDividers(items),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: FlatButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  borderRadius: 10,
-                                  child: const CustomText(text: 'Done'),
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                            ],
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                  child: Center(
-                    child: GradientIcon(
-                      gradient: enabled
-                          ? toSurfaceGradient(limelightGradient)
-                          : limelightGradient,
-                      icon: UniconsLine.clipboard_notes,
-                      size: 27,
-                    ),
-                  ),
+                        );
+                      },
+                    );
+                  },
                 );
               },
+              child: const Center(
+                child: GradientIcon(
+                  gradient: limelightGradient,
+                  icon: UniconsLine.clipboard_notes,
+                  size: 27,
+                ),
+              ),
             ),
             const SizedBox(width: 51 / 2),
             GradientButton(

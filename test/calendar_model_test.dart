@@ -23,7 +23,7 @@ void main() {
       "2023/7/11/1/27",
     ];
 
-    model.loadFromStringList(meals);
+    model.loadCalendar(meals);
 
     expect(model.get(2023, 7, 10, 1), 84);
   });
