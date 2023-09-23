@@ -37,7 +37,7 @@ class VariationModel extends ChangeNotifier {
   }
 
   List<(int, int)> variationIds(int recipeId) {
-    _growVariationIdsToFit(recipeId);
+    if (_variationIds.length < recipeId + 1) return [];
 
     List<(int, int)> ids = [];
     _map(recipeId, (groupId, variationId) {

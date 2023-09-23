@@ -51,6 +51,10 @@ class RecipeModel extends ChangeNotifier {
     List<IngredientData> ingredientList =
         List.from(recipe(recipeId).ingredients);
 
+    if (variationIds.isEmpty) {
+      variationIds = List.filled(numberOfVariationGroups(recipeId), (0, 0));
+    }
+
     for (var variationIdTuple in variationIds) {
       var variationGroupId = variationIdTuple.$1;
       var variationId = variationIdTuple.$2;
@@ -69,6 +73,10 @@ class RecipeModel extends ChangeNotifier {
     List<(int, int)> variationIds,
   ) {
     String instructions = recipe(recipeId).instructions.join("(Enter)");
+
+    if (variationIds.isEmpty) {
+      variationIds = List.filled(numberOfVariationGroups(recipeId), (0, 0));
+    }
 
     instructions = replaceVariationInstructions(
       instructions,
