@@ -234,7 +234,43 @@ class ActionButtons extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 53 / 2),
+            const SizedBox(width: 53 / 4),
+            Consumer<PreferencesModel>(builder: (context, preferences, child) {
+              final num = preferences.nbServingsLocal;
+
+              return GradientButton(
+                gradient: toLighterSurfaceGradient(limelightGradient),
+                height: 54,
+                borderRadius: 54 / 2,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GradientIcon(
+                      icon: Icons.remove,
+                      size: 22,
+                      gradient: toTextGradient(limelightGradient),
+                      padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
+                      onPressed: () => num < 2
+                          ? () {}
+                          : preferences.setNbServingsLocal(num - 1),
+                    ),
+                    CustomText(
+                      text: '$num',
+                      weight: FontWeight.w600,
+                      size: 17,
+                    ),
+                    GradientIcon(
+                      icon: Icons.add,
+                      size: 22,
+                      gradient: toTextGradient(limelightGradient),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                      onPressed: () => preferences.setNbServingsLocal(num + 1),
+                    )
+                  ],
+                ),
+              );
+            }),
+            const SizedBox(width: 53 / 4),
             Consumer<PreferencesModel>(
               builder: (context, preferences, child) {
                 final icons = [
