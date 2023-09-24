@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/preferences_model.dart';
+import 'package:limelight/pages/meal_list_page.dart';
+import 'package:limelight/widgets/gradient_appbar.dart';
 
 import 'package:provider/provider.dart';
 
@@ -10,6 +13,7 @@ import 'package:limelight/widgets/custom_text.dart';
 import 'package:limelight/widgets/flat_button.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:unicons/unicons.dart';
 
 final date = DateTime.now();
 final aMonthAgo = date.subtract(const Duration(days: 31));
@@ -59,17 +63,50 @@ class _CalendarPageState extends State<CalendarPage> {
     final recipes = Provider.of<RecipeModel>(context);
 
     return EmptyPage(
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: GradientIcon(
+      appBar: GradientAppBar(
+        child: Row(
+          children: [
+            GradientIcon(
               onPressed: () => Navigator.of(context).pop(),
               gradient: toTextGradient(limelightGradient),
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.only(left: 5),
               icon: Icons.chevron_left,
+              size: 27,
             ),
-          ),
+            const Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: CustomText(
+                  text: "Calendar",
+                  alignement: TextAlign.center,
+                  size: 22,
+                  weight: FontWeight.w700,
+                ),
+              ),
+            ),
+            GradientIcon(
+              onPressed: () {
+                Provider.of<PreferencesModel>(context, listen: false)
+                    .setPlannerMode(1);
+
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => MealListPage(
+                      recipeId: widget.recipeId,
+                    ),
+                  ),
+                );
+              },
+              gradient: toTextGradient(limelightGradient),
+              padding: const EdgeInsets.only(right: 5),
+              icon: UniconsLine.clipboard_notes,
+              size: 27,
+            ),
+          ],
+        ),
+      ),
+      child: Column(
+        children: [
           Expanded(
             child: PageView(
               controller: _pageController,
