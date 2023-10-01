@@ -15,7 +15,6 @@ class PreferencesModel extends ChangeNotifier {
   String _unitSystem = unitSystems[0];
   String _currency = currencies[0];
 
-  int _plannerMode = 0;
   int _nbServingsGlobal = 3;
   int _nbServingsLocal = 3;
 
@@ -23,7 +22,6 @@ class PreferencesModel extends ChangeNotifier {
     SharedPreferences.getInstance().then((instance) {
       _unitSystem = instance.getString("Unit system") ?? _unitSystem;
       _currency = instance.getString("Currency") ?? _currency;
-      _plannerMode = instance.getInt("Planner mode") ?? _plannerMode;
 
       _nbServingsGlobal = instance.getInt("Servings") ?? _nbServingsGlobal;
       _nbServingsLocal = _nbServingsLocal;
@@ -40,12 +38,6 @@ class PreferencesModel extends ChangeNotifier {
   void setCurrency(String currency) {
     _currency = currency;
     _set("Currency", currency);
-  }
-
-  int get plannerMode => _plannerMode;
-  void setPlannerMode(int plannerMode) {
-    _plannerMode = plannerMode;
-    _setInt("Planner mode", plannerMode);
   }
 
   int get nbServingsGlobal => _nbServingsGlobal;
