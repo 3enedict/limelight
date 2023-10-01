@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
+import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/data/provider/variation_model.dart';
 import 'package:limelight/widgets/custom_divider.dart';
 import 'package:limelight/widgets/flat_button.dart';
@@ -110,7 +111,7 @@ class Content extends StatelessWidget {
   }
 }
 
-class ActionButtons extends StatelessWidget {
+class ActionButtons extends StatefulWidget {
   final int recipeId;
   final RecipeModel recipes;
 
@@ -120,6 +121,11 @@ class ActionButtons extends StatelessWidget {
     required this.recipes,
   });
 
+  @override
+  State<ActionButtons> createState() => _ActionButtonsState();
+}
+
+class _ActionButtonsState extends State<ActionButtons> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -160,13 +166,13 @@ class ActionButtons extends StatelessWidget {
                             child: Consumer<VariationModel>(
                               builder: (context, variations, child) {
                                 List<Widget> variationList = [];
-                                final num =
-                                    recipes.numberOfVariationGroups(recipeId);
+                                final num = widget.recipes
+                                    .numberOfVariationGroups(widget.recipeId);
 
                                 for (var i = 0; i < num; i++) {
                                   int selected = 0;
-                                  for (var id
-                                      in variations.variationIds(recipeId)) {
+                                  for (var id in variations
+                                      .variationIds(widget.recipeId)) {
                                     if (id.$1 == i) selected = id.$2;
                                   }
 
@@ -174,25 +180,127 @@ class ActionButtons extends StatelessWidget {
 
                                   for (var j = 0;
                                       j <
-                                          recipes.numberOfVariations(
-                                              recipeId, i);
+                                          widget.recipes.numberOfVariations(
+                                              widget.recipeId, i);
                                       j++) {
-                                    names.add(
-                                        recipes.variationName(recipeId, i, j));
+                                    names.add(widget.recipes
+                                        .variationName(widget.recipeId, i, j));
                                   }
 
                                   variationList.add(
                                     Preference(
                                       icon: Icons.panorama_fish_eye,
-                                      text: recipes.variationGroupName(
-                                          recipeId, i),
+                                      text: widget.recipes.variationGroupName(
+                                          widget.recipeId, i),
                                       selected: names[selected],
                                       values: names,
                                       onChanged: (str) => variations.set(
-                                          recipeId, i, names.indexOf(str)),
+                                          widget.recipeId,
+                                          i,
+                                          names.indexOf(str)),
                                     ),
                                   );
                                 }
+
+                                variationList.add(
+                                  Consumer<PreferencesModel>(
+                                    builder: (context, preferences, child) {
+                                      final num = preferences
+                                          .nbServingsLocal(widget.recipeId);
+
+                                      return num < 0
+                                          ? Row(
+                                              children: [
+                                                const SizedBox(width: 6),
+                                                Expanded(
+                                                  child: Slider(
+                                                    value: num * -1,
+                                                    min: 1,
+                                                    max: 10,
+                                                    divisions: 9,
+                                                    activeColor:
+                                                        limelightGradient[1],
+                                                    inactiveColor:
+                                                        toLighterSurfaceGradient(
+                                                            limelightGradient)[0],
+                                                    label: (num * -1)
+                                                        .round()
+                                                        .toString(),
+                                                    onChanged: (double value) {
+                                                      preferences
+                                                          .setNbServingsLocal(
+                                                        value.round().toInt() *
+                                                            (-1),
+                                                        widget.recipeId,
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 10),
+                                                  child: GradientButton(
+                                                    gradient:
+                                                        toLighterSurfaceGradient(
+                                                      limelightGradient,
+                                                    ),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10),
+                                                    diameter: 40,
+                                                    child: const GradientIcon(
+                                                      icon: Icons.done,
+                                                    ),
+                                                    onPressed: () => preferences
+                                                        .setNbServingsLocal(
+                                                      -num,
+                                                      widget.recipeId,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 10),
+                                              ],
+                                            )
+                                          : FlatButton(
+                                              onPressed: () => preferences
+                                                  .setNbServingsLocal(
+                                                -1,
+                                                widget.recipeId,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  const Padding(
+                                                    padding: EdgeInsets.all(
+                                                      18,
+                                                    ),
+                                                    child: GradientIcon(
+                                                      icon: Icons
+                                                          .panorama_fish_eye,
+                                                    ),
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const CustomText(
+                                                        text:
+                                                            "Number of servings",
+                                                      ),
+                                                      CustomText(
+                                                        text: "$num",
+                                                        opacity: 0.6,
+                                                        size: 12,
+                                                        weight: FontWeight.w400,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                    },
+                                  ),
+                                );
 
                                 for (var i = variationList.length - 1;
                                     i > 0;
@@ -235,7 +343,7 @@ class ActionButtons extends StatelessWidget {
             const SizedBox(width: 53 / 4),
             Consumer<CalendarModel>(
               builder: (context, calendar, child) {
-                final num = calendar.mealList[recipeId];
+                final num = calendar.mealList[widget.recipeId];
 
                 return Padding(
                   padding: num != 0
@@ -270,7 +378,8 @@ class ActionButtons extends StatelessWidget {
                                             size: 20,
                                           ),
                                         ),
-                                        CustomText(text: recipes.name(i)),
+                                        CustomText(
+                                            text: widget.recipes.name(i)),
                                         const Expanded(child: SizedBox()),
                                         CustomText(
                                           text: '$num',
@@ -334,7 +443,7 @@ class ActionButtons extends StatelessWidget {
                     },
                     child: num == 0
                         ? GradientIcon(
-                            onPressed: () => calendar.add(recipeId),
+                            onPressed: () => calendar.add(widget.recipeId),
                             gradient: limelightGradient,
                             icon: UniconsLine.clipboard_notes,
                             size: 27,
@@ -348,7 +457,7 @@ class ActionButtons extends StatelessWidget {
                                 gradient: toTextGradient(limelightGradient),
                                 padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
                                 onPressed: () =>
-                                    calendar.removeFromList(recipeId),
+                                    calendar.removeFromList(widget.recipeId),
                               ),
                               CustomText(
                                 text: '$num',
@@ -360,7 +469,7 @@ class ActionButtons extends StatelessWidget {
                                 size: 22,
                                 gradient: toTextGradient(limelightGradient),
                                 padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
-                                onPressed: () => calendar.add(recipeId),
+                                onPressed: () => calendar.add(widget.recipeId),
                               )
                             ],
                           ),
@@ -373,7 +482,8 @@ class ActionButtons extends StatelessWidget {
               diameter: 53,
               gradient:
                   limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
-              onPressed: () => goto(context, CalendarPage(recipeId: recipeId)),
+              onPressed: () =>
+                  goto(context, CalendarPage(recipeId: widget.recipeId)),
               child: Center(
                 child: GradientIcon(
                   gradient: toSurfaceGradient(limelightGradient),

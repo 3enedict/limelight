@@ -16,7 +16,7 @@ class PreferencesModel extends ChangeNotifier {
   String _currency = currencies[0];
 
   int _nbServingsGlobal = 3;
-  int _nbServingsLocal = 3;
+  final List<int> _nbServingsLocal = [];
 
   void load() {
     SharedPreferences.getInstance().then((instance) {
@@ -24,7 +24,6 @@ class PreferencesModel extends ChangeNotifier {
       _currency = instance.getString("Currency") ?? _currency;
 
       _nbServingsGlobal = instance.getInt("Servings") ?? _nbServingsGlobal;
-      _nbServingsLocal = _nbServingsLocal;
     });
   }
 
@@ -46,9 +45,14 @@ class PreferencesModel extends ChangeNotifier {
     _setInt("Servings", nbServingsGlobal);
   }
 
-  int get nbServingsLocal => _nbServingsLocal;
-  void setNbServingsLocal(int nbServingsLocal) {
-    _nbServingsLocal = nbServingsLocal;
+  int nbServingsLocal(int recipeId) =>
+      _nbServingsLocal.elementAtOrNull(recipeId) ?? _nbServingsGlobal;
+  void setNbServingsLocal(int nbServingsLocal, int recipeId) {
+    while (_nbServingsLocal.length < recipeId + 1) {
+      _nbServingsLocal.add(nbServingsGlobal);
+    }
+
+    _nbServingsLocal[recipeId] = nbServingsLocal;
     notifyListeners();
   }
 
