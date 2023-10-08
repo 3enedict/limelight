@@ -83,7 +83,7 @@ class Content extends StatelessWidget {
       child: Consumer2<VariationModel, PreferencesModel>(
         builder: (context, variations, preferences, child) {
           final vIds = variations.variationIds(recipeId);
-          final servings = preferences.nbServingsLocal(recipeId);
+          final servings = (preferences.nbServingsLocal(recipeId)).abs();
 
           final ingredients = recipes.ingredientList(recipeId, servings, vIds);
           final instructions = recipes.instructionSet(recipeId, servings, vIds);
@@ -339,9 +339,13 @@ class _ActionButtonsState extends State<ActionButtons> {
               ),
             ),
             const SizedBox(width: 53 / 4),
-            Consumer<CalendarModel>(
-              builder: (context, calendar, child) {
-                final num = calendar.mealList[widget.recipeId];
+            Consumer2<CalendarModel, PreferencesModel>(
+              builder: (context, calendar, preferences, child) {
+                final servings =
+                    (preferences.nbServingsLocal(widget.recipeId)).abs();
+                final mealList =
+                    calendar.mealList.elementAtOrNull(widget.recipeId) ?? [];
+                final num = mealList.elementAtOrNull(servings) ?? 0;
 
                 return Padding(
                   padding: num != 0
@@ -362,31 +366,47 @@ class _ActionButtonsState extends State<ActionButtons> {
                               for (var i = 0;
                                   i < calendar.mealList.length;
                                   i++) {
-                                final num = calendar.mealList[i];
+                                for (var j = 0;
+                                    j < calendar.mealList[i].length;
+                                    j++) {
+                                  final num = calendar.mealList[i][j];
 
-                                if (num != 0) {
-                                  items.add(
-                                    Row(
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0, 12, 20, 12),
-                                          child: GradientIcon(
-                                            icon: Icons.panorama_fish_eye,
-                                            size: 20,
+                                  if (num != 0) {
+                                    items.add(
+                                      Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                0, 18, 20, 20),
+                                            child: GradientIcon(
+                                              icon: Icons.panorama_fish_eye,
+                                              size: 24,
+                                            ),
                                           ),
-                                        ),
-                                        CustomText(
-                                            text: widget.recipes.name(i)),
-                                        const Expanded(child: SizedBox()),
-                                        CustomText(
-                                          text: '$num',
-                                          opacity: 0.6,
-                                          weight: FontWeight.w400,
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              CustomText(
+                                                text: widget.recipes.name(i),
+                                              ),
+                                              const SizedBox(height: 2),
+                                              CustomText(
+                                                text: 'Serves $j',
+                                                opacity: 0.7,
+                                              ),
+                                            ],
+                                          ),
+                                          const Expanded(child: SizedBox()),
+                                          CustomText(
+                                            text: '$num',
+                                            opacity: 0.6,
+                                            weight: FontWeight.w400,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
                                 }
                               }
 
@@ -441,7 +461,8 @@ class _ActionButtonsState extends State<ActionButtons> {
                     },
                     child: num == 0
                         ? GradientIcon(
-                            onPressed: () => calendar.add(widget.recipeId),
+                            onPressed: () =>
+                                calendar.add(widget.recipeId, servings),
                             gradient: limelightGradient,
                             icon: UniconsLine.clipboard_notes,
                             size: 27,
@@ -454,8 +475,8 @@ class _ActionButtonsState extends State<ActionButtons> {
                                 size: 22,
                                 gradient: toTextGradient(limelightGradient),
                                 padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
-                                onPressed: () =>
-                                    calendar.removeFromList(widget.recipeId),
+                                onPressed: () => calendar.removeFromList(
+                                    widget.recipeId, servings),
                               ),
                               CustomText(
                                 text: '$num',
@@ -467,7 +488,8 @@ class _ActionButtonsState extends State<ActionButtons> {
                                 size: 22,
                                 gradient: toTextGradient(limelightGradient),
                                 padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
-                                onPressed: () => calendar.add(widget.recipeId),
+                                onPressed: () =>
+                                    calendar.add(widget.recipeId, servings),
                               )
                             ],
                           ),

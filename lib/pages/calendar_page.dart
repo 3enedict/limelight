@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/preferences_model.dart';
 
 import 'package:provider/provider.dart';
 
@@ -110,8 +111,13 @@ class _CalendarPageState extends State<CalendarPage> {
                               (int meal) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 5),
-                                child: Consumer<CalendarModel>(
-                                  builder: (context, calendar, child) {
+                                child:
+                                    Consumer2<CalendarModel, PreferencesModel>(
+                                  builder:
+                                      (context, calendar, preferences, child) {
+                                    final servings = preferences
+                                        .nbServingsLocal(widget.recipeId);
+
                                     final day =
                                         aMonthAgo.add(Duration(days: index));
 
@@ -121,12 +127,14 @@ class _CalendarPageState extends State<CalendarPage> {
                                     return FlatButton(
                                       onPressed: () {
                                         if (id == null ||
-                                            id != widget.recipeId) {
+                                            id.$1 != servings ||
+                                            id.$2 != widget.recipeId) {
                                           calendar.set(
                                             day.year,
                                             day.month,
                                             day.day,
                                             meal,
+                                            servings,
                                             widget.recipeId,
                                           );
                                         } else {
@@ -147,8 +155,14 @@ class _CalendarPageState extends State<CalendarPage> {
                                             CustomText(
                                               text: id == null
                                                   ? ''
-                                                  : recipes.name(id),
+                                                  : recipes.name(id.$2),
                                             ),
+                                            const Expanded(child: SizedBox()),
+                                            CustomText(
+                                              text:
+                                                  id == null ? '' : '${id.$1}',
+                                            ),
+                                            const SizedBox(width: 15),
                                           ],
                                         ),
                                       ),
