@@ -209,57 +209,32 @@ class _ActionButtonsState extends State<ActionButtons> {
                                           .nbServingsLocal(widget.recipeId);
 
                                       return num < 0
-                                          ? Row(
-                                              children: [
-                                                const SizedBox(width: 6),
-                                                Expanded(
-                                                  child: Slider(
-                                                    value: num * -1,
-                                                    min: 1,
-                                                    max: 10,
-                                                    divisions: 9,
-                                                    activeColor:
-                                                        limelightGradient[1],
-                                                    inactiveColor:
-                                                        toLighterSurfaceGradient(
-                                                            limelightGradient)[0],
-                                                    label: (num * -1)
-                                                        .round()
-                                                        .toString(),
-                                                    onChanged: (double value) {
-                                                      preferences
-                                                          .setNbServingsLocal(
-                                                        value.round().toInt() *
-                                                            (-1),
-                                                        widget.recipeId,
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 10),
-                                                  child: GradientButton(
-                                                    gradient:
-                                                        toLighterSurfaceGradient(
-                                                      limelightGradient,
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 10),
-                                                    diameter: 40,
-                                                    child: const GradientIcon(
-                                                      icon: Icons.done,
-                                                    ),
-                                                    onPressed: () => preferences
-                                                        .setNbServingsLocal(
-                                                      -num,
-                                                      widget.recipeId,
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 10),
-                                              ],
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      6, 6, 0, 6),
+                                              child: Slider(
+                                                value: num * -1,
+                                                min: 1,
+                                                max: 10,
+                                                divisions: 9,
+                                                activeColor:
+                                                    limelightGradient[1],
+                                                inactiveColor:
+                                                    toLighterSurfaceGradient(
+                                                        limelightGradient)[0],
+                                                label: (num * -1)
+                                                    .round()
+                                                    .toString(),
+                                                onChanged: (double value) {
+                                                  preferences
+                                                      .setNbServingsLocal(
+                                                    value.round().toInt() *
+                                                        (-1),
+                                                    widget.recipeId,
+                                                  );
+                                                },
+                                              ),
                                             )
                                           : FlatButton(
                                               onPressed: () => preferences
@@ -320,10 +295,29 @@ class _ActionButtonsState extends State<ActionButtons> {
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: FlatButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              borderRadius: 10,
-                              child: const CustomText(text: 'Done'),
+                            child: Consumer<PreferencesModel>(
+                              builder: (context, preferences, child) {
+                                final num = preferences
+                                    .nbServingsLocal(widget.recipeId);
+
+                                return num < 0
+                                    ? FlatButton(
+                                        onPressed: () =>
+                                            preferences.setNbServingsLocal(
+                                          -num,
+                                          widget.recipeId,
+                                        ),
+                                        borderRadius: 10,
+                                        child:
+                                            const CustomText(text: 'Confirm'),
+                                      )
+                                    : FlatButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        borderRadius: 10,
+                                        child: const CustomText(text: 'Done'),
+                                      );
+                              },
                             ),
                           ),
                           const SizedBox(height: 5),
