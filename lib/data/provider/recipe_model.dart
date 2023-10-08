@@ -46,6 +46,7 @@ class RecipeModel extends ChangeNotifier {
 
   List<IngredientData> ingredientList(
     int recipeId,
+    int numberOfServings,
     List<(int, int)> variationIds,
   ) {
     List<IngredientData> ingredientList =
@@ -64,7 +65,22 @@ class RecipeModel extends ChangeNotifier {
       );
     }
 
-    return ingredientList;
+    return ingredientList.map(
+      (e) {
+        String quantity = computeIngredientQuantities(numberOfServings, e);
+
+        if (quantity.contains('of')) {
+          quantity = quantity.split(' of ')[0];
+        } else {
+          quantity = quantity.split(' ')[0];
+        }
+
+        return IngredientData(
+          name: e.name,
+          quantity: quantity,
+        );
+      },
+    ).toList();
   }
 
   List<String> instructionSet(

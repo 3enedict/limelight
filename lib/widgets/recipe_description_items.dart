@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/widgets/custom_text.dart';
+
+import 'package:limelight/data/json/ingredient_data.dart';
 import 'package:limelight/widgets/gradient_icon.dart';
+import 'package:limelight/widgets/custom_text.dart';
 import 'package:limelight/gradients.dart';
 
 List<Widget> addDividers(List<Widget> items) {
@@ -20,13 +22,7 @@ List<Widget> addDividers(List<Widget> items) {
   return items;
 }
 
-List<Widget> generateIngredients(
-  int recipeId,
-  RecipeModel recipes,
-  List<(int, int)> variations,
-) {
-  var ingredientList = recipes.ingredientList(recipeId, variations);
-
+List<Widget> generateIngredients(List<IngredientData> ingredientList) {
   List<Widget> ingredients = [];
   for (var ingredient in ingredientList) {
     ingredients.add(Row(
@@ -49,13 +45,7 @@ List<Widget> generateIngredients(
   return addDividers(ingredients);
 }
 
-List<Widget> generateInstructions(
-  int recipeId,
-  RecipeModel recipes,
-  List<(int, int)> variations,
-) {
-  var instructionList = recipes.instructionSet(recipeId, 3, variations);
-
+List<Widget> generateInstructions(List<String> instructionList) {
   List<Widget> instructions = [];
   for (var instruction in instructionList) {
     instructions.add(Row(

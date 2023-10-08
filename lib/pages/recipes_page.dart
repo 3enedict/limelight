@@ -80,8 +80,14 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-      child: Consumer<VariationModel>(
-        builder: (context, variations, child) {
+      child: Consumer2<VariationModel, PreferencesModel>(
+        builder: (context, variations, preferences, child) {
+          final vIds = variations.variationIds(recipeId);
+          final servings = preferences.nbServingsLocal(recipeId);
+
+          final ingredients = recipes.ingredientList(recipeId, servings, vIds);
+          final instructions = recipes.instructionSet(recipeId, servings, vIds);
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -91,16 +97,14 @@ class Content extends StatelessWidget {
                 ),
                 child: RecipeDescriptionBox(
                   label: "Ingredients",
-                  items: generateIngredients(
-                      recipeId, recipes, variations.variationIds(recipeId)),
+                  items: generateIngredients(ingredients),
                 ),
               ),
               const SizedBox(height: 14),
               Expanded(
                 child: RecipeDescriptionBox(
                   label: "Instructions",
-                  items: generateInstructions(
-                      recipeId, recipes, variations.variationIds(recipeId)),
+                  items: generateInstructions(instructions),
                 ),
               ),
             ],
