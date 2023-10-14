@@ -53,7 +53,10 @@ class RecipeModel extends ChangeNotifier {
         List.from(recipe(recipeId).ingredients);
 
     if (variationIds.isEmpty) {
-      variationIds = List.filled(numberOfVariationGroups(recipeId), (0, 0));
+      variationIds = List.generate(
+        numberOfVariationGroups(recipeId),
+        (int index) => (index, 0),
+      );
     }
 
     for (var variationIdTuple in variationIds) {
