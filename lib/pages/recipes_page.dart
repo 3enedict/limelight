@@ -21,46 +21,36 @@ import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 import 'package:limelight/main.dart';
 
-class RecipesPage extends StatefulWidget {
+class RecipesPage extends StatelessWidget {
   const RecipesPage({super.key});
-
-  @override
-  State<RecipesPage> createState() => _RecipesPageState();
-}
-
-class _RecipesPageState extends State<RecipesPage> {
-  int _pageId = 0;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<RecipeModel>(
       builder: (context, recipes, child) {
-        return Column(
-          children: [
-            Expanded(
-              child: PageView(
-                onPageChanged: (id) => setState(() => _pageId = id),
-                children: List.generate(
-                  recipes.number,
-                  (int index) {
-                    return EmptyPage(
-                      appBar: GradientAppBar(
-                        text: CustomText(
-                          text: recipes.name(index),
-                          alignement: TextAlign.center,
-                          size: 20,
-                          weight: FontWeight.w700,
-                        ),
-                      ),
-                      child: Content(recipeId: index, recipes: recipes),
-                    );
-                  },
+        final pages = List.generate(
+          recipes.number,
+          (int index) {
+            return EmptyPage(
+              appBar: GradientAppBar(
+                text: CustomText(
+                  text: recipes.name(index),
+                  alignement: TextAlign.center,
+                  size: 20,
+                  weight: FontWeight.w700,
                 ),
               ),
-            ),
-            ActionButtons(recipeId: _pageId, recipes: recipes),
-          ],
+              child: Column(
+                children: [
+                  Expanded(child: Content(recipeId: index, recipes: recipes)),
+                  ActionButtons(recipeId: index, recipes: recipes),
+                ],
+              ),
+            );
+          },
         );
+
+        return PageView(children: pages);
       },
     );
   }
