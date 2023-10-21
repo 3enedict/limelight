@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/provider/variation_model.dart';
+import 'package:limelight/pages/shopping_list_page.dart';
 
 import 'package:provider/provider.dart';
 
@@ -58,6 +59,7 @@ class Limelight extends StatelessWidget {
             ],
           ),
           const RecipesPage(),
+          const ShoppingListPage(),
         ],
       ),
     );
