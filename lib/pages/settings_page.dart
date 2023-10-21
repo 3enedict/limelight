@@ -4,9 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 import 'package:limelight/data/provider/preferences_model.dart';
-import 'package:limelight/widgets/gradient_appbar.dart';
 import 'package:limelight/widgets/custom_divider.dart';
-import 'package:limelight/widgets/custom_text.dart';
 import 'package:limelight/widgets/preference.dart';
 import 'package:limelight/widgets/section.dart';
 import 'package:limelight/widgets/page.dart';
@@ -18,14 +16,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
-      appBar: const GradientAppBar(
-        text: CustomText(
-          text: "Settings",
-          alignement: TextAlign.center,
-          size: 22,
-          weight: FontWeight.w700,
-        ),
-      ),
+      appBarText: "Settings",
       child: ListView(
         children: [
           Section(

@@ -1,11 +1,14 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
+import 'package:limelight/widgets/gradient_appbar.dart';
+import 'package:limelight/widgets/custom_text.dart';
 import 'package:limelight/gradients.dart';
 
 class EmptyPage extends StatelessWidget {
   final List<Color> gradient;
   final PreferredSizeWidget? appBar;
+  final String? appBarText;
   final Widget? fab;
   final bool resizeToAvoidBottomInset;
   final Widget? child;
@@ -14,6 +17,7 @@ class EmptyPage extends StatelessWidget {
     super.key,
     this.gradient = limelightGradient,
     this.appBar,
+    this.appBarText,
     this.fab,
     this.resizeToAvoidBottomInset = false,
     this.child,
@@ -30,7 +34,7 @@ class EmptyPage extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: appBar == null
+        padding: appBar == null && appBarText == null
             ? EdgeInsets.only(top: MediaQuery.of(context).padding.top)
             : const EdgeInsets.all(0),
         child: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -38,7 +42,16 @@ class EmptyPage extends StatelessWidget {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-            appBar: appBar,
+            appBar: appBarText == null
+                ? appBar
+                : GradientAppBar(
+                    text: CustomText(
+                      text: appBarText ?? '',
+                      alignement: TextAlign.center,
+                      size: 20,
+                      weight: FontWeight.w700,
+                    ),
+                  ),
             floatingActionButton: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 6, 10),
               child: fab,

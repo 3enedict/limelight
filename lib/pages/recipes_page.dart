@@ -12,7 +12,6 @@ import 'package:unicons/unicons.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/widgets/recipe_description_items.dart';
 import 'package:limelight/widgets/recipe_description_box.dart';
-import 'package:limelight/widgets/gradient_appbar.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/widgets/custom_text.dart';
@@ -32,14 +31,7 @@ class RecipesPage extends StatelessWidget {
           recipes.number,
           (int index) {
             return EmptyPage(
-              appBar: GradientAppBar(
-                text: CustomText(
-                  text: recipes.name(index),
-                  alignement: TextAlign.center,
-                  size: 20,
-                  weight: FontWeight.w700,
-                ),
-              ),
+              appBarText: recipes.name(index),
               child: Column(
                 children: [
                   Expanded(child: Content(recipeId: index, recipes: recipes)),
