@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:limelight/data/provider/recipe_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:limelight/data/json/ingredient_data.dart';
 import 'package:limelight/widgets/gradient_icon.dart';
@@ -22,7 +21,23 @@ List<Widget> addDividers(List<Widget> items) {
   return items;
 }
 
-List<Widget> generateIngredients(List<IngredientData> ingredientList) {
+double calculateTextHeight(String text, TextStyle style, double maxWidth) {
+  final textSpan = TextSpan(text: text, style: style);
+  final textPainter = TextPainter(
+    text: textSpan,
+    textDirection: TextDirection.ltr,
+    textAlign: TextAlign.justify,
+    maxLines: 100, // A high value to prevent truncation
+  );
+
+  textPainter.layout(maxWidth: maxWidth);
+
+  return textPainter.height;
+}
+
+List<(double, Widget)> generateIngredients(
+  List<IngredientData> ingredientList,
+) {
   List<Widget> ingredients = [];
   for (var ingredient in ingredientList) {
     ingredients.add(Row(
@@ -42,31 +57,45 @@ List<Widget> generateIngredients(List<IngredientData> ingredientList) {
     ));
   }
 
-  return addDividers(ingredients);
+  return ingredients.map((e) => (12 * 2 + 20.0, e)).toList();
 }
 
-List<Widget> generateInstructions(List<String> instructionList) {
-  List<Widget> instructions = [];
+List<(double, Widget)> generateInstructions(
+  List<String> instructionList,
+  double width,
+) {
+  List<(double, Widget)> instructions = [];
   for (var instruction in instructionList) {
-    instructions.add(Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
-          child: GradientIcon(icon: Icons.panorama_fish_eye, size: 20),
-        ),
-        Flexible(
-          child: CustomText(
-            text: instruction,
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            alignement: TextAlign.justify,
-            size: 13,
-            weight: FontWeight.w300,
+    instructions.add((
+      10 * 2 +
+          calculateTextHeight(
+            instruction,
+            GoogleFonts.openSans(
+              fontWeight: FontWeight.w300,
+              fontSize: 13,
+            ),
+            width - (20 + 20),
           ),
-        ),
-      ],
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
+            child: GradientIcon(icon: Icons.panorama_fish_eye, size: 20),
+          ),
+          Flexible(
+            child: CustomText(
+              text: instruction,
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              alignement: TextAlign.justify,
+              size: 13,
+              weight: FontWeight.w300,
+            ),
+          ),
+        ],
+      )
     ));
   }
 
-  return addDividers(instructions);
+  return instructions;
 }

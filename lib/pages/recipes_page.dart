@@ -64,32 +64,35 @@ class Content extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
       child: Consumer2<VariationModel, PreferencesModel>(
         builder: (context, variations, preferences, child) {
+          final width = MediaQuery.of(context).size.width - 20 * 2 * 2;
+
           final vIds = variations.variationIds(recipeId);
           final servings = (preferences.nbServingsLocal(recipeId)).abs();
 
           final ingredients = recipes.ingredientList(recipeId, servings, vIds);
           final instructions = recipes.instructionSet(recipeId, servings, vIds);
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height / 2.5,
+          return Center(
+            child: Column(
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height / 2.5,
+                  ),
+                  child: RecipeDescriptionBox(
+                    label: "Ingredients",
+                    items: generateIngredients(ingredients),
+                  ),
                 ),
-                child: RecipeDescriptionBox(
-                  label: "Ingredients",
-                  items: generateIngredients(ingredients),
+                const SizedBox(height: 14),
+                Expanded(
+                  child: RecipeDescriptionBox(
+                    label: "Instructions",
+                    items: generateInstructions(instructions, width),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 14),
-              Expanded(
-                child: RecipeDescriptionBox(
-                  label: "Instructions",
-                  items: generateInstructions(instructions),
-                ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

@@ -10,6 +10,7 @@ class CustomText extends StatelessWidget {
   final TextAlign? alignement;
   final FontWeight? weight;
   final FontStyle? style;
+  final TextDecoration? decoration;
   final double? size;
   final EdgeInsetsGeometry padding;
 
@@ -21,6 +22,7 @@ class CustomText extends StatelessWidget {
     this.alignement,
     this.weight,
     this.style,
+    this.decoration,
     this.size,
     this.padding = const EdgeInsets.all(0),
   });
@@ -36,6 +38,8 @@ class CustomText extends StatelessWidget {
         textAlign: alignement,
         style: GoogleFonts.openSans(
           color: localColor.withOpacity(opacity),
+          decoration: decoration,
+          decorationColor: localColor,
           fontWeight: weight,
           fontStyle: style,
           fontSize: size,
