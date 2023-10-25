@@ -26,9 +26,9 @@ const weekdays = [
 ];
 
 class CalendarPage extends StatefulWidget {
-  final int recipeId;
+  final RecipeId recipe;
 
-  const CalendarPage({super.key, required this.recipeId});
+  const CalendarPage({super.key, required this.recipe});
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -111,13 +111,8 @@ class _CalendarPageState extends State<CalendarPage> {
                               (int meal) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 5),
-                                child:
-                                    Consumer2<CalendarModel, PreferencesModel>(
-                                  builder:
-                                      (context, calendar, preferences, child) {
-                                    final servings = preferences
-                                        .nbServingsLocal(widget.recipeId);
-
+                                child: Consumer<CalendarModel>(
+                                  builder: (context, calendar, child) {
                                     final day =
                                         aMonthAgo.add(Duration(days: index));
 
@@ -126,16 +121,13 @@ class _CalendarPageState extends State<CalendarPage> {
 
                                     return FlatButton(
                                       onPressed: () {
-                                        if (id == null ||
-                                            id.$1 != servings ||
-                                            id.$2 != widget.recipeId) {
+                                        if (id == null || id != widget.recipe) {
                                           calendar.set(
                                             day.year,
                                             day.month,
                                             day.day,
                                             meal,
-                                            servings,
-                                            widget.recipeId,
+                                            widget.recipe,
                                           );
                                         } else {
                                           calendar.remove(day.year, day.month,
@@ -155,12 +147,13 @@ class _CalendarPageState extends State<CalendarPage> {
                                             CustomText(
                                               text: id == null
                                                   ? ''
-                                                  : recipes.name(id.$2),
+                                                  : recipes.name(id.recipeId),
                                             ),
                                             const Expanded(child: SizedBox()),
                                             CustomText(
-                                              text:
-                                                  id == null ? '' : '${id.$1}',
+                                              text: id == null
+                                                  ? ''
+                                                  : '${id.servings}',
                                             ),
                                             const SizedBox(width: 15),
                                           ],

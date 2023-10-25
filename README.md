@@ -2,5 +2,4 @@
 
 ## TODO
 
-Add three random circles as background
-Add transitions in recipes (ex: after having finished making tagliatelle, say "You have now finished making tagliatelle !" for one second)
+Fix variations so that you don't have to select all of them to see the default ones...

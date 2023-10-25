@@ -74,7 +74,7 @@ class CalendarModel extends ChangeNotifier {
     _mealList = meals.map((e) => RecipeId.fromString(e)).toList();
   }
 
-  void add(int year, int month, int day, int meal, RecipeId recipe) {
+  void set(int year, int month, int day, int meal, RecipeId recipe) {
     _mealIds['$year:$month:$day:$meal'] = recipe;
     _saveCalendar();
   }

@@ -89,40 +89,39 @@ class RecipeDescriptionBox extends StatelessWidget {
                       finalHeight = finalHeight + height;
                       widgets.add(item);
 
-                      if (finalHeight > constraints.maxHeight - 1) break;
-                    }
-
-                    return widgets.length == items.length
-                        ? Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: addDividers(widgets),
-                          )
-                        : Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Flexible(
-                                child: Fade(
-                                  child: SingleChildScrollView(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: addDividers(widgets),
-                                    ),
+                      if (finalHeight > constraints.maxHeight - 1) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Flexible(
+                              child: Fade(
+                                child: SingleChildScrollView(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: addDividers(widgets),
                                   ),
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 10, bottom: 7),
-                                child: CustomText(
-                                  text: 'View more',
-                                  decoration: TextDecoration.underline,
-                                  opacity: 0.5,
-                                ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 10, bottom: 7),
+                              child: CustomText(
+                                text: 'View more',
+                                decoration: TextDecoration.underline,
+                                opacity: 0.5,
                               ),
-                            ],
-                          );
+                            ),
+                          ],
+                        );
+                      }
+                    }
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: addDividers(widgets),
+                    );
                   },
                 ),
               ),

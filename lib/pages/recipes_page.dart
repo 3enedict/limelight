@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 
 import 'package:provider/provider.dart';
@@ -141,19 +142,42 @@ class _ActionButtonsState extends State<ActionButtons> {
               ),
             ),
             const SizedBox(width: 53 / 3),
-            GradientButton(
-              diameter: 53,
-              gradient:
-                  limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
-              onPressed: () =>
-                  goto(context, CalendarPage(recipeId: widget.recipeId)),
-              child: Center(
-                child: GradientIcon(
-                  gradient: toSurfaceGradient(limelightGradient),
-                  icon: UniconsLine.calender,
-                  size: 26,
-                ),
-              ),
+            Consumer2<PreferencesModel, VariationModel>(
+              builder: (context, preferences, variations, child) {
+                List<int> vIds = [];
+
+                final ids = variations.variationIds(widget.recipeId);
+                for (var (groupId, variationId) in ids) {
+                  while (!(vIds.length > groupId)) {
+                    vIds.add(0);
+                  }
+
+                  vIds[groupId] = variationId;
+                }
+
+                return GradientButton(
+                  diameter: 53,
+                  gradient:
+                      limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
+                  onPressed: () => goto(
+                    context,
+                    CalendarPage(
+                      recipe: RecipeId(
+                        recipeId: widget.recipeId,
+                        servings: preferences.nbServingsLocal(widget.recipeId),
+                        variationIds: vIds,
+                      ),
+                    ),
+                  ),
+                  child: Center(
+                    child: GradientIcon(
+                      gradient: toSurfaceGradient(limelightGradient),
+                      icon: UniconsLine.calender,
+                      size: 26,
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(width: 53 / 3),
             GradientButton(
