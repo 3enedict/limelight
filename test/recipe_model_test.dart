@@ -252,8 +252,8 @@ void main() {
 
       // Believe it or not, generating an ingredient list multiple times actually used to be a bug
       // Cause: it was necessary to deep clone recipe(recipeId).ingredients
-      model.ingredientList(0, variations);
-      expect(model.ingredientList(0, variations), ingredients);
+      model.ingredientList(0, 1, variations);
+      expect(model.ingredientList(0, 1, variations), ingredients);
     });
 
     test(

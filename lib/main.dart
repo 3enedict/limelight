@@ -59,7 +59,6 @@ class Limelight extends StatelessWidget {
             ],
           ),
           const RecipesPage(),
-          const ShoppingListPage(),
         ],
       ),
     );

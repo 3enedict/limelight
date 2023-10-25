@@ -153,6 +153,30 @@ class VariationPickerDialog extends StatelessWidget {
                 },
               ),
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Consumer<PreferencesModel>(
+                builder: (context, preferences, child) {
+                  final num = preferences.nbServingsLocal(recipeId);
+
+                  return num < 0
+                      ? FlatButton(
+                          onPressed: () => preferences.setNbServingsLocal(
+                            -num,
+                            recipeId,
+                          ),
+                          borderRadius: 10,
+                          child: const CustomText(text: 'Confirm'),
+                        )
+                      : FlatButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          borderRadius: 10,
+                          child: const CustomText(text: 'Done'),
+                        );
+                },
+              ),
+            ),
+            const SizedBox(height: 5),
           ],
         ),
       ),
