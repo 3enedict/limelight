@@ -63,7 +63,7 @@ void main() {
 
     final recipe = RecipeId.fromString('9:3:2:0:1:3:2');
 
-    model.add(year, month, day, meal, recipe);
+    model.set(year, month, day, meal, recipe);
 
     expect(model.get(year, month, day, meal), recipe);
   });
@@ -82,7 +82,7 @@ void main() {
       variationIds: [0, 1, 3, 2],
     );
 
-    model.add(year, month, day, meal, recipe);
+    model.set(year, month, day, meal, recipe);
     model.remove(year, month, day, meal);
 
     expect(model.get(year, month, day, meal), null);

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
+
+import 'package:limelight/data/json/ingredient_data.dart';
 
 import 'package:provider/provider.dart';
 
@@ -19,29 +22,58 @@ class ShoppingListPage extends StatelessWidget {
       appBarText: "Ingredients to buy",
       child: Consumer2<CalendarModel, RecipeModel>(
         builder: (context, calendar, recipes, child) {
+          final meals = calendar.meals;
+          List<IngredientData> ingredients = [];
+
+          for (var meal in meals) {
+            final list = recipes.ingredientList(
+              meal.recipeId,
+              meal.servings,
+              meal.variationIds.mapIndexed((i, e) => (i, e)).toList(),
+            );
+
+            for (var item in list) {
+              final index = ingredients.indexWhere((e) => e.name == item.name);
+              if (index == -1) {
+                ingredients.add(item);
+              } else if (item.quantity.isNotEmpty) {
+                final i = ingredients[index].quantity;
+
+                final unit = i.replaceAll(RegExp(r"\d"), "");
+                final n1 = i.replaceAll(RegExp(r"\D"), "");
+                final n2 = item.quantity.replaceAll(RegExp(r"\D"), "");
+
+                if (n1.isNotEmpty && n2.isNotEmpty) {
+                  final num = int.parse(n1) + int.parse(n2);
+                  ingredients[index].quantity = '$num$unit';
+                }
+              }
+            }
+          }
+
           return ListView.builder(
-            itemCount: 3,
+            itemCount: ingredients.length,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                 child: GradientContainer(
                   borderRadius: 20,
                   gradient: toSurfaceGradient(limelightGradient),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
                         child: GradientIcon(
                             icon: Icons.panorama_fish_eye, size: 20),
                       ),
-                      CustomText(text: "Name"),
-                      Expanded(child: SizedBox()),
+                      CustomText(text: ingredients[index].name),
+                      const Expanded(child: SizedBox()),
                       CustomText(
-                        text: 'Quantity',
+                        text: ingredients[index].quantity,
                         opacity: 0.6,
                         weight: FontWeight.w400,
                       ),
-                      SizedBox(width: 16)
+                      const SizedBox(width: 16)
                     ],
                   ),
                 ),

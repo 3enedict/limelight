@@ -1,6 +1,6 @@
 class IngredientData {
-  final String name;
-  final String quantity;
+  String name;
+  String quantity;
 
   IngredientData({
     required this.name,

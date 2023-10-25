@@ -10,8 +10,8 @@ class RecipeId {
 
   RecipeId({
     required this.recipeId,
-    this.servings = 0,
-    this.times = 0,
+    this.servings = 1,
+    this.times = 1,
     variationIds,
   }) : variationIds = variationIds ?? [];
 
@@ -75,6 +75,7 @@ class CalendarModel extends ChangeNotifier {
   }
 
   void set(int year, int month, int day, int meal, RecipeId recipe) {
+    recipe.times = 1;
     _mealIds['$year:$month:$day:$meal'] = recipe;
     _saveCalendar();
   }
@@ -112,6 +113,8 @@ class CalendarModel extends ChangeNotifier {
   }
 
   List<RecipeId> get mealList => List.from(_mealList);
+  List<RecipeId> get meals =>
+      mealList + List.from(_mealIds.entries.map((e) => e.value).toList());
 
   void _saveCalendar() {
     SharedPreferences.getInstance().then(
