@@ -30,8 +30,21 @@ void main() async {
   );
 }
 
-class Limelight extends StatelessWidget {
+class Limelight extends StatefulWidget {
   const Limelight({super.key});
+
+  @override
+  State<Limelight> createState() => _LimelightState();
+}
+
+class _LimelightState extends State<Limelight> {
+  final PageController _pageController = PageController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +62,7 @@ class Limelight extends StatelessWidget {
         ),
       ),
       home: PageView(
+        controller: _pageController,
         scrollDirection: Axis.vertical,
         children: [
           PageView(
@@ -58,7 +72,11 @@ class Limelight extends StatelessWidget {
               IngredientsPage(),
             ],
           ),
-          const RecipesPage(),
+          RecipesPage(controller: _pageController),
+          Consumer<PreferencesModel>(
+            builder: (context, preferences, child) =>
+                preferences.getFinalScreen,
+          ),
         ],
       ),
     );

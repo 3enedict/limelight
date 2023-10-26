@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/calendar_model.dart';
+import 'package:limelight/pages/calendar_page.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,12 +13,23 @@ const units = {
 const currencies = ["Euro", "Dollar"];
 const currencySymbols = {"Euro": "€", "Dollar": "\$"};
 
+const categories = [
+  'Vegetables',
+  'Leafy greens',
+  'Fish',
+  'Dairy',
+  'Meat',
+  'Misc',
+];
+
 class PreferencesModel extends ChangeNotifier {
   String _unitSystem = unitSystems[0];
   String _currency = currencies[0];
 
   int _nbServingsGlobal = 3;
   final List<int> _nbServingsLocal = [];
+
+  Widget _finalScreen = CalendarPage(recipe: RecipeId(recipeId: 0));
 
   void load() {
     SharedPreferences.getInstance().then((instance) {
@@ -53,6 +66,12 @@ class PreferencesModel extends ChangeNotifier {
     }
 
     _nbServingsLocal[recipeId] = nbServingsLocal;
+    notifyListeners();
+  }
+
+  Widget get getFinalScreen => _finalScreen;
+  void setFinalScreen(Widget screen) {
+    _finalScreen = screen;
     notifyListeners();
   }
 

@@ -36,6 +36,7 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
 
     loadIngredientFromModel(context);
     if (ingredient.unit == '') ingredient.unit = unitList[0];
+    if (ingredient.category == '') ingredient.category = categories[0];
 
     return EmptyPage(
       resizeToAvoidBottomInset: true,
@@ -65,11 +66,57 @@ class _IngredientEditorPageState extends State<IngredientEditorPage> {
                 CustomTextField(
                   label: "Name",
                   icon: UniconsLine.tag_alt,
-                  hint: "Lime zest",
+                  hint: "Lime",
                   text: ingredient.name,
                   autofocus: true,
                   onSubmitted: (_) => seasonFocusNode.requestFocus(),
                   onChanged: (name) => ingredient.name = name,
+                  suffix: PopupMenuButton<String>(
+                    initialValue: ingredient.category,
+                    color: toSurfaceGradient(limelightGradient)[0],
+                    itemBuilder: (context) => List.generate(
+                      categories.length,
+                      (int index) => PopupMenuItem(
+                        onTap: () {
+                          setState(
+                              () => ingredient.category = categories[index]);
+                        },
+                        child: Text(
+                          categories[index],
+                          style: GoogleFonts.workSans(
+                            textStyle: TextStyle(color: textColor()),
+                          ),
+                        ),
+                      ),
+                      growable: false,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            VerticalDivider(
+                                color: textColor().withOpacity(0.2)),
+                            const SizedBox(width: 2),
+                            Text(
+                              ingredient.category,
+                              style: GoogleFonts.openSans(
+                                color: textColor(),
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            GradientIcon(
+                              gradient: toTextGradient(limelightGradient),
+                              icon: Icons.expand_more,
+                            ),
+                            const SizedBox(width: 14),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 CustomTextField(

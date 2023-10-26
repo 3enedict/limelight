@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/data/json/ingredient_description.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
+import 'package:limelight/widgets/custom_text.dart';
 
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
@@ -16,29 +19,106 @@ import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/pages/calendar_page.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
-import 'package:limelight/main.dart';
 
 class RecipesPage extends StatelessWidget {
-  const RecipesPage({super.key});
+  final PageController controller;
+
+  const RecipesPage({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RecipeModel>(
-      builder: (context, recipes, child) {
-        final pages = List.generate(
-          recipes.number,
-          (int index) {
-            return EmptyPage(
-              appBarText: recipes.name(index),
-              child: Column(
-                children: [
-                  Expanded(child: Content(recipeId: index, recipes: recipes)),
-                  ActionButtons(recipeId: index, recipes: recipes),
-                ],
-              ),
-            );
-          },
-        );
+    return Consumer2<RecipeModel, IngredientModel>(
+      builder: (context, recipes, ingredients, child) {
+        final variations = Provider.of<VariationModel>(context, listen: false);
+
+        List<RecipeId?> ids = [];
+        List<String> selected = ingredients.selected;
+
+        RegExp regex = RegExp(r'\(.*\)');
+
+        for (var i = 0; i < recipes.number; i++) {
+          ids.add(null);
+
+          final ing = recipes
+              .recipe(i)
+              .ingredients
+              .map((e) => e.name.replaceAll(regex, ''))
+              .toList();
+
+          for (var s in selected) {
+            if (ing.contains(s)) {
+              ids[i] = RecipeId(recipeId: i);
+              break;
+            }
+          }
+
+          if (ids[i] == null) {
+            for (var groupId = 0;
+                groupId < recipes.numberOfVariationGroups(i);
+                groupId++) {
+              for (var varId = 0;
+                  varId < recipes.numberOfVariations(i, groupId);
+                  varId++) {
+                final ing = recipes
+                    .variation(i, groupId, varId)
+                    .ingredients
+                    .map((e) => e.name.replaceAll(regex, ''))
+                    .toList();
+
+                for (var s in selected) {
+                  if (ing.contains(s)) {
+                    List<int> vIds =
+                        List.filled(recipes.numberOfVariationGroups(i), 0);
+                    vIds[groupId] = varId;
+
+                    variations.setLocal(i, groupId, varId);
+
+                    ids[i] = RecipeId(recipeId: i, variationIds: vIds);
+                    break;
+                  }
+                }
+
+                if (ids[i] != null) break;
+              }
+
+              if (ids[i] != null) break;
+            }
+          }
+        }
+
+        ids.removeWhere((e) => e == null);
+
+        final pages = ids.isEmpty
+            ? [
+                const EmptyPage(
+                  child: Center(
+                    child: CustomText(text: 'No recipes found...'),
+                  ),
+                ),
+              ]
+            : List.generate(
+                ids.length,
+                (int index) {
+                  return EmptyPage(
+                    appBarText: recipes.name(index),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Content(
+                            recipeId: ids[index]!.recipeId,
+                            recipes: recipes,
+                          ),
+                        ),
+                        ActionButtons(
+                          recipeId: ids[index]!.recipeId,
+                          recipes: recipes,
+                          controller: controller,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
 
         return PageView(children: pages);
       },
@@ -101,11 +181,13 @@ class Content extends StatelessWidget {
 class ActionButtons extends StatefulWidget {
   final int recipeId;
   final RecipeModel recipes;
+  final PageController controller;
 
   const ActionButtons({
     super.key,
     required this.recipeId,
     required this.recipes,
+    required this.controller,
   });
 
   @override
@@ -159,16 +241,21 @@ class _ActionButtonsState extends State<ActionButtons> {
                   diameter: 53,
                   gradient:
                       limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
-                  onPressed: () => goto(
-                    context,
-                    CalendarPage(
+                  onPressed: () {
+                    preferences.setFinalScreen(CalendarPage(
                       recipe: RecipeId(
                         recipeId: widget.recipeId,
                         servings: preferences.nbServingsLocal(widget.recipeId),
                         variationIds: vIds,
                       ),
-                    ),
-                  ),
+                    ));
+
+                    widget.controller.animateToPage(
+                      2,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
                   child: Center(
                     child: GradientIcon(
                       gradient: toSurfaceGradient(limelightGradient),
@@ -183,7 +270,18 @@ class _ActionButtonsState extends State<ActionButtons> {
             GradientButton(
               diameter: 54,
               gradient: toLighterSurfaceGradient(limelightGradient),
-              onPressed: () => goto(context, const ShoppingListPage()),
+              onPressed: () {
+                final preferences =
+                    Provider.of<PreferencesModel>(context, listen: false);
+
+                preferences.setFinalScreen(const ShoppingListPage());
+
+                widget.controller.animateToPage(
+                  2,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              },
               child: const Center(
                 child: GradientIcon(
                   gradient: limelightGradient,

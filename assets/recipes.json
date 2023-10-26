@@ -122,6 +122,21 @@
           "groupName": "Type of tomato sauce",
           "variations": [
             {
+              "name": "Canned tomato sauce",
+              "time": "+15 min",
+              "ingredients": [
+                {
+                  "name": "Can(s) of tomato sauce",
+                  "quantity": 0.75
+                }
+              ],
+              "instructionGroups": [
+                [
+                  "Add in {2:1:0:quantity} and cook until thickened"
+                ]
+              ]
+            },
+            {
               "name": "Crushed baby tomatoes",
               "time": "+20 min",
               "ingredients": [
@@ -134,21 +149,6 @@
                 [
                   "Add in about {2:0:0:quantity} to the pan and cover until the skin starts to split.",
                   "Either mash up the tomatoes or wait for them to cook down to a saucy consistency."
-                ]
-              ]
-            },
-            {
-              "name": "Canned tomato sauce",
-              "time": "+15 min",
-              "ingredients": [
-                {
-                  "name": "Can(s) of tomato sauce",
-                  "quantity": 0.75
-                }
-              ],
-              "instructionGroups": [
-                [
-                  "Add in {2:1:0:quantity} and cook until thickened"
                 ]
               ]
             }

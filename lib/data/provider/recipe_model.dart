@@ -52,11 +52,20 @@ class RecipeModel extends ChangeNotifier {
     List<IngredientData> ingredientList =
         List.from(recipe(recipeId).ingredients);
 
+    final nbVarGrps = numberOfVariationGroups(recipeId);
+
     if (variationIds.isEmpty) {
-      variationIds = List.generate(
-        numberOfVariationGroups(recipeId),
-        (int index) => (index, 0),
-      );
+      variationIds = List.generate(nbVarGrps, (int index) => (index, 0));
+    }
+
+    if (variationIds.length != nbVarGrps) {
+      List<int> ids = List.generate(nbVarGrps, (int index) => index);
+
+      for (var (gId, _) in variationIds) {
+        ids.remove(gId);
+      }
+
+      variationIds = variationIds + ids.map((e) => (e, 0)).toList();
     }
 
     for (var variationIdTuple in variationIds) {

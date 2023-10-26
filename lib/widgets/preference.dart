@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/widgets/custom_text.dart';
 import 'package:limelight/widgets/flat_button.dart';

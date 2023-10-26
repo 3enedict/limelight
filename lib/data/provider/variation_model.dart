@@ -14,6 +14,11 @@ class VariationModel extends ChangeNotifier {
   }
 
   void set(int recipeId, int variationGroupId, int variationId) {
+    setLocal(recipeId, variationGroupId, variationId);
+    notifyListeners();
+  }
+
+  void setLocal(int recipeId, int variationGroupId, int variationId) {
     _growVariationIdsToFit(recipeId);
 
     bool needToAdd = true;
@@ -32,8 +37,6 @@ class VariationModel extends ChangeNotifier {
         instance.setStringList("Variations", _variationIds);
       },
     );
-
-    notifyListeners();
   }
 
   List<(int, int)> variationIds(int recipeId) {
