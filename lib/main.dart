@@ -63,14 +63,6 @@ class _LimelightState extends State<Limelight> {
         ),
       ),
       home: PageView(
-        physics: BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-          spring: const ScrollSpringDescription(
-            mass: 1.0,
-            stiffness: 500.0,
-            damping: 1.0,
-          ),
-        ),
         controller: _pageController,
         scrollDirection: Axis.vertical,
         children: [

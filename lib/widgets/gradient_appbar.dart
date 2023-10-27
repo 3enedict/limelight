@@ -6,11 +6,13 @@ import 'package:limelight/gradients.dart';
 
 class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
   final CustomText? text;
+  final List<Color> gradient;
   final Widget child;
 
   const GradientAppBar({
     super.key,
     this.text,
+    this.gradient = limelightGradient,
     this.child = const SizedBox(),
   });
 
@@ -26,7 +28,7 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return GradientContainer(
-      gradient: toSurfaceGradient(limelightGradient),
+      gradient: toSurfaceGradient(gradient),
       child: Padding(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         child: localChild,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
 import 'package:limelight/data/json/ingredient_data.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
 
 import 'package:provider/provider.dart';
 
@@ -27,87 +28,183 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return EmptyPage(
-      appBarText: "Ingredients to buy",
-      child: Consumer2<CalendarModel, RecipeModel>(
-        builder: (context, calendar, recipes, child) {
-          final meals = calendar.meals;
-          List<IngredientData> ingredients = [];
+    return Consumer3<CalendarModel, RecipeModel, IngredientModel>(
+      builder: (context, calendar, recipes, ingModel, child) {
+        final meals = calendar.meals;
+        List<IngredientData> ingredients = [];
 
-          for (var meal in meals) {
-            final list = recipes.ingredientList(
-              meal.recipeId,
-              meal.servings,
-              meal.variationIds.mapIndexed((i, e) => (i, e)).toList(),
-            );
+        for (var meal in meals) {
+          final list = recipes.ingredientList(
+            meal.recipeId,
+            meal.servings,
+            meal.variationIds.mapIndexed((i, e) => (i, e)).toList(),
+          );
 
-            for (var item in list) {
-              final index = ingredients.indexWhere((e) => e.name == item.name);
-              if (index == -1) {
-                ingredients.add(item);
-              } else if (item.quantity.isNotEmpty) {
-                final i = ingredients[index].quantity;
+          for (var item in list) {
+            final index = ingredients.indexWhere((e) => e.name == item.name);
+            if (index == -1) {
+              ingredients.add(item);
+            } else if (item.quantity.isNotEmpty) {
+              final i = ingredients[index].quantity;
 
-                final unit = i.replaceAll(RegExp(r"\d"), "");
-                final n1 = i.replaceAll(RegExp(r"\D"), "");
-                final n2 = item.quantity.replaceAll(RegExp(r"\D"), "");
+              final unit = i.replaceAll(RegExp(r"\d"), "");
+              final n1 = i.replaceAll(RegExp(r"\D"), "");
+              final n2 = item.quantity.replaceAll(RegExp(r"\D"), "");
 
-                if (n1.isNotEmpty && n2.isNotEmpty) {
-                  final num = int.parse(n1) + int.parse(n2);
-                  ingredients[index].quantity = '$num$unit';
-                }
+              if (n1.isNotEmpty && n2.isNotEmpty) {
+                final num = int.parse(n1) + int.parse(n2);
+                ingredients[index].quantity = '$num$unit';
               }
             }
           }
+        }
 
-          return NotificationListener(
-            onNotification: (notification) {
-              if (notification is ScrollStartNotification) _start = true;
-              if (notification is ScrollUpdateNotification) _start = false;
+        final names = ingModel.shopped.map((e) => e.split(':')[0]).toList();
+        for (var i = 0; i < ingredients.length; i++) {
+          if (names.contains(ingredients[i].name)) {
+            final ing = ingModel.shopped[names.indexOf(ingredients[i].name)];
 
-              if (notification is OverscrollNotification && _start == true) {
-                if (notification.overscroll < 0) {
-                  widget.pageController.previousPage(
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  );
-                }
-              }
+            final unit = ingredients[i].quantity.replaceAll(RegExp(r"\d"), "");
+            final n1 = ingredients[i].quantity.replaceAll(RegExp(r"\D"), "");
+            final quantity = int.parse(n1) - int.parse(ing.split(':')[1]);
 
-              return false;
-            },
-            child: ListView.builder(
-              itemCount: ingredients.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                  child: GradientContainer(
-                    borderRadius: 20,
-                    gradient: toSurfaceGradient(limelightGradient),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                          child: GradientIcon(
-                              icon: Icons.panorama_fish_eye, size: 20),
+            if (quantity == 0) {
+              ingredients.removeAt(i);
+            } else {
+              ingredients[i].quantity = '$quantity$unit';
+            }
+          }
+        }
+
+        return PageView(
+          children: [
+            EmptyPage(
+              appBarText: "Ingredients to buy",
+              child: NotificationListener(
+                onNotification: (notification) {
+                  if (notification is ScrollStartNotification) _start = true;
+                  if (notification is ScrollUpdateNotification) _start = false;
+
+                  if (notification is OverscrollNotification &&
+                      _start == true) {
+                    if (notification.overscroll < 0) {
+                      widget.pageController.previousPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    }
+                  }
+
+                  return false;
+                },
+                child: ListView.builder(
+                  itemCount: ingredients.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final name = ingredients[index].name;
+                    final quantity = ingredients[index].quantity;
+
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                      child: Dismissible(
+                        key: UniqueKey(),
+                        direction: DismissDirection.startToEnd,
+                        onDismissed: (_) => ingModel.shop(
+                          name,
+                          int.parse(quantity.replaceAll(RegExp(r"\D"), "")),
                         ),
-                        CustomText(text: ingredients[index].name),
-                        const Expanded(child: SizedBox()),
-                        CustomText(
-                          text: ingredients[index].quantity,
-                          opacity: 0.6,
-                          weight: FontWeight.w400,
+                        child: GradientContainer(
+                          borderRadius: 20,
+                          gradient: toSurfaceGradient(limelightGradient),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                                child: GradientIcon(
+                                    icon: Icons.panorama_fish_eye, size: 20),
+                              ),
+                              CustomText(text: name),
+                              const Expanded(child: SizedBox()),
+                              CustomText(
+                                text: quantity,
+                                opacity: 0.6,
+                                weight: FontWeight.w400,
+                              ),
+                              const SizedBox(width: 16)
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: 16)
-                      ],
-                    ),
-                  ),
-                );
-              },
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
-          );
-        },
-      ),
+            EmptyPage(
+              appBarText: "Shopping cart",
+              gradient: redGradient,
+              child: NotificationListener(
+                onNotification: (notification) {
+                  if (notification is ScrollStartNotification) _start = true;
+                  if (notification is ScrollUpdateNotification) _start = false;
+
+                  if (notification is OverscrollNotification &&
+                      _start == true) {
+                    if (notification.overscroll < 0) {
+                      widget.pageController.previousPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    }
+                  }
+
+                  return false;
+                },
+                child: ListView.builder(
+                  itemCount: ingModel.shopped.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                      child: Dismissible(
+                        key: UniqueKey(),
+                        direction: DismissDirection.startToEnd,
+                        onDismissed: (_) => ingModel.unshop(index),
+                        child: GradientContainer(
+                          borderRadius: 20,
+                          gradient: toSurfaceGradient(redGradient),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                                child: GradientIcon(
+                                  gradient: redGradient,
+                                  icon: Icons.panorama_fish_eye,
+                                  size: 20,
+                                ),
+                              ),
+                              CustomText(
+                                color: toTextGradient(redGradient)[0],
+                                text: ingModel.shopped[index].split(':')[0],
+                              ),
+                              const Expanded(child: SizedBox()),
+                              CustomText(
+                                color: toTextGradient(redGradient)[1],
+                                text: ingModel.shopped[index].split(':')[1],
+                                opacity: 0.6,
+                                weight: FontWeight.w400,
+                              ),
+                              const SizedBox(width: 16)
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

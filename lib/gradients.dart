@@ -5,6 +5,10 @@ const limelightGradient = [
   Color(0xFF3aaada),
 ];
 
+const redGradient = [
+  Color(0xFFFF4B2B),
+  Color(0xFFFF416C),
+];
 List<Color> toBackgroundGradient(List<Color> gradient) {
   return List.generate(
     2,

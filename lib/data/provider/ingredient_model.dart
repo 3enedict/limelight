@@ -14,6 +14,8 @@ class IngredientModel extends ChangeNotifier {
   List<String> _selected = [];
   List<String> _shoppingList = [];
 
+  List<String> _shopped = [];
+
   void load() {
     getApplicationDocumentsDirectory().then(
       (dir) => File("${dir.path}/ingredients.json")
@@ -35,6 +37,7 @@ class IngredientModel extends ChangeNotifier {
     SharedPreferences.getInstance().then((instance) {
       _selected = instance.getStringList("Selected") ?? [];
       _shoppingList = instance.getStringList("Shopping list") ?? [];
+      _shopped = instance.getStringList("Shopped") ?? [];
     });
   }
 
@@ -91,6 +94,26 @@ class IngredientModel extends ChangeNotifier {
     notify();
   }
 
+  void shop(String name, int quantity) {
+    final list = _shopped.map((e) => e.split(':')[0]).toList();
+
+    if (list.contains(name)) {
+      final index = list.indexOf(name);
+      final oldQuantity = int.parse(_shopped[index].split(':')[1]);
+
+      _shopped[index] = '$name:${oldQuantity + quantity}';
+    } else {
+      _shopped.add('$name:$quantity');
+    }
+
+    notifyListeners();
+  }
+
+  void unshop(int index) {
+    _shopped.removeAt(index);
+    notifyListeners();
+  }
+
   void notify() {
     final data = _ingredients.map((e) => e.toJson()).toList();
 
@@ -108,6 +131,7 @@ class IngredientModel extends ChangeNotifier {
       SharedPreferences.getInstance().then((instance) {
         instance.setStringList("Selected", _selected);
         instance.setStringList("Shopping list", _shoppingList);
+        instance.setStringList("Shopped", _shopped);
       });
     }
 
@@ -116,6 +140,7 @@ class IngredientModel extends ChangeNotifier {
 
   List<String> get selected => List.from(_selected);
   List<String> get shoppingList => List.from(_shoppingList);
+  List<String> get shopped => List.from(_shopped);
   List<IngredientDescription> get ingredients => List.from(_ingredients);
 
   // Utilities

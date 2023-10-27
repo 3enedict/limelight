@@ -45,6 +45,7 @@ class EmptyPage extends StatelessWidget {
             appBar: appBarText == null
                 ? appBar
                 : GradientAppBar(
+                    gradient: gradient,
                     text: CustomText(
                       text: appBarText ?? '',
                       alignement: TextAlign.center,
