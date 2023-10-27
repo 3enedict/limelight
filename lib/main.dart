@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/provider/variation_model.dart';
+import 'package:limelight/pages/calendar_page.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 
 import 'package:provider/provider.dart';
@@ -62,6 +63,14 @@ class _LimelightState extends State<Limelight> {
         ),
       ),
       home: PageView(
+        physics: BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+          spring: const ScrollSpringDescription(
+            mass: 1.0,
+            stiffness: 500.0,
+            damping: 1.0,
+          ),
+        ),
         controller: _pageController,
         scrollDirection: Axis.vertical,
         children: [
@@ -73,10 +82,11 @@ class _LimelightState extends State<Limelight> {
             ],
           ),
           RecipesPage(controller: _pageController),
-          Consumer<PreferencesModel>(
-            builder: (context, preferences, child) =>
-                preferences.getFinalScreen,
-          ),
+          Consumer<PreferencesModel>(builder: (context, preferences, child) {
+            return preferences.getFinalScreen == null
+                ? ShoppingListPage(pageController: _pageController)
+                : CalendarPage(recipe: preferences.getFinalScreen!);
+          }),
         ],
       ),
     );

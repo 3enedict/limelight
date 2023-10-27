@@ -22,7 +22,7 @@ class RecipeId {
       recipeId: ids[0],
       servings: ids[1],
       times: ids[2],
-      variationIds: ids.sublist(3, ids.length),
+      variationIds: ids.length > 3 ? ids.sublist(3, ids.length) : <int>[],
     );
   }
 
@@ -34,6 +34,8 @@ class RecipeId {
 
   @override
   String toString() {
+    if (variationIds.isEmpty) return '$recipeId:$servings:$times';
+
     final vIds = variationIds.join(':');
     return '$recipeId:$servings:$times:$vIds';
   }

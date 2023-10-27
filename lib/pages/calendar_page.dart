@@ -62,15 +62,6 @@ class _CalendarPageState extends State<CalendarPage> {
     return EmptyPage(
       child: Column(
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: GradientIcon(
-              onPressed: () => Navigator.of(context).pop(),
-              gradient: toTextGradient(limelightGradient),
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              icon: Icons.chevron_left,
-            ),
-          ),
           Expanded(
             child: PageView(
               controller: _pageController,

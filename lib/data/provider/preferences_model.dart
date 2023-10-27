@@ -29,7 +29,7 @@ class PreferencesModel extends ChangeNotifier {
   int _nbServingsGlobal = 3;
   final List<int> _nbServingsLocal = [];
 
-  Widget _finalScreen = CalendarPage(recipe: RecipeId(recipeId: 0));
+  RecipeId? _finalScreen = RecipeId(recipeId: 0);
 
   void load() {
     SharedPreferences.getInstance().then((instance) {
@@ -69,8 +69,8 @@ class PreferencesModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Widget get getFinalScreen => _finalScreen;
-  void setFinalScreen(Widget screen) {
+  RecipeId? get getFinalScreen => _finalScreen;
+  void setFinalScreen(RecipeId? screen) {
     _finalScreen = screen;
     notifyListeners();
   }

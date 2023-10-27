@@ -242,13 +242,13 @@ class _ActionButtonsState extends State<ActionButtons> {
                   gradient:
                       limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
                   onPressed: () {
-                    preferences.setFinalScreen(CalendarPage(
-                      recipe: RecipeId(
+                    preferences.setFinalScreen(
+                      RecipeId(
                         recipeId: widget.recipeId,
                         servings: preferences.nbServingsLocal(widget.recipeId),
                         variationIds: vIds,
                       ),
-                    ));
+                    );
 
                     widget.controller.animateToPage(
                       2,
@@ -274,7 +274,7 @@ class _ActionButtonsState extends State<ActionButtons> {
                 final preferences =
                     Provider.of<PreferencesModel>(context, listen: false);
 
-                preferences.setFinalScreen(const ShoppingListPage());
+                preferences.setFinalScreen(null);
 
                 widget.controller.animateToPage(
                   2,
