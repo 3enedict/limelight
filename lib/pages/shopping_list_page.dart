@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 
 import 'package:limelight/data/json/ingredient_data.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/widgets/gradient_button.dart';
 
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,9 @@ import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/widgets/custom_text.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
+
+// Hmphh...
+// https://github.com/flutter/flutter/issues/31476
 
 class ShoppingListPage extends StatefulWidget {
   PageController pageController;
@@ -25,6 +29,14 @@ class ShoppingListPage extends StatefulWidget {
 
 class _ShoppingListPageState extends State<ShoppingListPage> {
   bool _start = false;
+
+  final PageController _pageController = PageController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,129 +89,236 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
         }
 
         return PageView(
+          controller: _pageController,
           children: [
             EmptyPage(
               appBarText: "Ingredients to buy",
-              child: NotificationListener(
-                onNotification: (notification) {
-                  if (notification is ScrollStartNotification) _start = true;
-                  if (notification is ScrollUpdateNotification) _start = false;
+              child: Column(
+                children: [
+                  Expanded(
+                    child: NotificationListener(
+                      onNotification: (notification) {
+                        if (notification is ScrollStartNotification) {
+                          _start = true;
+                        }
 
-                  if (notification is OverscrollNotification &&
-                      _start == true) {
-                    if (notification.overscroll < 0) {
-                      widget.pageController.previousPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    }
-                  }
+                        if (notification is ScrollUpdateNotification) {
+                          _start = false;
+                        }
 
-                  return false;
-                },
-                child: ListView.builder(
-                  itemCount: ingredients.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final name = ingredients[index].name;
-                    final quantity = ingredients[index].quantity;
+                        if (notification is OverscrollNotification &&
+                            _start == true) {
+                          if (notification.overscroll < 0) {
+                            widget.pageController.previousPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                          }
+                        }
 
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                      child: Dismissible(
-                        key: UniqueKey(),
-                        direction: DismissDirection.startToEnd,
-                        onDismissed: (_) => ingModel.shop(
-                          name,
-                          int.parse(quantity.replaceAll(RegExp(r"\D"), "")),
-                        ),
-                        child: GradientContainer(
-                          borderRadius: 20,
-                          gradient: toSurfaceGradient(limelightGradient),
-                          child: Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                                child: GradientIcon(
-                                    icon: Icons.panorama_fish_eye, size: 20),
+                        return false;
+                      },
+                      child: ListView.builder(
+                        itemCount: ingredients.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final name = ingredients[index].name;
+                          final quantity = ingredients[index].quantity;
+
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                            child: Dismissible(
+                              key: UniqueKey(),
+                              direction: DismissDirection.startToEnd,
+                              onDismissed: (_) => ingModel.shop(
+                                name,
+                                int.parse(
+                                    quantity.replaceAll(RegExp(r"\D"), "")),
                               ),
-                              CustomText(text: name),
-                              const Expanded(child: SizedBox()),
-                              CustomText(
-                                text: quantity,
-                                opacity: 0.6,
-                                weight: FontWeight.w400,
+                              child: GradientContainer(
+                                borderRadius: 20,
+                                gradient: toSurfaceGradient(limelightGradient),
+                                child: Row(
+                                  children: [
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(16, 16, 16, 16),
+                                      child: GradientIcon(
+                                          icon: Icons.panorama_fish_eye,
+                                          size: 20),
+                                    ),
+                                    CustomText(text: name),
+                                    const Expanded(child: SizedBox()),
+                                    CustomText(
+                                      text: quantity,
+                                      opacity: 0.6,
+                                      weight: FontWeight.w400,
+                                    ),
+                                    const SizedBox(width: 16)
+                                  ],
+                                ),
                               ),
-                              const SizedBox(width: 16)
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  Container(
+                    color: toBackgroundGradient(limelightGradient)[1],
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GradientButton(
+                            diameter: 54,
+                            gradient:
+                                toLighterSurfaceGradient(limelightGradient),
+                            onPressed: () {},
+                            child: const Center(
+                              child: GradientIcon(
+                                gradient: limelightGradient,
+                                icon: Icons.panorama_fish_eye,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 53 / 3),
+                          GradientButton(
+                            diameter: 54,
+                            gradient:
+                                toLighterSurfaceGradient(limelightGradient),
+                            onPressed: () => _pageController.animateToPage(
+                              1,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            ),
+                            child: const Center(
+                              child: GradientIcon(
+                                gradient: redGradient,
+                                icon: Icons.arrow_forward,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             EmptyPage(
               appBarText: "Shopping cart",
               gradient: redGradient,
-              child: NotificationListener(
-                onNotification: (notification) {
-                  if (notification is ScrollStartNotification) _start = true;
-                  if (notification is ScrollUpdateNotification) _start = false;
+              child: Column(
+                children: [
+                  Expanded(
+                    child: NotificationListener(
+                      onNotification: (notification) {
+                        if (notification is ScrollStartNotification) {
+                          _start = true;
+                        }
 
-                  if (notification is OverscrollNotification &&
-                      _start == true) {
-                    if (notification.overscroll < 0) {
-                      widget.pageController.previousPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    }
-                  }
+                        if (notification is ScrollUpdateNotification) {
+                          _start = false;
+                        }
 
-                  return false;
-                },
-                child: ListView.builder(
-                  itemCount: ingModel.shopped.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                      child: Dismissible(
-                        key: UniqueKey(),
-                        direction: DismissDirection.startToEnd,
-                        onDismissed: (_) => ingModel.unshop(index),
-                        child: GradientContainer(
-                          borderRadius: 20,
-                          gradient: toSurfaceGradient(redGradient),
-                          child: Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                                child: GradientIcon(
-                                  gradient: redGradient,
-                                  icon: Icons.panorama_fish_eye,
-                                  size: 20,
+                        if (notification is OverscrollNotification &&
+                            _start == true) {
+                          if (notification.overscroll < 0) {
+                            widget.pageController.previousPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                          }
+                        }
+
+                        return false;
+                      },
+                      child: ListView.builder(
+                        itemCount: ingModel.shopped.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                            child: Dismissible(
+                              key: UniqueKey(),
+                              direction: DismissDirection.endToStart,
+                              onDismissed: (_) => ingModel.unshop(index),
+                              child: GradientContainer(
+                                borderRadius: 20,
+                                gradient: toSurfaceGradient(redGradient),
+                                child: Row(
+                                  children: [
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(16, 16, 16, 16),
+                                      child: GradientIcon(
+                                        gradient: redGradient,
+                                        icon: Icons.panorama_fish_eye,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    CustomText(
+                                      color: toTextGradient(redGradient)[0],
+                                      text:
+                                          ingModel.shopped[index].split(':')[0],
+                                    ),
+                                    const Expanded(child: SizedBox()),
+                                    CustomText(
+                                      color: toTextGradient(redGradient)[1],
+                                      text:
+                                          ingModel.shopped[index].split(':')[1],
+                                      opacity: 0.6,
+                                      weight: FontWeight.w400,
+                                    ),
+                                    const SizedBox(width: 16)
+                                  ],
                                 ),
                               ),
-                              CustomText(
-                                color: toTextGradient(redGradient)[0],
-                                text: ingModel.shopped[index].split(':')[0],
-                              ),
-                              const Expanded(child: SizedBox()),
-                              CustomText(
-                                color: toTextGradient(redGradient)[1],
-                                text: ingModel.shopped[index].split(':')[1],
-                                opacity: 0.6,
-                                weight: FontWeight.w400,
-                              ),
-                              const SizedBox(width: 16)
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  Container(
+                    color: toBackgroundGradient(redGradient)[1],
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GradientButton(
+                            diameter: 54,
+                            gradient: toLighterSurfaceGradient(redGradient),
+                            onPressed: () => _pageController.animateToPage(
+                              0,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            ),
+                            child: const Center(
+                              child: GradientIcon(
+                                gradient: limelightGradient,
+                                icon: Icons.arrow_back,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 53 / 3),
+                          GradientButton(
+                            diameter: 54,
+                            gradient: toLighterSurfaceGradient(redGradient),
+                            onPressed: () {},
+                            child: const Center(
+                              child: GradientIcon(
+                                gradient: redGradient,
+                                icon: Icons.panorama_fish_eye,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
