@@ -94,14 +94,16 @@ class IngredientModel extends ChangeNotifier {
     notify();
   }
 
-  void shop(String name, int quantity) {
+  void shop(String name, String quantity) {
     final list = _shopped.map((e) => e.split(':')[0]).toList();
 
     if (list.contains(name)) {
       final index = list.indexOf(name);
       final oldQuantity = int.parse(_shopped[index].split(':')[1]);
+      final newQuantity = int.parse(quantity.replaceAll(RegExp(r"\D"), ""));
+      final unit = quantity.replaceAll(RegExp(r"\d"), "");
 
-      _shopped[index] = '$name:${oldQuantity + quantity}';
+      _shopped[index] = '$name:${oldQuantity + newQuantity}$unit';
     } else {
       _shopped.add('$name:$quantity');
     }

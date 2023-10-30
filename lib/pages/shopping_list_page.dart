@@ -78,13 +78,20 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
 
             final unit = ingredients[i].quantity.replaceAll(RegExp(r"\d"), "");
             final n1 = ingredients[i].quantity.replaceAll(RegExp(r"\D"), "");
-            final quantity = int.parse(n1) - int.parse(ing.split(':')[1]);
+            final n2 = ing.split(':')[1].replaceAll(RegExp(r"\D"), "");
 
-            if (quantity == 0) {
+            if (int.tryParse(n2) == null) {
               ingredients.removeAt(i);
               i--;
             } else {
-              ingredients[i].quantity = '$quantity$unit';
+              final quantity = int.parse(n1) - int.parse(n2);
+
+              if (quantity == 0) {
+                ingredients.removeAt(i);
+                i--;
+              } else {
+                ingredients[i].quantity = '$quantity$unit';
+              }
             }
           }
         }
@@ -130,12 +137,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                             child: Dismissible(
                               key: UniqueKey(),
                               direction: DismissDirection.startToEnd,
-                              onDismissed: (_) => ingModel.shop(
-                                name,
-                                int.parse(
-                                  quantity.replaceAll(RegExp(r"\D"), ""),
-                                ),
-                              ),
+                              onDismissed: (_) => ingModel.shop(name, quantity),
                               child: GradientContainer(
                                 borderRadius: 20,
                                 gradient: toSurfaceGradient(limelightGradient),
