@@ -29,7 +29,8 @@ class PreferencesModel extends ChangeNotifier {
   int _nbServingsGlobal = 3;
   final List<int> _nbServingsLocal = [];
 
-  RecipeId? _finalScreen = RecipeId(recipeId: 0);
+  RecipeId _finalScreenId = RecipeId(recipeId: 0);
+  bool _finalScreenIsCalendar = true;
 
   void load() {
     SharedPreferences.getInstance().then((instance) {
@@ -69,9 +70,14 @@ class PreferencesModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  RecipeId? get getFinalScreen => _finalScreen;
-  void setFinalScreen(RecipeId? screen) {
-    _finalScreen = screen;
+  RecipeId get getFinalScreenId => _finalScreenId;
+  bool get getFinalScreenIsCalendar => _finalScreenIsCalendar;
+  void setFinalScreenId(RecipeId screen) {
+    _finalScreenId = screen;
+  }
+
+  void setFinalScreenIsCalendar(bool isCalendar) {
+    _finalScreenIsCalendar = isCalendar;
     notifyListeners();
   }
 

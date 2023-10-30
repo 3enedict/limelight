@@ -75,9 +75,9 @@ class _LimelightState extends State<Limelight> {
           ),
           RecipesPage(controller: _pageController),
           Consumer<PreferencesModel>(builder: (context, preferences, child) {
-            return preferences.getFinalScreen == null
+            return preferences.getFinalScreenIsCalendar == false
                 ? ShoppingListPage(pageController: _pageController)
-                : CalendarPage(recipe: preferences.getFinalScreen!);
+                : CalendarPage(recipe: preferences.getFinalScreenId);
           }),
         ],
       ),

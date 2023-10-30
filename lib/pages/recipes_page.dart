@@ -237,18 +237,20 @@ class _ActionButtonsState extends State<ActionButtons> {
                   vIds[groupId] = variationId;
                 }
 
+                preferences.setFinalScreenId(
+                  RecipeId(
+                    recipeId: widget.recipeId,
+                    servings: preferences.nbServingsLocal(widget.recipeId),
+                    variationIds: vIds,
+                  ),
+                );
+
                 return GradientButton(
                   diameter: 53,
                   gradient:
                       limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
                   onPressed: () {
-                    preferences.setFinalScreen(
-                      RecipeId(
-                        recipeId: widget.recipeId,
-                        servings: preferences.nbServingsLocal(widget.recipeId),
-                        variationIds: vIds,
-                      ),
-                    );
+                    preferences.setFinalScreenIsCalendar(true);
 
                     widget.controller.animateToPage(
                       2,
@@ -274,7 +276,7 @@ class _ActionButtonsState extends State<ActionButtons> {
                 final preferences =
                     Provider.of<PreferencesModel>(context, listen: false);
 
-                preferences.setFinalScreen(null);
+                preferences.setFinalScreenIsCalendar(false);
 
                 widget.controller.animateToPage(
                   2,
