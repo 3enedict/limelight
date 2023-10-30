@@ -115,8 +115,25 @@ class CalendarModel extends ChangeNotifier {
   }
 
   List<RecipeId> get mealList => List.from(_mealList);
-  List<RecipeId> get meals =>
-      mealList + List.from(_mealIds.entries.map((e) => e.value).toList());
+  List<RecipeId> get meals {
+    final calendarList = _mealIds.entries.map((e) {
+      DateTime now = DateTime.now();
+      final ids = e.key.split(':');
+      final year = int.parse(ids[0]);
+      final month = int.parse(ids[1]);
+      final day = int.parse(ids[2]);
+
+      if (day >= now.day && month >= now.month && year >= now.month) {
+        return e.value;
+      }
+
+      return 'This is before the current day';
+    }).toList();
+
+    calendarList.removeWhere((e) => e == 'This is before the current day');
+
+    return mealList + List.from(calendarList);
+  }
 
   void _saveCalendar() {
     SharedPreferences.getInstance().then(
