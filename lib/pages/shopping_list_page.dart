@@ -82,6 +82,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
 
             if (quantity == 0) {
               ingredients.removeAt(i);
+              i--;
             } else {
               ingredients[i].quantity = '$quantity$unit';
             }
@@ -132,7 +133,8 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                               onDismissed: (_) => ingModel.shop(
                                 name,
                                 int.parse(
-                                    quantity.replaceAll(RegExp(r"\D"), "")),
+                                  quantity.replaceAll(RegExp(r"\D"), ""),
+                                ),
                               ),
                               child: GradientContainer(
                                 borderRadius: 20,
