@@ -81,7 +81,7 @@ class _SearchPageState extends State<SearchPage> {
     List<IngredientSearchItem> matches = [];
 
     List<IngredientDescription> ingredients = [];
-    if (query == "") {
+    if (query == '') {
       List<String> selected = widget.getSelected(model).reversed.toList();
       ingredients = List.filled(selected.length, IngredientDescription.empty());
 
@@ -98,7 +98,10 @@ class _SearchPageState extends State<SearchPage> {
         query: query,
         ingredient: ingredient,
         getSelected: widget.getSelected,
-        selectIngredient: widget.selectIngredient,
+        selectIngredient: (ing) {
+          setState(() => _query = '');
+          widget.selectIngredient(ing);
+        },
       ));
     }
 
