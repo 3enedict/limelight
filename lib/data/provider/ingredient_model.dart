@@ -84,11 +84,27 @@ class IngredientModel extends ChangeNotifier {
     notify();
   }
 
-  void addToShoppingList(String name) {
-    if (_shoppingList.contains(name)) {
-      _shoppingList.remove(name);
+  void addToShoppingList(String name, String quantity) {
+    final list = _shoppingList.map((e) => e.split(':')[0]).toList();
+
+    if (list.contains(name)) {
+      final index = list.indexOf(name);
+      final oldQuantity =
+          _shoppingList[index].split(':')[1].replaceAll(RegExp(r"\D"), "");
+      final newQuantity = quantity.replaceAll(RegExp(r"\D"), "");
+
+      String finalQuantity;
+      if (oldQuantity == '' || newQuantity == '') {
+        finalQuantity = '';
+      } else {
+        finalQuantity = '${int.parse(oldQuantity) + int.parse(newQuantity)}';
+      }
+
+      final unit = quantity.replaceAll(RegExp(r"\d"), "");
+
+      _shoppingList[index] = '$name:$finalQuantity$unit';
     } else {
-      _shoppingList.add(name);
+      _shoppingList.add('$name:$quantity');
     }
 
     notify();
@@ -99,21 +115,45 @@ class IngredientModel extends ChangeNotifier {
 
     if (list.contains(name)) {
       final index = list.indexOf(name);
-      final oldQuantity = int.parse(_shopped[index].split(':')[1]);
-      final newQuantity = int.parse(quantity.replaceAll(RegExp(r"\D"), ""));
+      final oldQuantity =
+          _shopped[index].split(':')[1].replaceAll(RegExp(r"\D"), "");
+      final newQuantity = quantity.replaceAll(RegExp(r"\D"), "");
+
+      String finalQuantity;
+      if (oldQuantity == '' || newQuantity == '') {
+        finalQuantity = '';
+      } else {
+        finalQuantity = '${int.parse(oldQuantity) + int.parse(newQuantity)}';
+      }
+
       final unit = quantity.replaceAll(RegExp(r"\d"), "");
 
-      _shopped[index] = '$name:${oldQuantity + newQuantity}$unit';
+      _shopped[index] = '$name:$finalQuantity$unit';
     } else {
       _shopped.add('$name:$quantity');
     }
 
-    notifyListeners();
+    if (_shoppingList.contains('$name:$quantity')) {
+      _shoppingList[_shoppingList.indexOf('$name:$quantity')] =
+          '-$name:$quantity';
+    }
+
+    notify();
   }
 
   void unshop(int index) {
+    if (_shoppingList.contains('-${_shopped[index]}')) {
+      _shoppingList[_shoppingList.indexOf('-${_shopped[index]}')] =
+          _shopped[index];
+    }
+
     _shopped.removeAt(index);
-    notifyListeners();
+    notify();
+  }
+
+  void clearShopped() {
+    _shopped = [];
+    notify();
   }
 
   void notify() {

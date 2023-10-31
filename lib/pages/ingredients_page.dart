@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/pages/add_to_shopping_list_page.dart';
 
 import 'package:unicons/unicons.dart';
 import 'package:provider/provider.dart';
@@ -87,7 +88,6 @@ class SearchBarIcons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<IngredientModel>(context, listen: false);
     const size = 30.0;
 
     return Row(
@@ -104,11 +104,7 @@ class SearchBarIcons extends StatelessWidget {
         GradientIcon(
           onPressed: () => Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => SearchPage(
-                searchHint: 'Add to shopping list',
-                getSelected: (newModel) => newModel.shoppingList,
-                selectIngredient: (name) => model.addToShoppingList(name),
-              ),
+              builder: (context) => const AddToShoppingListPage(),
             ),
           ),
           size: size,
