@@ -8,12 +8,14 @@ import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/gradients.dart';
 
 class AppbarSearchBar extends StatefulWidget {
+  TextEditingController controller;
   final String searchHint;
   final void Function(String) onChanged;
   final VoidCallback onSubmitted;
 
-  const AppbarSearchBar({
+  AppbarSearchBar({
     super.key,
+    required this.controller,
     required this.searchHint,
     required this.onChanged,
     required this.onSubmitted,
@@ -24,7 +26,6 @@ class AppbarSearchBar extends StatefulWidget {
 }
 
 class _AppbarSearchBarState extends State<AppbarSearchBar> {
-  final _controller = TextEditingController();
   String _query = '';
 
   @override
@@ -49,7 +50,7 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
               Expanded(
                 child: TextField(
                   autofocus: true,
-                  controller: _controller,
+                  controller: widget.controller,
                   keyboardAppearance: Brightness.dark,
                   decoration: InputDecoration.collapsed(
                     hintText: widget.searchHint,
@@ -100,6 +101,6 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
   void clear() {
     setState(() => _query = '');
     widget.onChanged('');
-    _controller.clear();
+    widget.controller.clear();
   }
 }

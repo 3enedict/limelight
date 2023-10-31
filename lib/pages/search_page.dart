@@ -33,6 +33,8 @@ class _SearchPageState extends State<SearchPage> {
   // Not particularly happy with this as it's copied data...
   String _query = '';
 
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<IngredientModel>(context, listen: false);
@@ -51,6 +53,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             Expanded(
               child: AppbarSearchBar(
+                controller: _controller,
                 searchHint: widget.searchHint,
                 onChanged: (query) => setState(() => _query = query),
                 onSubmitted: () {
@@ -100,6 +103,7 @@ class _SearchPageState extends State<SearchPage> {
         getSelected: widget.getSelected,
         selectIngredient: (ing) {
           setState(() => _query = '');
+          _controller.clear();
           widget.selectIngredient(ing);
         },
       ));
