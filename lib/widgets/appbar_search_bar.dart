@@ -30,6 +30,8 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.controller.value.toString == '') _query = '';
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: GradientContainer(

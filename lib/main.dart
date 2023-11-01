@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/provider/variation_model.dart';
 import 'package:limelight/pages/calendar_page.dart';
+import 'package:limelight/pages/cooking_page.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 
 import 'package:provider/provider.dart';
@@ -39,7 +40,7 @@ class Limelight extends StatefulWidget {
 }
 
 class _LimelightState extends State<Limelight> {
-  final PageController _pageController = PageController();
+  final PageController _pageController = PageController(initialPage: 1);
 
   @override
   void dispose() {
@@ -66,6 +67,7 @@ class _LimelightState extends State<Limelight> {
         controller: _pageController,
         scrollDirection: Axis.vertical,
         children: [
+          const CookingPage(),
           PageView(
             controller: PageController(initialPage: 1),
             children: const [
