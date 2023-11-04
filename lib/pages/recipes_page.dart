@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:limelight/data/json/ingredient_description.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
-import 'package:limelight/pages/shopping_list_page.dart';
 import 'package:limelight/widgets/custom_text.dart';
 
 import 'package:provider/provider.dart';
@@ -16,7 +14,6 @@ import 'package:limelight/widgets/recipe_description_items.dart';
 import 'package:limelight/widgets/recipe_description_box.dart';
 import 'package:limelight/widgets/gradient_button.dart';
 import 'package:limelight/widgets/gradient_icon.dart';
-import 'package:limelight/pages/calendar_page.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 

@@ -45,7 +45,7 @@ class _AddToShoppingListPageState extends State<AddToShoppingListPage> {
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
               children: [
                 Text(
-                  "Ingredient",
+                  "Add to shopping list",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.workSans(
                     color: textColor(),
