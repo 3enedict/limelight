@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/gradients.dart';
@@ -50,7 +51,7 @@ class CustomTextField extends StatelessWidget {
           onSubmitted: onSubmitted,
           onChanged: onChanged,
           controller: TextEditingController(text: text),
-          style: TextStyle(
+          style: GoogleFonts.openSans(
             color: textColor(),
             fontWeight: FontWeight.w400,
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/main.dart';
+import 'package:limelight/pages/recipe_editor.dart';
 import 'package:limelight/pages/recipes_page.dart';
 import 'package:limelight/widgets/appbar_search_bar.dart';
 import 'package:limelight/widgets/custom_text.dart';
@@ -53,13 +54,8 @@ class _CookbookPageState extends State<CookbookPage> {
                     setState(() => _query = '');
 
                     Navigator.of(context).push(SwipeablePageRoute(
-                      builder: (BuildContext context) => EmptyPage(
-                        appBarText: recipes.name(matches[0]),
-                        backButton: true,
-                        child: Content(
-                          recipeId: matches[0],
-                          recipes: recipes,
-                        ),
+                      builder: (BuildContext context) => RecipeEditor(
+                        recipeId: matches[0],
                       ),
                     ));
                   }
@@ -105,14 +101,7 @@ class _CookbookPageState extends State<CookbookPage> {
               padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
               borderRadius: 15,
               onPressed: () => Navigator.of(context).push(SwipeablePageRoute(
-                builder: (BuildContext context) => EmptyPage(
-                  appBarText: recipes.name(e),
-                  backButton: true,
-                  child: Content(
-                    recipeId: e,
-                    recipes: recipes,
-                  ),
-                ),
+                builder: (BuildContext context) => RecipeEditor(recipeId: e),
               )),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
