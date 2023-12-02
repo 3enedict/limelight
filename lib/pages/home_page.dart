@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:unicons/unicons.dart';
 
+import 'package:limelight/pages/ingredient_search_page.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/widgets/circles.dart';
+import 'package:limelight/utils/utils.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
@@ -33,17 +35,7 @@ class SearchBar extends StatelessWidget {
         child: GradientButton(
           gradient: toSurfaceGradient(limelightGradient),
           borderRadius: 100,
-          /*
-          onPressed: () => goto(
-            context,
-            SearchPage(
-              searchHint: 'Select ingredients to cook with',
-              getSelected: (newModel) => newModel.selected,
-              selectIngredient: (name) => model.select(name),
-            ),
-          ),
-          */
-          onPressed: () {},
+          onPressed: () => goto(context, const IngredientSearchPage()),
           child: const Padding(
             padding: EdgeInsets.fromLTRB(30, 12, 18, 12),
             child: Row(
