@@ -64,23 +64,23 @@ class _LimelightState extends State<Limelight> {
         ),
       ),
       home: PageView(
-        controller: _pageController,
-        scrollDirection: Axis.vertical,
+        controller: PageController(initialPage: 1),
+        scrollDirection: Axis.horizontal,
         children: [
           const CookingPage(),
           PageView(
-            controller: PageController(initialPage: 1),
-            children: const [
-              SettingsPage(),
-              IngredientsPage(),
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            children: [
+              Consumer<PreferencesModel>(
+                builder: (context, preferences, child) {
+                  return CalendarPage(recipe: preferences.getFinalScreenId);
+                },
+              ),
+              RecipesPage(controller: _pageController),
+              ShoppingListPage(pageController: _pageController),
             ],
           ),
-          RecipesPage(controller: _pageController),
-          Consumer<PreferencesModel>(builder: (context, preferences, child) {
-            return preferences.getFinalScreenIsCalendar == false
-                ? ShoppingListPage(pageController: _pageController)
-                : CalendarPage(recipe: preferences.getFinalScreenId);
-          }),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/pages/ingredients_page.dart';
 import 'package:limelight/widgets/custom_text.dart';
 
 import 'package:provider/provider.dart';
@@ -17,10 +18,17 @@ import 'package:limelight/widgets/gradient_icon.dart';
 import 'package:limelight/widgets/page.dart';
 import 'package:limelight/gradients.dart';
 
-class RecipesPage extends StatelessWidget {
+class RecipesPage extends StatefulWidget {
   final PageController controller;
-
   const RecipesPage({super.key, required this.controller});
+
+  @override
+  _RecipesPageState createState() => _RecipesPageState();
+}
+
+class _RecipesPageState extends State<RecipesPage>
+    with AutomaticKeepAliveClientMixin<RecipesPage> {
+  final _pageController = PageController(keepPage: true);
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +117,7 @@ class RecipesPage extends StatelessWidget {
                         ActionButtons(
                           recipeId: ids[index]!.recipeId,
                           recipes: recipes,
-                          controller: controller,
+                          controller: widget.controller,
                         ),
                       ],
                     ),
@@ -117,10 +125,16 @@ class RecipesPage extends StatelessWidget {
                 },
               );
 
-        return PageView(children: pages);
+        return PageView(
+          controller: _pageController,
+          children: [const IngredientsPage(), ...pages],
+        );
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class Content extends StatelessWidget {
