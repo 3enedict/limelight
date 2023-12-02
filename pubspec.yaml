@@ -16,7 +16,6 @@ dependencies:
   flutter_feather_icons:
   fluttericon:
   unicons:
-  swipeable_page_route:
 
 dev_dependencies:
   flutter_lints:
