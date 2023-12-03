@@ -5,9 +5,11 @@ import 'package:provider/provider.dart';
 
 import 'package:limelight/data/json/ingredient_description.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/pages/ingredient_editor_page.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
+import 'package:limelight/utils/utils.dart';
 import 'package:limelight/gradients.dart';
 
 class IngredientSearchItem extends StatelessWidget {
@@ -26,6 +28,8 @@ class IngredientSearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final editor = IngredientEditorPage(name: ingredient.name);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
       child: GradientButton(
@@ -33,7 +37,7 @@ class IngredientSearchItem extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
         borderRadius: 15,
         onPressed: () => selectIngredient(ingredient.name),
-        //onLongPress: () => goto(context, editor),
+        onLongPress: () => goto(context, editor),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -36,6 +36,7 @@ class SearchBar extends StatelessWidget {
           gradient: toSurfaceGradient(limelightGradient),
           borderRadius: 100,
           onPressed: () => goto(context, const IngredientSearchPage()),
+          ink: false,
           child: const Padding(
             padding: EdgeInsets.fromLTRB(30, 12, 18, 12),
             child: Row(

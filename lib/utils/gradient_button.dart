@@ -13,6 +13,7 @@ class GradientButton extends StatelessWidget {
   final bool outlineBorder;
   final VoidCallback? onPressed;
   final VoidCallback? onLongPress;
+  final bool ink;
   final Widget child;
 
   const GradientButton({
@@ -26,6 +27,7 @@ class GradientButton extends StatelessWidget {
     this.outlineBorder = false,
     this.onPressed,
     this.onLongPress,
+    this.ink = true,
     required this.child,
   });
 
@@ -35,7 +37,8 @@ class GradientButton extends StatelessWidget {
       style: TextButton.styleFrom(
         elevation: 0,
         padding: const EdgeInsets.all(0),
-        foregroundColor: textColor().withOpacity(0.25),
+        splashFactory: ink ? null : NoSplash.splashFactory,
+        foregroundColor: ink ? textColor().withOpacity(0.25) : null,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(diameter ?? borderRadius),
         ),

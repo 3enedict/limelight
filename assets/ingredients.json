@@ -1,0 +1,46 @@
+{
+  "ingredients": [
+    {
+      "name": "Lettuce",
+      "season": "All year",
+      "price": "1.00",
+      "unit": "per head",
+      "category": "Leafy green"
+    },
+    {
+      "name": "Carrot",
+      "season": "Fall and winter",
+      "price": "2.00",
+      "unit": "per kg",
+      "category": "Vegetable"
+    },
+    {
+      "name": "Baby tomato",
+      "season": "Late summer and fall",
+      "price": "5.00",
+      "unit": "per kg",
+      "category": "Vegetable"
+    },
+    {
+      "name": "Salmon",
+      "season": "All year",
+      "price": "20.00",
+      "unit": "per kg",
+      "category": "Fish"
+    },
+    {
+      "name": "Parmesan",
+      "season": "All year",
+      "price": "15.00",
+      "unit": "per kg",
+      "category": "Dairy"
+    },
+    {
+      "name": "Egg",
+      "season": "All year",
+      "price": "0.20",
+      "unit": "per unit",
+      "category": "Dairy"
+    }
+  ]
+}

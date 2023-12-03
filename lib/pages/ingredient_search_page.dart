@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/widgets/ingredient_search_item.dart';
+import 'package:limelight/pages/ingredient_editor_page.dart';
 import 'package:limelight/widgets/appbar_search_bar.dart';
 import 'package:limelight/utils/gradient_appbar.dart';
 import 'package:limelight/utils/gradient_icon.dart';
+import 'package:limelight/utils/utils.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
@@ -70,8 +72,7 @@ class _SearchPageState extends State<IngredientSearchPage> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
                   gradient: toTextGradient(limelightGradient),
-                  //onPressed: () => goto(context, const IngredientEditorPage()),
-                  onPressed: () {},
+                  onPressed: () => goto(context, const IngredientEditorPage()),
                   size: 26,
                   icon: Icons.add,
                 ),
