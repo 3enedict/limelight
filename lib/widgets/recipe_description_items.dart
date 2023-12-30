@@ -35,21 +35,19 @@ double calculateTextHeight(String text, TextStyle style, double maxWidth) {
   return textPainter.height;
 }
 
-List<(double, Widget)> generateIngredients(
-  List<IngredientData> ingredientList,
-) {
+List<Widget> generateIngredients(List<IngredientData> ingredientList) {
   List<Widget> ingredients = [];
-  for (var ingredient in ingredientList) {
+  for (var i in ingredientList) {
     ingredients.add(Row(
       children: [
         const Padding(
           padding: EdgeInsets.fromLTRB(0, 12, 20, 12),
           child: GradientIcon(icon: Icons.panorama_fish_eye, size: 20),
         ),
-        CustomText(text: ingredient.name),
+        CustomText(text: i.getName(i.quantity.round())),
         const Expanded(child: SizedBox()),
         CustomText(
-          text: ingredient.quantity,
+          text: i.getQuantity(),
           opacity: 0.6,
           weight: FontWeight.w400,
         ),
@@ -57,43 +55,29 @@ List<(double, Widget)> generateIngredients(
     ));
   }
 
-  return ingredients.map((e) => (12 * 2 + 20.0, e)).toList();
+  return ingredients;
 }
 
-List<(double, Widget)> generateInstructions(
-  List<String> instructionList,
-  double width,
-) {
-  List<(double, Widget)> instructions = [];
+List<Widget> generateInstructions(List<String> instructionList, double width) {
+  List<Widget> instructions = [];
   for (var instruction in instructionList) {
-    instructions.add((
-      10 * 2 +
-          calculateTextHeight(
-            instruction,
-            GoogleFonts.openSans(
-              fontWeight: FontWeight.w300,
-              fontSize: 13,
-            ),
-            width - (20 + 20),
+    instructions.add(Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
+          child: GradientIcon(icon: Icons.panorama_fish_eye, size: 20),
+        ),
+        Flexible(
+          child: CustomText(
+            text: instruction,
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            alignement: TextAlign.justify,
+            size: 13,
+            weight: FontWeight.w300,
           ),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
-            child: GradientIcon(icon: Icons.panorama_fish_eye, size: 20),
-          ),
-          Flexible(
-            child: CustomText(
-              text: instruction,
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              alignement: TextAlign.justify,
-              size: 13,
-              weight: FontWeight.w300,
-            ),
-          ),
-        ],
-      )
+        ),
+      ],
     ));
   }
 

@@ -47,28 +47,32 @@ class RecipeModel extends ChangeNotifier {
   }
 
   List<IngredientData> ingredientList(RecipeId id) {
-    List<IngredientData> list = List.from(recipe(id.recipeId).ingredients);
-    id = verifyVariationIds(id);
+    final ingredients = recipe(id.recipeId).ingredients;
 
+    // Deep copy
+    List<IngredientData> list = List.generate(
+      ingredients.length,
+      (i) => IngredientData.from(ingredients[i]),
+    );
+
+    id = verifyVariationIds(id);
     for (var i = 0; i < nbVarGroups(id.recipeId); i++) {
-      final v = variation(id.recipeId, i, id.variationIds[i]);
-      list.addAll(v.ingredients);
+      final varIngs = variation(id.recipeId, i, id.variationIds[i]).ingredients;
+
+      // Deep copy
+      List<IngredientData> l = List.generate(
+        varIngs.length,
+        (i) => IngredientData.from(varIngs[i]),
+      );
+
+      list.addAll(l);
     }
 
-    return list.map(
-      (e) {
-        String nb = e.quantity.replaceAll(RegExp(r'[^0-9]'), '');
+    for (var ingredient in list) {
+      ingredient.multiply(id.servings);
+    }
 
-        String quantity = nb == ''
-            ? e.quantity
-            : e.quantity.replaceAll(nb, '${int.parse(nb) * id.servings}');
-
-        return IngredientData(
-          name: e.name,
-          quantity: quantity,
-        );
-      },
-    ).toList();
+    return list;
   }
 
   List<String> instructionSet(RecipeId id) {
@@ -87,8 +91,8 @@ class RecipeModel extends ChangeNotifier {
 
   RecipeId verifyVariationIds(RecipeId id) {
     final nbVarGrps = nbVarGroups(id.recipeId);
-    if (id.variationIds.length != nbVarGrps) {
-      id.variationIds = List.filled(nbVarGrps, 0);
+    while (id.variationIds.length != nbVarGrps) {
+      id.variationIds.add(0);
     }
 
     return id;

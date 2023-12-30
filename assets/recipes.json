@@ -7,7 +7,8 @@
       "ingredients": [
         {
           "name": "Olive oil",
-          "quantity": "2tbsp"
+          "quantity": 1,
+          "unit": "some"
         }
       ],
       "instructions": [
@@ -32,11 +33,13 @@
               "ingredients": [
                 {
                   "name": "Flour",
-                  "quantity": "100g"
+                  "quantity": 100,
+                  "unit": "g"
                 },
                 {
                   "name": "Egg(s)",
-                  "quantity": 1
+                  "quantity": 1,
+                  "unit": ""
                 }
               ],
               "instructionGroups": [
@@ -57,7 +60,8 @@
               "ingredients": [
                 {
                   "name": "Dry pasta",
-                  "quantity": ""
+                  "quantity": 1,
+                  "unit": "some"
                 }
               ],
               "instructionGroups": [
@@ -77,15 +81,18 @@
               "ingredients": [
                 {
                   "name": "Onion(s)",
-                  "quantity": 0.75
+                  "quantity": 0.75,
+                  "unit": ""
                 },
                 {
                   "name": "Carrot(s)",
-                  "quantity": 2
+                  "quantity": 2,
+                  "unit": ""
                 },
                 {
                   "name": "Celery stick(s)",
-                  "quantity": 2
+                  "quantity": 2,
+                  "unit": ""
                 }
               ],
               "instructionGroups": [
@@ -101,11 +108,13 @@
               "ingredients": [
                 {
                   "name": "Onion(s)",
-                  "quantity": 1
+                  "quantity": 1,
+                  "unit": ""
                 },
                 {
                   "name": "Garlic clove(s)",
-                  "quantity": 1
+                  "quantity": 1,
+                  "unit": ""
                 }
               ],
               "instructionGroups": [
@@ -127,7 +136,8 @@
               "ingredients": [
                 {
                   "name": "Can(s) of tomato sauce",
-                  "quantity": 0.75
+                  "quantity": 0.75,
+                  "unit": ""
                 }
               ],
               "instructionGroups": [
@@ -142,7 +152,8 @@
               "ingredients": [
                 {
                   "name": "Baby tomato(es)",
-                  "quantity": 10
+                  "quantity": 10,
+                  "unit": ""
                 }
               ],
               "instructionGroups": [
@@ -163,19 +174,23 @@
       "ingredients": [
         {
           "name": "Egg(s)",
-          "quantity": "0.8"
+          "quantity": 0.8,
+          "unit": ""
         },
         {
           "name": "Flour",
-          "quantity": "100g"
+          "quantity": 100,
+          "unit": "g"
         },
         {
           "name": "Parmesan",
-          "quantity": "A good handful"
+          "quantity": "",
+          "unit": "some"
         },
         {
           "name": "Butter",
-          "quantity": "A good knob"
+          "quantity": "",
+          "unit": "some"
         }
       ],
       "instructions": [

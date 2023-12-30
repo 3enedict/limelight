@@ -1,70 +1,113 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
+
 import 'package:limelight/widgets/recipe_description_items.dart';
+import 'package:limelight/widgets/variation_picker_dialog.dart';
 import 'package:limelight/widgets/recipe_description_box.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
+import 'package:limelight/pages/shopping_list_page.dart';
+import 'package:limelight/utils/gradient_button.dart';
+import 'package:limelight/pages/calendar_page.dart';
+import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/data/recipe_id.dart';
 import 'package:limelight/utils/page.dart';
+import 'package:limelight/gradients.dart';
 
-class RecipeView extends StatelessWidget {
+class RecipeView extends StatefulWidget {
   final RecipeId id;
-  final RecipeModel recipes;
+  const RecipeView({super.key, required this.id});
 
-  const RecipeView({
-    super.key,
-    required this.id,
-    required this.recipes,
-  });
+  @override
+  State<RecipeView> createState() => _RecipeViewState();
+}
+
+class _RecipeViewState extends State<RecipeView>
+    with AutomaticKeepAliveClientMixin {
+  late PageController _controller;
+  late RecipeId _localId;
+  double _currentPage = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _localId = widget.id;
+    _controller = PageController(initialPage: 1);
+    _controller.addListener(() {
+      setState(() {
+        _currentPage = _controller.page ?? _currentPage;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return EmptyPage(
-      appBarText: recipes.name(id.recipeId),
-      child: Content(
-        id: id,
-        recipes: recipes,
-      ),
+    super.build(context);
+    final recipes = Provider.of<RecipeModel>(context, listen: false);
+
+    return PageView(
+      controller: _controller,
+      physics: _currentPage == 1
+          ? const NeverScrollableScrollPhysics()
+          : const PageScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      children: [
+        CalendarPage(recipe: _localId),
+        EmptyPage(
+          appBarText: recipes.name(_localId.recipeId),
+          child: Column(
+            children: [
+              Expanded(child: Content(id: _localId)),
+              ActionButtons(
+                id: _localId,
+                controller: _controller,
+                onVariationChange: (newId) => setState(() => _localId = newId),
+              ),
+            ],
+          ),
+        ),
+        ShoppingListPage(pageController: _controller),
+      ],
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class Content extends StatelessWidget {
   final RecipeId id;
-  final RecipeModel recipes;
-
-  const Content({
-    super.key,
-    required this.id,
-    required this.recipes,
-  });
+  const Content({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
+    final recipes = Provider.of<RecipeModel>(context, listen: false);
     final width = MediaQuery.of(context).size.width - 20 * 2 * 2;
 
     final ingredients = recipes.ingredientList(id);
     final instructions = recipes.instructionSet(id);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-      child: Center(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      child: SingleChildScrollView(
         child: Column(
           children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height / 2.5,
-              ),
-              child: RecipeDescriptionBox(
-                label: "Ingredients",
-                items: generateIngredients(ingredients),
-              ),
+            const SizedBox(height: 14),
+            RecipeDescriptionBox(
+              label: "Ingredients",
+              items: generateIngredients(ingredients),
             ),
             const SizedBox(height: 14),
-            Expanded(
-              child: RecipeDescriptionBox(
-                label: "Instructions",
-                items: generateInstructions(instructions, width),
-              ),
+            RecipeDescriptionBox(
+              label: "Instructions",
+              items: generateInstructions(instructions, width),
             ),
           ],
         ),
@@ -73,30 +116,24 @@ class Content extends StatelessWidget {
   }
 }
 
-/*
-class ActionButtons extends StatefulWidget {
-  final int recipeId;
-  final RecipeModel recipes;
+class ActionButtons extends StatelessWidget {
+  final RecipeId id;
   final PageController controller;
+  final void Function(RecipeId) onVariationChange;
 
   const ActionButtons({
     super.key,
-    required this.recipeId,
-    required this.recipes,
+    required this.id,
     required this.controller,
+    required this.onVariationChange,
   });
 
-  @override
-  State<ActionButtons> createState() => _ActionButtonsState();
-}
-
-class _ActionButtonsState extends State<ActionButtons> {
   @override
   Widget build(BuildContext context) {
     return Container(
       color: toBackgroundGradient(limelightGradient)[1],
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
+        padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -107,8 +144,8 @@ class _ActionButtonsState extends State<ActionButtons> {
                 context: context,
                 builder: (BuildContext context) {
                   return VariationPickerDialog(
-                    recipeId: widget.recipeId,
-                    recipes: widget.recipes,
+                    id: id,
+                    onVariationChange: onVariationChange,
                   );
                 },
               ),
@@ -120,66 +157,32 @@ class _ActionButtonsState extends State<ActionButtons> {
               ),
             ),
             const SizedBox(width: 53 / 3),
-            Consumer2<PreferencesModel, VariationModel>(
-              builder: (context, preferences, variations, child) {
-                List<int> vIds = [];
-
-                final ids = variations.variationIds(widget.recipeId);
-                for (var (groupId, variationId) in ids) {
-                  while (!(vIds.length > groupId)) {
-                    vIds.add(0);
-                  }
-
-                  vIds[groupId] = variationId;
-                }
-
-                preferences.setFinalScreenId(
-                  RecipeId(
-                    recipeId: widget.recipeId,
-                    servings: preferences.nbServingsLocal(widget.recipeId),
-                    variationIds: vIds,
-                  ),
-                );
-
-                return GradientButton(
-                  diameter: 53,
-                  gradient:
-                      limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
-                  onPressed: () {
-                    preferences.setFinalScreenIsCalendar(true);
-
-                    widget.controller.animateToPage(
-                      2,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  },
-                  child: Center(
-                    child: GradientIcon(
-                      gradient: toSurfaceGradient(limelightGradient),
-                      icon: UniconsLine.calender,
-                      size: 26,
-                    ),
-                  ),
-                );
-              },
+            GradientButton(
+              diameter: 53,
+              gradient:
+                  limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
+              onPressed: () => controller.animateToPage(
+                0,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.ease,
+              ),
+              child: Center(
+                child: GradientIcon(
+                  gradient: toSurfaceGradient(limelightGradient),
+                  icon: UniconsLine.calender,
+                  size: 26,
+                ),
+              ),
             ),
             const SizedBox(width: 53 / 3),
             GradientButton(
               diameter: 54,
               gradient: toLighterSurfaceGradient(limelightGradient),
-              onPressed: () {
-                final preferences =
-                    Provider.of<PreferencesModel>(context, listen: false);
-
-                preferences.setFinalScreenIsCalendar(false);
-
-                widget.controller.animateToPage(
-                  2,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              },
+              onPressed: () => controller.animateToPage(
+                2,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.ease,
+              ),
               child: const Center(
                 child: GradientIcon(
                   gradient: limelightGradient,
@@ -194,4 +197,3 @@ class _ActionButtonsState extends State<ActionButtons> {
     );
   }
 }
-*/

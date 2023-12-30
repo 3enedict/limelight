@@ -33,6 +33,15 @@ class VariationGroup {
     return variations.elementAtOrNull(id) ?? Variation.empty();
   }
 
+  List<String> get names {
+    List<String> names = [];
+    for (var variation in variations) {
+      names.add(variation.name);
+    }
+
+    return names;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'groupName': groupName,

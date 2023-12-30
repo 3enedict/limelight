@@ -26,8 +26,7 @@ String replaceVariationInstructions(
     final old = "{$variationGroupId:$variationId:$instructionId:instruction}";
 
     if (id.variationIds[variationGroupId] == variationId) {
-      final group = recipeVariations.elementAtOrNull(variationGroupId) ??
-          VariationGroup.empty();
+      final group = recipeVariations[variationGroupId];
 
       final newInstructions = group
           .variation(variationId)
@@ -58,10 +57,7 @@ String replaceGlobalIngredients(
 
     localInstructions = localInstructions.replaceAll(
       "{$instructionId:quantity}",
-      computeIngredientQuantities(
-        id.servings,
-        ingredients.elementAtOrNull(instructionId) ?? IngredientData.empty(),
-      ),
+      ingredients[instructionId].toEnglish(id.servings),
     );
   }
 
@@ -83,48 +79,14 @@ String replaceVariationIngredients(
     final variationId = int.parse(match.group(2) ?? "-1");
     final instructionId = int.parse(match.group(3) ?? "-1");
 
-    final group = recipeVariations.elementAtOrNull(variationGroupId) ??
-        VariationGroup.empty();
+    final group = recipeVariations[variationGroupId];
+    final ingredient = group.variation(variationId).ingredient(instructionId);
 
     localInstructions = localInstructions.replaceAll(
       "{$variationGroupId:$variationId:$instructionId:quantity}",
-      computeIngredientQuantities(
-        id.servings,
-        group.variation(variationId).ingredient(instructionId),
-      ),
+      ingredient.toEnglish(id.servings),
     );
   }
 
   return localInstructions;
-}
-
-String computeIngredientQuantities(
-  int numberOfServings,
-  IngredientData ingredient,
-) {
-  double? quantity = double.tryParse(ingredient.quantity);
-
-  if (quantity == null) {
-    String quantity = ingredient.quantity.replaceAll(RegExp(r'[^0-9]'), '');
-    if (quantity == "") {
-      return "${ingredient.quantity.toLowerCase()} of ${ingredient.name.toLowerCase()}";
-    }
-
-    int number = (numberOfServings * double.parse(quantity)).floor();
-    if (number == 0) number = 1;
-
-    String unit = ingredient.quantity.replaceAll(quantity, "");
-    String name = ingredient.name;
-
-    return "$number$unit of $name".toLowerCase();
-  } else {
-    int number = (numberOfServings * quantity).floor();
-    if (number == 0) number = 1;
-
-    String ingredientName = number == 1
-        ? ingredient.name.replaceAll(RegExp(r'\(.*\)'), '')
-        : ingredient.name.replaceAll('(', '').replaceAll(')', '');
-
-    return "$number $ingredientName".toLowerCase();
-  }
 }

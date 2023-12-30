@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:limelight/data/provider/shopping_list_model.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
+import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/widgets/recipe_view.dart';
 import 'package:limelight/utils/custom_text.dart';
@@ -17,6 +19,8 @@ void main() async {
         // Don't forget to call load() if need be in loadModelDataFromLocalFiles() at the bottom of this file
         ChangeNotifierProvider(create: (context) => IngredientModel()),
         ChangeNotifierProvider(create: (context) => RecipeModel()),
+        ChangeNotifierProvider(create: (context) => CalendarModel()),
+        ChangeNotifierProvider(create: (context) => ShoppingListModel()),
       ],
       child: const Limelight(),
     ),
@@ -53,9 +57,7 @@ class Limelight extends StatelessWidget {
                     ),
                   ),
                 ]
-              : matches
-                  .map((e) => RecipeView(id: e, recipes: recipes))
-                  .toList();
+              : matches.map((e) => RecipeView(id: e)).toList();
 
           return PageView(
             children: [const HomePage(), ...pages],
@@ -69,4 +71,6 @@ class Limelight extends StatelessWidget {
 void loadModelDataFromLocalFiles(BuildContext context) {
   Provider.of<IngredientModel>(context, listen: false).load();
   Provider.of<RecipeModel>(context, listen: false).load();
+  Provider.of<CalendarModel>(context, listen: false).load();
+  Provider.of<ShoppingListModel>(context, listen: false).load();
 }
