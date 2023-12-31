@@ -9,6 +9,8 @@ class GradientContainer extends StatelessWidget {
   final double? width;
   final double? borderRadius;
   final double? diameter;
+  final Alignment begin;
+  final Alignment end;
   final Widget child;
 
   const GradientContainer({
@@ -19,6 +21,8 @@ class GradientContainer extends StatelessWidget {
     this.width,
     this.borderRadius,
     this.diameter,
+    this.begin = Alignment.topLeft,
+    this.end = Alignment.bottomCenter,
     required this.child,
   });
 
@@ -38,11 +42,8 @@ class GradientContainer extends StatelessWidget {
         ],
         gradient: LinearGradient(
           colors: borderGradient ?? gradient,
-          begin:
-              borderGradient == null ? Alignment.centerLeft : Alignment.topLeft,
-          end: borderGradient == null
-              ? Alignment.centerRight
-              : Alignment.bottomRight,
+          begin: begin,
+          end: end,
         ),
       ),
       height: diameter ?? height,

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:unicons/unicons.dart';
@@ -17,9 +19,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const EmptyPage(
+    return EmptyPage(
       child: Circles(
-        child: SearchBar(),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+          child: const SearchBar(),
+        ),
       ),
     );
   }

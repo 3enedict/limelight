@@ -5,6 +5,8 @@ import 'package:limelight/gradients.dart';
 
 class GradientButton extends StatelessWidget {
   final List<Color> gradient;
+  final Alignment begin;
+  final Alignment end;
   final double? height;
   final double? width;
   final double borderRadius;
@@ -19,6 +21,8 @@ class GradientButton extends StatelessWidget {
   const GradientButton({
     super.key,
     this.gradient = limelightGradient,
+    this.begin = Alignment.topCenter,
+    this.end = Alignment.bottomCenter,
     this.height,
     this.width,
     this.borderRadius = 20,
@@ -62,6 +66,8 @@ class GradientButton extends StatelessWidget {
 
     return GradientContainer(
       gradient: gradient,
+      begin: begin,
+      end: end,
       height: height,
       width: width,
       borderRadius: borderRadius,

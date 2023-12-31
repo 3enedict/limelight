@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:limelight/utils/gradient_container.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/gradients.dart';
 
@@ -27,8 +26,8 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
     }
 
-    return GradientContainer(
-      gradient: toSurfaceGradient(gradient),
+    return Container(
+      color: toSurfaceGradient(gradient)[0],
       child: Padding(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         child: localChild,

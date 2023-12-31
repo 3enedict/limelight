@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 
-const limelightGradient = [
+const oldlimelightGradient = [
   Color(0xFF41cdc9),
   Color(0xFF3aaada),
+];
+
+const newlimelightGradient = [
+  Color(0xFF00d2ff),
+  Color(0xFF3a7bd5),
+];
+
+const limelightGradient = [
+  Color(0xFF24C6DC),
+  Color(0xFF514A9D),
 ];
 
 const redGradient = [
@@ -47,4 +57,13 @@ Color modifyColor(Color color, double value, double saturation) {
   hsvColor = hsvColor.withSaturation(saturation);
 
   return hsvColor.toColor();
+}
+
+Color lighten(Color color, [double amount = .1]) {
+  assert(amount >= 0 && amount <= 1);
+
+  final hsl = HSLColor.fromColor(color);
+  final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+
+  return hslLight.toColor();
 }

@@ -30,7 +30,8 @@ class GradientIcon extends StatelessWidget {
       shaderCallback: (Rect bounds) {
         return LinearGradient(
           colors: gradient,
-          begin: Alignment.topCenter,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ).createShader(bounds);
       },
       child: Icon(icon, size: size, color: Colors.white, weight: weight),

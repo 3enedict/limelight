@@ -161,6 +161,8 @@ class ActionButtons extends StatelessWidget {
               diameter: 53,
               gradient:
                   limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
               onPressed: () => controller.animateToPage(
                 0,
                 duration: const Duration(milliseconds: 500),
