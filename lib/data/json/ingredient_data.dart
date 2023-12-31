@@ -11,7 +11,7 @@ class IngredientData {
 
   IngredientData.empty({
     this.name = '',
-    this.quantity = 1,
+    this.quantity = 0,
     this.unit = '',
   });
 

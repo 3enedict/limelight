@@ -6,7 +6,7 @@ import 'package:limelight/data/provider/shopping_list_model.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/widgets/recipe_view.dart';
+import 'package:limelight/pages/recipe_page.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/pages/home_page.dart';
 import 'package:limelight/utils/page.dart';
@@ -57,7 +57,7 @@ class Limelight extends StatelessWidget {
                     ),
                   ),
                 ]
-              : matches.map((e) => RecipeView(id: e)).toList();
+              : matches.map((e) => RecipePage(id: e)).toList();
 
           return PageView(
             children: [const HomePage(), ...pages],

@@ -107,6 +107,25 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
             ? [...shoppingList.shoppingCart, ...shoppingList.recipesCart]
             : [...shoppingList.shoppingList, ...listFromRecipes];
 
+        if (!widget.cart &&
+            list.isEmpty &&
+            shoppingList.shoppingCart.isNotEmpty) {
+          return EmptyPage(
+            appBarText: 'Ingredients to buy',
+            gradient: gradient,
+            child: Center(
+              child: GradientButton(
+                onPressed: () => shoppingList.clear(),
+                gradient: toSurfaceGradient(limelightGradient),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: CustomText(text: 'Done'),
+                ),
+              ),
+            ),
+          );
+        }
+
         return EmptyPage(
           appBarText: widget.cart ? 'Shopping cart' : 'Ingredients to buy',
           gradient: gradient,

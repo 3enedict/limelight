@@ -15,15 +15,15 @@ import 'package:limelight/data/recipe_id.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
-class RecipeView extends StatefulWidget {
+class RecipePage extends StatefulWidget {
   final RecipeId id;
-  const RecipeView({super.key, required this.id});
+  const RecipePage({super.key, required this.id});
 
   @override
-  State<RecipeView> createState() => _RecipeViewState();
+  State<RecipePage> createState() => _RecipePageState();
 }
 
-class _RecipeViewState extends State<RecipeView>
+class _RecipePageState extends State<RecipePage>
     with AutomaticKeepAliveClientMixin {
   late PageController _controller;
   late RecipeId _localId;
@@ -183,11 +183,11 @@ class ActionButtons extends StatelessWidget {
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.ease,
               ),
-              child: const Center(
+              child: Center(
                 child: GradientIcon(
-                  gradient: limelightGradient,
+                  gradient: toTextGradient(limelightGradient),
                   icon: UniconsLine.shopping_basket,
-                  size: 25,
+                  size: 24,
                 ),
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:unicons/unicons.dart';
 
+import 'package:limelight/pages/add_to_shopping_list_page.dart';
 import 'package:limelight/pages/ingredient_search_page.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
@@ -67,14 +68,11 @@ class SearchBarIcons extends StatelessWidget {
     return Row(
       children: [
         GradientIcon(
-          /*
           onPressed: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const AddToShoppingListPage(),
             ),
           ),
-          */
-          onPressed: () {},
           size: size,
           icon: UniconsLine.notes,
         ),
@@ -82,6 +80,7 @@ class SearchBarIcons extends StatelessWidget {
           //onPressed: () => goto(context, const CookbookPage()),
           onPressed: () {},
           size: size,
+          gradient: redGradient,
           icon: UniconsLine.fire,
         ),
       ],
