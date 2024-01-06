@@ -69,23 +69,25 @@ class CalendarModel extends ChangeNotifier {
 
   List<RecipeId> get mealList => List.from(_mealList);
   List<RecipeId> get meals {
-    final calendarList = getFutureMeals.values.toList();
+    final calendarList = getFutureMeals().values.toList();
 
     return mealList + List.from(calendarList);
   }
 
-  Map<String, RecipeId> get getFutureMeals {
+  Map<String, RecipeId> getFutureMeals() {
+    DateTime now = DateTime.now();
     Map<String, RecipeId> newIds = Map.from(_mealIds);
 
     newIds.removeWhere(
       (key, value) {
-        DateTime now = DateTime.now();
         final ids = key.split(':');
         final year = int.parse(ids[0]);
         final month = int.parse(ids[1]);
         final day = int.parse(ids[2]);
 
-        if (day >= now.day && month >= now.month && year >= now.month) {
+        if (day >= now.day && month == now.month && year == now.year ||
+            month > now.month && year == now.year ||
+            year > now.year) {
           return false;
         }
 

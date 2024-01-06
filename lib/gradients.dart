@@ -15,10 +15,16 @@ const limelightGradient = [
   Color(0xFF514A9D),
 ];
 
-const redGradient = [
+const oldredGradient = [
   Color(0xFFFF4B2B),
   Color(0xFFFF416C),
 ];
+
+const redGradient = [
+  Color(0xFFFF512F),
+  Color(0xFFDD2476),
+];
+
 List<Color> toBackgroundGradient(List<Color> gradient) {
   return List.generate(
     2,
@@ -43,7 +49,7 @@ List<Color> toLighterSurfaceGradient(List<Color> gradient) {
 List<Color> toTextGradient(List<Color> gradient) {
   return List.generate(
     2,
-    (int index) => modifyColor(gradient[index], 0.8, 0.1),
+    (int index) => modifyColor(gradient[index], 0.85, 0.1),
   );
 }
 

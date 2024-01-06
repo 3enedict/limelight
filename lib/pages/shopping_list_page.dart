@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:limelight/data/provider/shopping_list_model.dart';
+import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/data/json/ingredient_data.dart';
@@ -17,9 +18,14 @@ import 'package:limelight/gradients.dart';
 // https://github.com/flutter/flutter/issues/31476
 
 class ShoppingListPage extends StatefulWidget {
-  PageController pageController;
+  final PageController verticalPageController;
+  final PageController horizontalPageController;
 
-  ShoppingListPage({super.key, required this.pageController});
+  const ShoppingListPage({
+    super.key,
+    required this.verticalPageController,
+    required this.horizontalPageController,
+  });
 
   @override
   State<ShoppingListPage> createState() => _ShoppingListPageState();
@@ -41,7 +47,8 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
       children: List.generate(
         2,
         (i) => ShoppingListSubPage(
-          pageController: widget.pageController,
+          verticalPageController: widget.verticalPageController,
+          horizontalPageController: widget.horizontalPageController,
           shoppingListPageController: _pageController,
           cart: i == 1,
         ),
@@ -51,13 +58,15 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
 }
 
 class ShoppingListSubPage extends StatefulWidget {
-  PageController pageController;
-  PageController shoppingListPageController;
-  bool cart;
+  final PageController verticalPageController;
+  final PageController horizontalPageController;
+  final PageController shoppingListPageController;
+  final bool cart;
 
-  ShoppingListSubPage({
+  const ShoppingListSubPage({
     super.key,
-    required this.pageController,
+    required this.verticalPageController,
+    required this.horizontalPageController,
     required this.shoppingListPageController,
     required this.cart,
   });
@@ -71,8 +80,9 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<RecipeModel, CalendarModel, ShoppingListModel>(
-      builder: (context, recipes, calendar, shoppingList, child) {
+    return Consumer4<IngredientModel, RecipeModel, CalendarModel,
+        ShoppingListModel>(
+      builder: (context, ingredients, recipes, calendar, shoppingList, child) {
         final gradient = widget.cart ? redGradient : limelightGradient;
 
         List<IngredientData> listFromRecipes = [];
@@ -109,13 +119,18 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
 
         if (!widget.cart &&
             list.isEmpty &&
-            shoppingList.shoppingCart.isNotEmpty) {
+            shoppingList.recipesCart.isNotEmpty) {
           return EmptyPage(
             appBarText: 'Ingredients to buy',
             gradient: gradient,
             child: Center(
               child: GradientButton(
-                onPressed: () => shoppingList.clear(),
+                onPressed: () {
+                  ingredients.clear();
+                  shoppingList.clear();
+                  widget.verticalPageController.jumpToPage(1);
+                  widget.horizontalPageController.jumpToPage(0);
+                },
                 gradient: toSurfaceGradient(limelightGradient),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -145,7 +160,7 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
                     if (notification is OverscrollNotification &&
                         _start == true) {
                       if (notification.overscroll < 0) {
-                        widget.pageController.animateToPage(
+                        widget.verticalPageController.animateToPage(
                           1,
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.ease,

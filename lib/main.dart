@@ -6,11 +6,22 @@ import 'package:limelight/data/provider/shopping_list_model.dart';
 import 'package:limelight/data/provider/ingredient_model.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
+import 'package:limelight/utils/gradient_appbar.dart';
 import 'package:limelight/pages/recipe_page.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/pages/home_page.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+
+List<String> daysOfTheWeek = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+];
 
 void main() async {
   runApp(
@@ -27,8 +38,21 @@ void main() async {
   );
 }
 
-class Limelight extends StatelessWidget {
+class Limelight extends StatefulWidget {
   const Limelight({super.key});
+
+  @override
+  LimelightState createState() => LimelightState();
+}
+
+class LimelightState extends State<Limelight> {
+  final _controller = PageController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +69,92 @@ class Limelight extends StatelessWidget {
           selectionHandleColor: modifyColor(limelightGradient[1], 0.7, 0.7),
         ),
       ),
-      home: Consumer2<IngredientModel, RecipeModel>(
-        builder: (context, ingredients, recipes, child) {
-          final matches = recipes.search(ingredients.namesOfSelected);
+      home: Consumer3<IngredientModel, RecipeModel, CalendarModel>(
+        builder: (context, ingredients, recipes, calendar, child) {
+          List<Widget> pages = [];
 
-          final pages = matches.isEmpty
-              ? [
-                  const EmptyPage(
-                    child: Center(
-                      child: CustomText(text: 'No recipes found...'),
-                    ),
-                  ),
-                ]
-              : matches.map((e) => RecipePage(id: e)).toList();
+          if (ingredients.selected.isEmpty) {
+            final meals = calendar.getFutureMeals();
+            final scheduledRecipes = meals.values.isEmpty
+                ? [
+                    const EmptyPage(
+                      child: Center(
+                        child: CustomText(
+                          text:
+                              'No recipes scheduled nor any ingredients selected...',
+                        ),
+                      ),
+                    )
+                  ]
+                : meals.entries.map(
+                    (e) {
+                      final ids =
+                          e.key.split(':').map((e) => int.parse(e)).toList();
+
+                      final date = DateTime.utc(ids[0], ids[1], ids[2]);
+                      final meal = ids[3] == 0 ? 'lunch' : 'dinner';
+
+                      return EmptyPage(
+                        appBar: GradientAppBar(
+                          gradient: limelightGradient,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 19),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomText(
+                                  text: recipes.name(e.value.recipeId),
+                                  alignement: TextAlign.center,
+                                  size: 20,
+                                  weight: FontWeight.w700,
+                                ),
+                                const SizedBox(height: 1),
+                                CustomText(
+                                  text:
+                                      '${daysOfTheWeek[date.weekday - 1]} $meal',
+                                  alignement: TextAlign.center,
+                                  size: 16,
+                                  weight: FontWeight.w500,
+                                  style: FontStyle.italic,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        child: Content(id: e.value),
+                      );
+                    },
+                  ).toList();
+
+            pages = scheduledRecipes;
+          } else {
+            final matches = recipes.search(ingredients.namesOfSelected);
+            final proposals = matches.isEmpty
+                ? [
+                    const EmptyPage(
+                      child: Center(
+                        child: CustomText(text: 'No recipes found...'),
+                      ),
+                    )
+                  ]
+                : matches
+                    .map(
+                      (e) => RecipePage(
+                        id: e,
+                        horizontalPageController: _controller,
+                      ),
+                    )
+                    .toList();
+
+            pages = proposals;
+          }
 
           return PageView(
-            children: [const HomePage(), ...pages],
+            controller: _controller,
+            children: [
+              HomePage(pageController: _controller),
+              ...pages,
+            ],
           );
         },
       ),

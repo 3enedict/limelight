@@ -99,6 +99,7 @@ class ShoppingListModel extends ChangeNotifier {
 
   void clear() {
     _shoppingCart.clear();
+    _recipesCart.clear();
     notify();
   }
 

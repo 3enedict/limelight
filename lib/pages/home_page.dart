@@ -15,7 +15,8 @@ import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final PageController pageController;
+  const HomePage({super.key, required this.pageController});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
       child: Circles(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-          child: const SearchBar(),
+          child: SearchBar(pageController: pageController),
         ),
       ),
     );
@@ -31,7 +32,8 @@ class HomePage extends StatelessWidget {
 }
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({super.key});
+  final PageController pageController;
+  const SearchBar({super.key, required this.pageController});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,10 @@ class SearchBar extends StatelessWidget {
         child: GradientButton(
           gradient: toSurfaceGradient(limelightGradient),
           borderRadius: 100,
-          onPressed: () => goto(context, const IngredientSearchPage()),
+          onPressed: () => goto(
+            context,
+            IngredientSearchPage(pageController: pageController),
+          ),
           ink: false,
           child: const Padding(
             padding: EdgeInsets.fromLTRB(30, 12, 18, 12),

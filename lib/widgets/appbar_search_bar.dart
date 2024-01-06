@@ -12,6 +12,7 @@ class AppbarSearchBar extends StatefulWidget {
   final String searchHint;
   final void Function(String) onChanged;
   final VoidCallback onSubmitted;
+  final VoidCallback? popContext;
 
   AppbarSearchBar({
     super.key,
@@ -19,6 +20,7 @@ class AppbarSearchBar extends StatefulWidget {
     required this.searchHint,
     required this.onChanged,
     required this.onSubmitted,
+    this.popContext,
   });
 
   @override
@@ -75,8 +77,12 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
                           widget.onSubmitted();
                           clear();
                         },
-                  onSubmitted:
-                      _query == '' ? (_) => Navigator.of(context).pop() : null,
+                  onSubmitted: _query == ''
+                      ? (_) {
+                          if (widget.popContext != null) widget.popContext!();
+                          Navigator.of(context).pop();
+                        }
+                      : null,
                 ),
               ),
               _query != ''

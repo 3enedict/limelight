@@ -121,6 +121,11 @@ class IngredientModel extends ChangeNotifier {
     return descriptions;
   }
 
+  void clear() {
+    _selected.clear();
+    notify();
+  }
+
   // Utilities
 
   void loadFromString(String data) {

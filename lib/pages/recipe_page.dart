@@ -17,7 +17,13 @@ import 'package:limelight/gradients.dart';
 
 class RecipePage extends StatefulWidget {
   final RecipeId id;
-  const RecipePage({super.key, required this.id});
+  final PageController horizontalPageController;
+
+  const RecipePage({
+    super.key,
+    required this.id,
+    required this.horizontalPageController,
+  });
 
   @override
   State<RecipePage> createState() => _RecipePageState();
@@ -67,7 +73,10 @@ class _RecipePageState extends State<RecipePage>
             ],
           ),
         ),
-        ShoppingListPage(pageController: _controller),
+        ShoppingListPage(
+          verticalPageController: _controller,
+          horizontalPageController: widget.horizontalPageController,
+        ),
       ],
     );
   }
