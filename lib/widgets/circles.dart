@@ -15,6 +15,7 @@ class GradientCircle extends CustomPainter {
     const LinearGradient gradient = LinearGradient(
       colors: limelightGradient,
       begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
     );
 
     canvas.drawCircle(

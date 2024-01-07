@@ -344,6 +344,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  persistent_header_adaptive:
+    dependency: "direct main"
+    description:
+      name: persistent_header_adaptive
+      sha256: "4a3acd21ba264ad4bf764c184ad65835bf03df265dd13bc1150da29d4de2c59e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   platform:
     dependency: transitive
     description:

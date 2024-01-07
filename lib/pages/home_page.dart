@@ -22,10 +22,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return EmptyPage(
       child: Circles(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-          child: SearchBar(pageController: pageController),
-        ),
+        child: SearchBar(pageController: pageController),
       ),
     );
   }

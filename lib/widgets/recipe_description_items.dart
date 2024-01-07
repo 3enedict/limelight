@@ -6,6 +6,14 @@ import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/gradients.dart';
 
+final instructionStyle = GoogleFonts.openSans(
+  textStyle: TextStyle(
+    color: toTextGradient(limelightGradient)[1],
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+  ),
+);
+
 List<Widget> addDividers(List<Widget> items) {
   for (var i = items.length - 1; i > 0; i--) {
     items.insert(
@@ -21,18 +29,15 @@ List<Widget> addDividers(List<Widget> items) {
   return items;
 }
 
-double calculateTextHeight(String text, TextStyle style, double maxWidth) {
-  final textSpan = TextSpan(text: text, style: style);
-  final textPainter = TextPainter(
-    text: textSpan,
-    textDirection: TextDirection.ltr,
+double calculateTextHeight(String text, double maxWidth) {
+  final span = TextSpan(text: text, style: instructionStyle);
+  final tp = TextPainter(
+    text: span,
     textAlign: TextAlign.justify,
-    maxLines: 100, // A high value to prevent truncation
+    textDirection: TextDirection.ltr,
   );
-
-  textPainter.layout(maxWidth: maxWidth);
-
-  return textPainter.height;
+  tp.layout(maxWidth: maxWidth);
+  return tp.size.height;
 }
 
 List<Widget> generateIngredients(List<IngredientData> ingredientList) {
@@ -69,12 +74,12 @@ List<Widget> generateInstructions(List<String> instructionList, double width) {
           child: GradientIcon(icon: Icons.panorama_fish_eye, size: 20),
         ),
         Flexible(
-          child: CustomText(
-            text: instruction,
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            alignement: TextAlign.justify,
-            size: 13,
-            weight: FontWeight.w300,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: CustomPaint(
+              painter: MyTextPainter(instruction),
+              size: Size(width, calculateTextHeight(instruction, width)),
+            ),
           ),
         ),
       ],
@@ -82,4 +87,36 @@ List<Widget> generateInstructions(List<String> instructionList, double width) {
   }
 
   return instructions;
+}
+
+// Urghh... What a nightmare ! If ever you read this and you know WHAT
+// the difference is between TextPainter and Text in terms of sizing,
+// tell me, because I just wasted 3 hours of my life on this.......
+
+// Rant over. Sorry...
+
+class MyTextPainter extends CustomPainter {
+  final String text;
+
+  MyTextPainter(this.text);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: instructionStyle,
+      ),
+      textAlign: TextAlign.justify,
+      textDirection: TextDirection.ltr,
+    );
+
+    textPainter.layout(minWidth: 0, maxWidth: size.width);
+    textPainter.paint(canvas, const Offset(0, 0));
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
 }

@@ -1,5 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
@@ -11,6 +14,7 @@ import 'package:limelight/pages/shopping_list_page.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/pages/calendar_page.dart';
 import 'package:limelight/utils/gradient_icon.dart';
+import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/data/recipe_id.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
@@ -91,6 +95,37 @@ class _RecipePageState extends State<RecipePage>
   bool get wantKeepAlive => true;
 }
 
+class _SliverBoxDelegate extends SliverPersistentHeaderDelegate {
+  _SliverBoxDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => math.max(maxHeight, minHeight);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  bool shouldRebuild(_SliverBoxDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
+  }
+}
+
 class Content extends StatelessWidget {
   final RecipeId id;
   const Content({super.key, required this.id});
@@ -98,28 +133,65 @@ class Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final recipes = Provider.of<RecipeModel>(context, listen: false);
-    final width = MediaQuery.of(context).size.width - 20 * 2 * 2;
+    final width = MediaQuery.of(context).size.width;
 
     final ingredients = recipes.ingredientList(id);
     final instructions = recipes.instructionSet(id);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 14),
-            RecipeDescriptionBox(
-              label: "Ingredients",
-              items: generateIngredients(ingredients),
+      child: CustomScrollView(
+        slivers: [
+          SliverList.list(
+            children: const [
+              SizedBox(height: 14),
+              CustomText(
+                text: ' Ingredients',
+                opacity: 0.5,
+                weight: FontWeight.w300,
+              ),
+            ],
+          ),
+          SliverPersistentHeader(
+            delegate: _SliverBoxDelegate(
+              minHeight: 0.0,
+              maxHeight: ingredients.length * (12 * 2 + 20.0) + 10 + 14,
+              child: RecipeDescriptionBox(
+                items: generateIngredients(ingredients),
+              ),
             ),
-            const SizedBox(height: 14),
-            RecipeDescriptionBox(
-              label: "Instructions",
-              items: generateInstructions(instructions, width),
+          ),
+          SliverList.list(
+            children: const [
+              SizedBox(height: 7),
+              CustomText(
+                text: ' Instructions',
+                opacity: 0.5,
+                weight: FontWeight.w300,
+              ),
+            ],
+          ),
+          SliverPersistentHeader(
+            delegate: _SliverBoxDelegate(
+              minHeight: 0.0,
+              maxHeight: 20 +
+                  instructions
+                      .map((e) {
+                        return 10 * 2 +
+                            calculateTextHeight(
+                              e,
+                              width - 6 * 20, // 20 | 20 40(o) text 20 | 20
+                            );
+                      })
+                      .toList()
+                      .reduce((a, b) => a + b),
+              child: RecipeDescriptionBox(
+                items: generateInstructions(instructions, width - 6 * 20),
+                reverse: true,
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
