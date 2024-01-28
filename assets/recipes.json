@@ -142,7 +142,7 @@
               ],
               "instructionGroups": [
                 [
-                  "Add in {2:1:0:quantity} and cook until thickened"
+                  "Add in {2:0:0:quantity} and cook until thickened"
                 ]
               ]
             },
@@ -158,7 +158,7 @@
               ],
               "instructionGroups": [
                 [
-                  "Add in about {2:0:0:quantity} to the pan and cover until the skin starts to split.",
+                  "Add in about {2:1:0:quantity} to the pan and cover until the skin starts to split.",
                   "Either mash up the tomatoes or wait for them to cook down to a saucy consistency."
                 ]
               ]

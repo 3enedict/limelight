@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
 
+import 'package:limelight/widgets/variation_picker_dialog.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/utils/gradient_container.dart';
+import 'package:limelight/utils/custom_popup_menu.dart';
+import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/utils/flat_button.dart';
@@ -26,9 +30,9 @@ const weekdays = [
 ];
 
 class CalendarPage extends StatefulWidget {
-  final RecipeId recipe;
+  final RecipeId? recipe;
 
-  const CalendarPage({super.key, required this.recipe});
+  const CalendarPage({super.key, this.recipe});
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -39,9 +43,13 @@ class _CalendarPageState extends State<CalendarPage> {
   late ScrollController _scrollController;
   int _pageId = 31;
 
+  late RecipeId? _recipe;
+  int _recipeBeingMoved = -1;
+
   @override
   void initState() {
     super.initState();
+    _recipe = widget.recipe;
     _pageController = PageController(initialPage: _pageId);
     _scrollController = ScrollController(
       initialScrollOffset: calculateScrollOffset(_pageId),
@@ -94,6 +102,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           gradient: toTextGradient(limelightGradient),
                           padding: const EdgeInsets.all(15),
                           icon: Icons.chevron_left,
+                          size: 24,
                         ),
                         Expanded(
                           child: Column(
@@ -110,45 +119,192 @@ class _CalendarPageState extends State<CalendarPage> {
                                     final id = calendar.get(
                                         day.year, day.month, day.day, meal);
 
-                                    return FlatButton(
-                                      onPressed: () {
-                                        if (id == null || id != widget.recipe) {
-                                          calendar.set(
-                                            day.year,
-                                            day.month,
-                                            day.day,
-                                            meal,
-                                            widget.recipe,
-                                          );
-                                        } else {
-                                          calendar.remove(day.year, day.month,
-                                              day.day, meal);
-                                        }
-                                      },
-                                      child: GradientContainer(
-                                        gradient: toSurfaceGradient(
-                                            limelightGradient),
-                                        borderRadius: 20,
-                                        child: Row(
-                                          children: [
-                                            const GradientIcon(
-                                              padding: EdgeInsets.all(15),
-                                              icon: Icons.panorama_fish_eye,
-                                            ),
-                                            CustomText(
-                                              text: id == null
-                                                  ? ''
-                                                  : recipes.name(id.recipeId),
-                                            ),
-                                            const Expanded(child: SizedBox()),
-                                            CustomText(
-                                              text: id == null
-                                                  ? ''
-                                                  : '${id.servings}',
-                                            ),
-                                            const SizedBox(width: 15),
-                                          ],
-                                        ),
+                                    return GradientButton(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      gradient:
+                                          toSurfaceGradient(limelightGradient),
+                                      borderRadius: 20,
+                                      onPressed: _recipe == null
+                                          ? () {
+                                              if (id == null || id != _recipe) {
+                                                if (_recipe == null) {
+                                                  calendar.remove(day.year,
+                                                      day.month, day.day, meal);
+                                                } else {
+                                                  calendar.set(
+                                                    day.year,
+                                                    day.month,
+                                                    day.day,
+                                                    meal,
+                                                    _recipe!,
+                                                  );
+                                                }
+
+                                                if (widget.recipe != _recipe) {
+                                                  final idDay = aMonthAgo.add(
+                                                    Duration(
+                                                        days:
+                                                            (_recipeBeingMoved /
+                                                                    2)
+                                                                .floor()),
+                                                  );
+
+                                                  final idMeal =
+                                                      _recipeBeingMoved % 2;
+
+                                                  if (id == null) {
+                                                    calendar.remove(
+                                                        idDay.year,
+                                                        idDay.month,
+                                                        idDay.day,
+                                                        idMeal);
+                                                  } else {
+                                                    calendar.set(
+                                                      idDay.year,
+                                                      idDay.month,
+                                                      idDay.day,
+                                                      idMeal,
+                                                      id,
+                                                    );
+                                                  }
+
+                                                  setState(() {
+                                                    _recipe = widget.recipe;
+                                                    _recipeBeingMoved = -1;
+                                                  });
+                                                }
+                                              } else {
+                                                calendar.remove(day.year,
+                                                    day.month, day.day, meal);
+                                              }
+                                            }
+                                          : () {},
+                                      onLongPress: id != null
+                                          ? () {
+                                              final RelativeRect position =
+                                                  buttonMenuPosition(context);
+
+                                              List<PopupMenuItem<int>> list =
+                                                  [];
+
+                                              print('$_recipe vs $id');
+                                              if (_recipe != id) {
+                                                list.add(PopupMenuItem<int>(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _recipe = id;
+                                                      _recipeBeingMoved =
+                                                          2 * index + meal;
+                                                    });
+                                                  },
+                                                  child: const ListTile(
+                                                    leading: GradientIcon(
+                                                      icon: UniconsLine
+                                                          .arrow_circle_up,
+                                                    ),
+                                                    title: CustomText(
+                                                      text:
+                                                          'Move to a new location',
+                                                    ),
+                                                  ),
+                                                ));
+                                              }
+
+                                              list.add(
+                                                PopupMenuItem<int>(
+                                                  onTap: () =>
+                                                      showDialog<String>(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return VariationPickerDialog(
+                                                        id: id,
+                                                        onVariationChange:
+                                                            (newId) {
+                                                          calendar.set(
+                                                            day.year,
+                                                            day.month,
+                                                            day.day,
+                                                            meal,
+                                                            newId,
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                  child: const ListTile(
+                                                    leading: GradientIcon(
+                                                      icon: Icons.layers,
+                                                    ),
+                                                    title: CustomText(
+                                                      text: 'Change variations',
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+
+                                              list.add(
+                                                PopupMenuItem<int>(
+                                                  onTap: () {},
+                                                  child: const ListTile(
+                                                    leading: GradientIcon(
+                                                      icon: UniconsLine.fire,
+                                                    ),
+                                                    title: CustomText(
+                                                      text: 'View recipe',
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+
+                                              showMenu(
+                                                context: context,
+                                                position: position,
+                                                elevation: 0,
+                                                color: toSurfaceGradient(
+                                                    limelightGradient)[1],
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(20.0),
+                                                  ),
+                                                ),
+                                                constraints: BoxConstraints(
+                                                  minWidth:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width -
+                                                          2 * (2 * 15 + 24),
+                                                ),
+                                                items: list,
+                                              );
+                                            }
+                                          : () {},
+                                      child: Row(
+                                        children: [
+                                          GradientIcon(
+                                            gradient: 2 * index + meal ==
+                                                    _recipeBeingMoved
+                                                ? redGradient
+                                                : limelightGradient,
+                                            padding: const EdgeInsets.all(15),
+                                            icon: Icons.panorama_fish_eye,
+                                          ),
+                                          CustomText(
+                                            text: id == null
+                                                ? ''
+                                                : recipes.name(id.recipeId),
+                                          ),
+                                          const Expanded(child: SizedBox()),
+                                          CustomText(
+                                            text: id == null
+                                                ? ''
+                                                : '${id.servings}',
+                                          ),
+                                          const SizedBox(width: 15),
+                                        ],
                                       ),
                                     );
                                   },
@@ -161,6 +317,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           gradient: toTextGradient(limelightGradient),
                           padding: const EdgeInsets.all(15),
                           icon: Icons.chevron_right,
+                          size: 24,
                         ),
                       ],
                     ),

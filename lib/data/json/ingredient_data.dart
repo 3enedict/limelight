@@ -81,11 +81,25 @@ class IngredientData {
   }
 
   String toEnglish(int nbServings) {
+    final num = [
+      'one',
+      'two',
+      'three',
+      'four',
+      'five',
+      'six',
+      'seven',
+      'eight',
+      'nine',
+      'ten'
+    ];
+
     final number = (quantity * nbServings).round();
     final actualName = getName(number).toLowerCase();
 
     if (unit == 'some') return 'some $actualName'; // some butter
-    if (unit == '') return '$number $actualName';
+    if (unit == '' && number > 10) return '$number $actualName';
+    if (unit == '' && !(number > 10)) return '${num[number - 1]} $actualName';
     return '$number$unit of $actualName';
   }
 
