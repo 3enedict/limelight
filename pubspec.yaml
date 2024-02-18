@@ -17,6 +17,7 @@ dependencies:
   fluttericon:
   unicons:
   persistent_header_adaptive:
+  swipeable_page_route:
 
 dev_dependencies:
   flutter_lints:

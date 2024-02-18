@@ -5,6 +5,7 @@ import 'package:unicons/unicons.dart';
 import 'package:limelight/pages/add_to_shopping_list_page.dart';
 import 'package:limelight/pages/ingredient_search_page.dart';
 import 'package:limelight/utils/gradient_button.dart';
+import 'package:limelight/pages/cookbook_page.dart';
 import 'package:limelight/pages/calendar_page.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
@@ -145,8 +146,7 @@ class SearchBarIcons extends StatelessWidget {
           icon: UniconsLine.notes,
         ),
         GradientIcon(
-          //onPressed: () => goto(context, const CookbookPage()),
-          onPressed: () {},
+          onPressed: () => goto(context, const CookbookPage()),
           size: size,
           gradient: redGradient,
           icon: UniconsLine.fire,

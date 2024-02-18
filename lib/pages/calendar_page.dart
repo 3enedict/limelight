@@ -125,61 +125,57 @@ class _CalendarPageState extends State<CalendarPage> {
                                       gradient:
                                           toSurfaceGradient(limelightGradient),
                                       borderRadius: 20,
-                                      onPressed: _recipe != null
-                                          ? () {
-                                              if (id == null || id != _recipe) {
-                                                if (_recipe == null) {
-                                                  calendar.remove(day.year,
-                                                      day.month, day.day, meal);
-                                                } else {
-                                                  calendar.set(
-                                                    day.year,
-                                                    day.month,
-                                                    day.day,
-                                                    meal,
-                                                    _recipe!,
-                                                  );
-                                                }
+                                      onPressed: () {
+                                        if (id == null || id != _recipe) {
+                                          if (_recipe == null) {
+                                            calendar.remove(day.year, day.month,
+                                                day.day, meal);
+                                          } else {
+                                            calendar.set(
+                                              day.year,
+                                              day.month,
+                                              day.day,
+                                              meal,
+                                              _recipe!,
+                                            );
+                                          }
 
-                                                if (widget.recipe != _recipe) {
-                                                  final idDay = aMonthAgo.add(
-                                                    Duration(
-                                                        days:
-                                                            (_recipeBeingMoved /
-                                                                    2)
-                                                                .floor()),
-                                                  );
+                                          if (widget.recipe != _recipe) {
+                                            final idDay = aMonthAgo.add(
+                                              Duration(
+                                                  days: (_recipeBeingMoved / 2)
+                                                      .floor()),
+                                            );
 
-                                                  final idMeal =
-                                                      _recipeBeingMoved % 2;
+                                            final idMeal =
+                                                _recipeBeingMoved % 2;
 
-                                                  if (id == null) {
-                                                    calendar.remove(
-                                                        idDay.year,
-                                                        idDay.month,
-                                                        idDay.day,
-                                                        idMeal);
-                                                  } else {
-                                                    calendar.set(
-                                                      idDay.year,
-                                                      idDay.month,
-                                                      idDay.day,
-                                                      idMeal,
-                                                      id,
-                                                    );
-                                                  }
-
-                                                  setState(() {
-                                                    _recipe = widget.recipe;
-                                                    _recipeBeingMoved = -1;
-                                                  });
-                                                }
-                                              } else {
-                                                calendar.remove(day.year,
-                                                    day.month, day.day, meal);
-                                              }
+                                            if (id == null) {
+                                              calendar.remove(
+                                                  idDay.year,
+                                                  idDay.month,
+                                                  idDay.day,
+                                                  idMeal);
+                                            } else {
+                                              calendar.set(
+                                                idDay.year,
+                                                idDay.month,
+                                                idDay.day,
+                                                idMeal,
+                                                id,
+                                              );
                                             }
-                                          : () {},
+
+                                            setState(() {
+                                              _recipe = widget.recipe;
+                                              _recipeBeingMoved = -1;
+                                            });
+                                          }
+                                        } else {
+                                          calendar.remove(day.year, day.month,
+                                              day.day, meal);
+                                        }
+                                      },
                                       onLongPress: id != null
                                           ? () {
                                               final RelativeRect position =
@@ -188,7 +184,6 @@ class _CalendarPageState extends State<CalendarPage> {
                                               List<PopupMenuItem<int>> list =
                                                   [];
 
-                                              print('$_recipe vs $id');
                                               if (_recipe != id) {
                                                 list.add(PopupMenuItem<int>(
                                                   onTap: () {
