@@ -50,17 +50,34 @@ class HomePageState extends State<HomePage> {
                 SearchBar(pageController: widget.pageController),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: GradientIcon(
-                    onPressed: () => _controller.animateToPage(
-                      0,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    ),
-                    gradient: toTextGradient(limelightGradient)
-                        .map((e) => e.withOpacity(0.5))
-                        .toList(),
-                    padding: const EdgeInsets.all(10),
-                    icon: UniconsLine.calender,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GradientIcon(
+                        onPressed: () => widget.pageController.animateToPage(
+                          0,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        ),
+                        gradient: toTextGradient(limelightGradient)
+                            .map((e) => e.withOpacity(0.5))
+                            .toList(),
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        icon: UniconsLine.setting,
+                      ),
+                      GradientIcon(
+                        onPressed: () => _controller.animateToPage(
+                          0,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        ),
+                        gradient: toTextGradient(limelightGradient)
+                            .map((e) => e.withOpacity(0.5))
+                            .toList(),
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        icon: UniconsLine.calender,
+                      ),
+                    ],
                   ),
                 ),
               ],

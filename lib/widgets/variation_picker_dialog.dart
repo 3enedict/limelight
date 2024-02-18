@@ -74,7 +74,7 @@ class _VariationPickerDialogState extends State<VariationPickerDialog> {
     } else {
       variationList.add(
         FlatButton(
-          onPressed: () => setState(() => _id.servings = -1),
+          onPressed: () => setState(() => _id.servings = _id.servings * -1),
           child: Row(
             children: [
               const Padding(

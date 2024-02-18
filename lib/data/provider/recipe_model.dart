@@ -98,7 +98,7 @@ class RecipeModel extends ChangeNotifier {
     return id;
   }
 
-  List<RecipeId> search(List<String> ingredients) {
+  List<RecipeId> search(List<String> ingredients, int servings) {
     List<RecipeId?> ids = [];
 
     for (var i = 0; i < number; i++) {
@@ -107,7 +107,7 @@ class RecipeModel extends ChangeNotifier {
       final gIngredients = removePlural(recipe(i).ingredients);
       for (var s in ingredients) {
         if (gIngredients.contains(s)) {
-          ids[i] = RecipeId(recipeId: i);
+          ids[i] = RecipeId(recipeId: i, servings: servings);
           break;
         }
       }
@@ -123,7 +123,12 @@ class RecipeModel extends ChangeNotifier {
                 List<int> vIds = List.filled(nbVarGroups(i), 0);
                 vIds[groupId] = varId;
 
-                ids[i] = RecipeId(recipeId: i, variationIds: vIds);
+                ids[i] = RecipeId(
+                  recipeId: i,
+                  servings: servings,
+                  variationIds: vIds,
+                );
+
                 break;
               }
             }

@@ -12,6 +12,8 @@ import 'package:limelight/utils/utils.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
+const int recipePage = 2;
+
 class IngredientSearchPage extends StatefulWidget {
   final PageController pageController;
   const IngredientSearchPage({
@@ -70,7 +72,8 @@ class _SearchPageState extends State<IngredientSearchPage> {
                         ingredients.select(matches[0].name);
                       }
                     },
-                    popContext: () => widget.pageController.jumpToPage(1),
+                    popContext: () =>
+                        widget.pageController.jumpToPage(recipePage),
                   ),
                 ),
                 GradientIcon(
@@ -78,7 +81,7 @@ class _SearchPageState extends State<IngredientSearchPage> {
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
                   gradient: toTextGradient(limelightGradient),
                   onPressed: () {
-                    widget.pageController.jumpToPage(1);
+                    widget.pageController.jumpToPage(recipePage);
                     Navigator.of(context).pop();
                   },
                   size: 26,

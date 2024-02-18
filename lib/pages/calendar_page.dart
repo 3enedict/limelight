@@ -125,7 +125,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                       gradient:
                                           toSurfaceGradient(limelightGradient),
                                       borderRadius: 20,
-                                      onPressed: _recipe == null
+                                      onPressed: _recipe != null
                                           ? () {
                                               if (id == null || id != _recipe) {
                                                 if (_recipe == null) {

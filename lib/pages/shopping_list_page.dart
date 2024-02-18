@@ -129,7 +129,7 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
                   ingredients.clear();
                   shoppingList.clear();
                   widget.verticalPageController.jumpToPage(1);
-                  widget.horizontalPageController.jumpToPage(0);
+                  widget.horizontalPageController.jumpToPage(1);
                 },
                 gradient: toSurfaceGradient(limelightGradient),
                 child: const Padding(
