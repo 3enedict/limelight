@@ -30,8 +30,6 @@ class RecipeModel extends ChangeNotifier {
           return;
         }
 
-        print(file);
-
         _recipes = loadRecipes(jsonDecode(file));
       }),
     );
@@ -63,9 +61,22 @@ class RecipeModel extends ChangeNotifier {
     int ingredientId,
     IngredientData ingredient,
   ) {
-    if (_recipes.elementAtOrNull(recipeId) != null) {
-      _recipes[recipeId].ingredients[ingredientId] = ingredient;
-    }
+    _recipes[recipeId].ingredients[ingredientId] = ingredient;
+
+    notify();
+  }
+
+  void editVarIngredient(
+    int recipeId,
+    int variationGroupId,
+    int variationId,
+    int ingredientId,
+    IngredientData ingredient,
+  ) {
+    _recipes[recipeId]
+        .variationGroups[variationGroupId]
+        .variations[variationId]
+        .ingredients[ingredientId] = ingredient;
 
     notify();
   }

@@ -6,12 +6,14 @@ import 'package:limelight/gradients.dart';
 
 class Section extends StatelessWidget {
   final List<Color> gradient;
+  final EdgeInsetsGeometry padding;
   final String label;
   final Widget child;
 
   const Section({
     super.key,
     this.gradient = limelightGradient,
+    this.padding = const EdgeInsets.fromLTRB(20, 20, 20, 0),
     required this.label,
     required this.child,
   });
@@ -19,7 +21,7 @@ class Section extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
