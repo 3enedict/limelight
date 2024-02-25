@@ -80,9 +80,9 @@ class IngredientModel extends ChangeNotifier {
   }
 
   void notify() {
-    final data = _ingredients.map((e) => e.toJson()).toList();
-
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      final data = _ingredients.map((e) => e.toJson()).toList();
+
       getApplicationDocumentsDirectory().then(
         (dir) {
           final file = File("${dir.path}/ingredients.json");

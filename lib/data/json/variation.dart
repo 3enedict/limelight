@@ -52,7 +52,7 @@ class Variation {
     return {
       "name": name,
       "time": time,
-      "ingredients": ingredients,
+      "ingredients": ingredients.map((data) => data.toJson()).toList(),
       "instructionGroups": instructionGroups,
     };
   }

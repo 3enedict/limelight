@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:path_provider/path_provider.dart';
 
 import 'package:limelight/data/json/variation_group.dart';
 import 'package:limelight/data/json/ingredient_data.dart';
@@ -14,15 +17,24 @@ class RecipeModel extends ChangeNotifier {
   List<RecipeData> _recipes = [];
 
   void load() {
-    if (_recipes.isEmpty) {
-      rootBundle.loadString("assets/recipes.json").then(
-        (jsonData) {
-          final parsedJson = jsonDecode(jsonData);
+    getApplicationDocumentsDirectory().then(
+      (dir) => File("${dir.path}/recipes.json")
+          .readAsString()
+          .onError((_, __) => Future.value(''))
+          .then((file) {
+        if (file == "") {
+          rootBundle.loadString("assets/recipes.json").then(
+                (assetFile) => _recipes = loadRecipes(jsonDecode(assetFile)),
+              );
 
-          _recipes = loadRecipes(parsedJson);
-        },
-      );
-    }
+          return;
+        }
+
+        print(file);
+
+        _recipes = loadRecipes(jsonDecode(file));
+      }),
+    );
   }
 
   void add(RecipeData recipe) {
@@ -43,6 +55,36 @@ class RecipeModel extends ChangeNotifier {
     if (recipe == null) return;
 
     recipe.ingredients.add(ingredient);
+    notifyListeners();
+  }
+
+  void editIngredient(
+    int recipeId,
+    int ingredientId,
+    IngredientData ingredient,
+  ) {
+    if (_recipes.elementAtOrNull(recipeId) != null) {
+      _recipes[recipeId].ingredients[ingredientId] = ingredient;
+    }
+
+    notify();
+  }
+
+  void notify() {
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      final data = _recipes.map((e) => e.toJson()).toList();
+
+      getApplicationDocumentsDirectory().then(
+        (dir) {
+          final file = File("${dir.path}/recipes.json");
+
+          file.writeAsString(
+            jsonEncode({'recipes': data}),
+          );
+        },
+      );
+    }
+
     notifyListeners();
   }
 
@@ -154,7 +196,7 @@ class RecipeModel extends ChangeNotifier {
   // Getters
 
   RecipeData recipe(int recipeId) {
-    return List.from(_recipes).elementAtOrNull(recipeId) ?? RecipeData.empty();
+    return RecipeData.from(_recipes[recipeId]);
   }
 
   VariationGroup variationGroup(int recipeId, int variationGroupId) {

@@ -45,7 +45,7 @@ class VariationGroup {
   Map<String, dynamic> toJson() {
     return {
       'groupName': groupName,
-      'variations': variations,
+      'variations': variations.map((data) => data.toJson()).toList(),
     };
   }
 }

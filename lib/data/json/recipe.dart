@@ -32,6 +32,18 @@ class RecipeData {
         variationGroups = [],
         gradient = toBackgroundGradient(limelightGradient);
 
+  factory RecipeData.from(RecipeData data) {
+    return RecipeData(
+      name: data.name,
+      difficulty: data.difficulty,
+      price: data.price,
+      ingredients: data.ingredients,
+      instructions: data.instructions,
+      variationGroups: data.variationGroups,
+      gradient: limelightGradient,
+    );
+  }
+
   factory RecipeData.fromJson(Map<String, dynamic> data) {
     final name = data['name'] as String;
     final difficulty = data['difficulty'] as String;
@@ -69,6 +81,13 @@ class RecipeData {
       'name': name,
       'difficulty': difficulty,
       'price': price,
+      'ingredients': ingredients.map((data) => data.toJson()).toList(),
+      'instructions': instructions,
+      'variationGroups': variationGroups.map((data) => data.toJson()).toList(),
     };
+  }
+
+  IngredientData ingredient(int id) {
+    return ingredients[id];
   }
 }
