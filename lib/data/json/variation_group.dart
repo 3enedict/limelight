@@ -1,10 +1,10 @@
 import 'package:limelight/data/json/variation.dart';
 
 class VariationGroup {
-  final String groupName;
-  final List<Variation> variations;
+  String groupName;
+  List<Variation> variations;
 
-  const VariationGroup({
+  VariationGroup({
     required this.groupName,
     required this.variations,
   });

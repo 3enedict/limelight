@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
-
 import 'package:limelight/data/json/ingredient_data.dart';
 
 class Variation {
-  final String name;
-  final String time;
-  final List<IngredientData> ingredients;
-  final List<List<String>> instructionGroups;
+  String name;
+  String time;
+  List<IngredientData> ingredients;
+  List<List<String>> instructionGroups;
 
-  const Variation({
+  Variation({
     required this.name,
     required this.time,
     required this.ingredients,

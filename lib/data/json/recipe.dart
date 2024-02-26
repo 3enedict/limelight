@@ -5,15 +5,15 @@ import 'package:limelight/data/json/variation_group.dart';
 import 'package:limelight/gradients.dart';
 
 class RecipeData {
-  final String name;
-  final String difficulty;
-  final String price;
-  final List<IngredientData> ingredients;
-  final List<String> instructions;
-  final List<VariationGroup> variationGroups;
-  final List<Color> gradient;
+  String name;
+  String difficulty;
+  String price;
+  List<IngredientData> ingredients;
+  List<String> instructions;
+  List<VariationGroup> variationGroups;
+  List<Color> gradient;
 
-  const RecipeData({
+  RecipeData({
     required this.name,
     required this.difficulty,
     required this.price,

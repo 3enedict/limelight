@@ -81,6 +81,25 @@ class RecipeModel extends ChangeNotifier {
     notify();
   }
 
+  void editVarGroupName(int recipeId, int variationGroupId, String name) {
+    _recipes[recipeId].variationGroups[variationGroupId].groupName = name;
+    notify();
+  }
+
+  void editVarName(
+    int recipeId,
+    int variationGroupId,
+    int variationId,
+    String name,
+  ) {
+    _recipes[recipeId]
+        .variationGroups[variationGroupId]
+        .variations[variationId]
+        .name = name;
+
+    notify();
+  }
+
   void notify() {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       final data = _recipes.map((e) => e.toJson()).toList();
