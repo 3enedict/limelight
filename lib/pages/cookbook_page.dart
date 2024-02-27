@@ -25,115 +25,138 @@ class CookbookPage extends StatefulWidget {
 
 class _CookbookPageState extends State<CookbookPage> {
   String _query = '';
+  int _recipe = 0;
+
   final _controller = TextEditingController();
+  final _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     final recipes = Provider.of<RecipeModel>(context, listen: false);
     final matches = searchRecipes(recipes);
 
-    return EmptyPage(
-      appBar: GradientAppBar(
-        child: Row(
-          children: [
-            GradientIcon(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
-              gradient: toTextGradient(limelightGradient),
-              onPressed: () => Navigator.of(context).pop(),
-              size: 26,
-              icon: Icons.chevron_left,
-            ),
-            Expanded(
-              child: AppbarSearchBar(
-                controller: _controller,
-                searchHint: 'Search for recipes',
-                onChanged: (query) => setState(() => _query = query),
-                onSubmitted: () {
-                  if (matches.isNotEmpty) {
-                    setState(() => _query = '');
+    return PageView(
+      controller: _pageController,
+      children: [
+        EmptyPage(
+          appBar: GradientAppBar(
+            child: Row(
+              children: [
+                GradientIcon(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
+                  gradient: toTextGradient(limelightGradient),
+                  onPressed: () => Navigator.of(context).pop(),
+                  size: 26,
+                  icon: Icons.chevron_left,
+                ),
+                Expanded(
+                  child: AppbarSearchBar(
+                    controller: _controller,
+                    searchHint: 'Search for recipes',
+                    onChanged: (query) => setState(() => _query = query),
+                    onSubmitted: () {
+                      if (matches.isNotEmpty) {
+                        setState(() {
+                          _query = '';
+                          _recipe = matches[0];
+                        });
 
-                    Navigator.of(context).push(SwipeablePageRoute(
-                      builder: (BuildContext context) => RecipeEditor(
-                        recipeId: matches[0],
-                      ),
-                    ));
-                  }
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        _pageController.animateToPage(
+                          1,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      }
+                    },
+                  ),
+                ),
+                GradientIcon(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
+                  gradient: toTextGradient(limelightGradient),
+                  onPressed: () => goto(context, const IngredientEditorPage()),
+                  size: 26,
+                  icon: Icons.add,
+                ),
+              ],
+            ),
+          ),
+          child: ListView(
+            children: matches.map((e) {
+              final runes = recipes.name(e).runes;
+              List<TextSpan> styledName = List.generate(
+                runes.length,
+                (int index) {
+                  String character =
+                      String.fromCharCode(runes.elementAtOrNull(index)!);
+                  bool match =
+                      _query.toLowerCase().contains(character.toLowerCase());
+
+                  return TextSpan(
+                    text: character,
+                    style: TextStyle(
+                      color: match
+                          ? modifyColor(textColor(), 0.95, 0.1)
+                          : textColor(),
+                      fontWeight: match ? FontWeight.w900 : FontWeight.w100,
+                    ),
+                  );
                 },
-              ),
-            ),
-            GradientIcon(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
-              gradient: toTextGradient(limelightGradient),
-              onPressed: () => goto(context, const IngredientEditorPage()),
-              size: 26,
-              icon: Icons.add,
-            ),
-          ],
-        ),
-      ),
-      child: ListView(
-        children: matches.map((e) {
-          final runes = recipes.name(e).runes;
-          List<TextSpan> styledName = List.generate(
-            runes.length,
-            (int index) {
-              String character =
-                  String.fromCharCode(runes.elementAtOrNull(index)!);
-              bool match =
-                  _query.toLowerCase().contains(character.toLowerCase());
+              );
 
-              return TextSpan(
-                text: character,
-                style: TextStyle(
-                  color:
-                      match ? modifyColor(textColor(), 0.95, 0.1) : textColor(),
-                  fontWeight: match ? FontWeight.w900 : FontWeight.w100,
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                child: GradientButton(
+                  gradient: toSurfaceGradient(limelightGradient),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
+                  borderRadius: 15,
+                  onPressed: () {
+                    setState(() => _recipe = e);
+
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _pageController.animateToPage(
+                      1,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const GradientIcon(
+                        gradient: limelightGradient,
+                        padding: EdgeInsets.all(20),
+                        size: 30,
+                        icon: Icons.panorama_fish_eye,
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          children: styledName,
+                          style: GoogleFonts.workSans(
+                            color: textColor(),
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      const Expanded(child: SizedBox()),
+                      CustomText(
+                        text: recipes.recipe(e).difficulty,
+                        opacity: 0.8,
+                        style: FontStyle.italic,
+                        size: 13,
+                      ),
+                      const SizedBox(width: 20),
+                    ],
+                  ),
                 ),
               );
-            },
-          );
-
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-            child: GradientButton(
-              gradient: toSurfaceGradient(limelightGradient),
-              padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
-              borderRadius: 15,
-              onPressed: () => Navigator.of(context).push(SwipeablePageRoute(
-                builder: (BuildContext context) => RecipeEditor(recipeId: e),
-              )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const GradientIcon(
-                    gradient: limelightGradient,
-                    padding: EdgeInsets.all(20),
-                    size: 30,
-                    icon: Icons.panorama_fish_eye,
-                  ),
-                  Text.rich(
-                    TextSpan(
-                      children: styledName,
-                      style: GoogleFonts.workSans(
-                        color: textColor(),
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  const Expanded(child: SizedBox()),
-                  CustomText(
-                    text: recipes.recipe(e).difficulty,
-                    opacity: 0.8,
-                    style: FontStyle.italic,
-                    size: 13,
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ),
+            }).toList(),
+          ),
+        ),
+        ...recipeEditor(recipes, _recipe, _pageController),
+      ],
     );
   }
 
