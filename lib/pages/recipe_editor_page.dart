@@ -74,14 +74,14 @@ List<Widget> recipeEditor(
   );
 
   final variationsPage = ListView(
-    children: List.generate(
-      recipes.nbVarGroups(recipeId),
-      (index) {
-        List<Widget> items = [];
-
-        items.add(
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+    children: [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+        child: GradientContainer(
+          gradient: toSurfaceGradient(limelightGradient),
+          borderRadius: 20,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: Row(
               children: [
                 const Padding(
@@ -90,54 +90,103 @@ List<Widget> recipeEditor(
                 ),
                 Expanded(
                   child: TextField(
-                    onSubmitted: (text) {
-                      recipes.editVarGroupName(recipeId, index, text);
-                    },
-                    controller: TextEditingController(
-                      text: recipes.variationGroupName(recipeId, index),
-                    ),
+                    onSubmitted: (text) => recipes.editName(recipeId, text),
+                    controller:
+                        TextEditingController(text: recipes.name(recipeId)),
                     style: GoogleFonts.openSans(color: textColor()),
+                    decoration: const InputDecoration(border: InputBorder.none),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                IntrinsicWidth(
+                  child: TextField(
+                    textAlign: TextAlign.right,
+                    onSubmitted: (text) =>
+                        recipes.editDifficulty(recipeId, text),
+                    controller: TextEditingController(
+                      text: recipes.difficulty(recipeId),
+                    ),
+                    style: GoogleFonts.openSans(
+                      color: textColor().withOpacity(0.6),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                     decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
               ],
             ),
           ),
-        );
+        ),
+      ),
+      ...List.generate(
+        recipes.nbVarGroups(recipeId),
+        (index) {
+          List<Widget> items = [];
 
-        for (var i = 0; i < recipes.nbVariations(recipeId, index); i++) {
           items.add(
             Padding(
-              padding: const EdgeInsets.fromLTRB(64, 0, 20, 0),
-              child: TextField(
-                onSubmitted: (text) {
-                  recipes.editVarName(recipeId, index, i, text);
-                },
-                controller: TextEditingController(
-                  text: recipes.variationName(recipeId, index, i),
-                ),
-                style: GoogleFonts.openSans(
-                  color: textColor().withOpacity(0.8),
-                ),
-                decoration: const InputDecoration(border: InputBorder.none),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 15, 22, 15),
+                    child:
+                        GradientIcon(icon: Icons.panorama_fish_eye, size: 22),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      onSubmitted: (text) {
+                        recipes.editVarGroupName(recipeId, index, text);
+                      },
+                      controller: TextEditingController(
+                        text: recipes.variationGroupName(recipeId, index),
+                      ),
+                      style: GoogleFonts.openSans(color: textColor()),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
-        }
 
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-          child: GradientContainer(
-            gradient: toSurfaceGradient(limelightGradient),
-            borderRadius: 20,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-              child: Column(children: items),
+          for (var i = 0; i < recipes.nbVariations(recipeId, index); i++) {
+            items.add(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(64, 0, 20, 0),
+                child: TextField(
+                  onSubmitted: (text) {
+                    recipes.editVarName(recipeId, index, i, text);
+                  },
+                  controller: TextEditingController(
+                    text: recipes.variationName(recipeId, index, i),
+                  ),
+                  style: GoogleFonts.openSans(
+                    color: textColor().withOpacity(0.8),
+                  ),
+                  decoration: const InputDecoration(border: InputBorder.none),
+                ),
+              ),
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+            child: GradientContainer(
+              gradient: toSurfaceGradient(limelightGradient),
+              borderRadius: 20,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: Column(children: items),
+              ),
             ),
-          ),
-        );
-      },
-    ),
+          );
+        },
+      ),
+    ],
   );
 
   final limelight = limelightGradient.map((e) => e.withOpacity(0.8)).toList();

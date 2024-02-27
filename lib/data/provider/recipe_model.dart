@@ -56,6 +56,16 @@ class RecipeModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void editName(int recipeId, String name) {
+    _recipes[recipeId].name = name;
+    notify();
+  }
+
+  void editDifficulty(int recipeId, String diff) {
+    _recipes[recipeId].difficulty = diff;
+    notify();
+  }
+
   void editIngredient(
     int recipeId,
     int ingredientId,
