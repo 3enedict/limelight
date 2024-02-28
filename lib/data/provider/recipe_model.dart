@@ -110,6 +110,16 @@ class RecipeModel extends ChangeNotifier {
     notify();
   }
 
+  void editInstruction(
+    int recipeId,
+    int instructionId,
+    String instruction,
+  ) {
+    _recipes[recipeId].instructions[instructionId] = instruction;
+
+    notify();
+  }
+
   void notify() {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       final data = _recipes.map((e) => e.toJson()).toList();

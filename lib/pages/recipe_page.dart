@@ -156,6 +156,7 @@ class Content extends StatelessWidget {
               minHeight: 0.0,
               maxHeight: ingredients.length * (12 * 2 + 20.0) + 10 + 14,
               child: RecipeDescriptionBox(
+                reverse: true,
                 items: generateIngredients(ingredients),
               ),
             ),

@@ -9,7 +9,6 @@ import 'package:limelight/data/json/ingredient_data.dart';
 import 'package:limelight/utils/gradient_container.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
-import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/widgets/section.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
@@ -67,6 +66,7 @@ List<Widget> recipeEditor(
   }
 
   final ingredientsPage = ListView(
+    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
     children: [
       ...items,
       const SizedBox(height: 10),
@@ -74,6 +74,7 @@ List<Widget> recipeEditor(
   );
 
   final variationsPage = ListView(
+    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
     children: [
       Padding(
         padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
@@ -91,8 +92,9 @@ List<Widget> recipeEditor(
                 Expanded(
                   child: TextField(
                     onSubmitted: (text) => recipes.editName(recipeId, text),
-                    controller:
-                        TextEditingController(text: recipes.name(recipeId)),
+                    controller: TextEditingController(
+                      text: recipes.name(recipeId),
+                    ),
                     style: GoogleFonts.openSans(color: textColor()),
                     decoration: const InputDecoration(border: InputBorder.none),
                   ),
@@ -189,6 +191,65 @@ List<Widget> recipeEditor(
     ],
   );
 
+  final instructionsPage = ListView(
+    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+    children: List.generate(
+      recipes.recipe(recipeId).instructions.length,
+      (index) {
+        String text = recipes.recipe(recipeId).instructions[index];
+
+        final ingredientsRegex = RegExp(
+          r'\{([0-9]+):quantity\}',
+        );
+
+        for (var match in ingredientsRegex.allMatches(text)) {
+          final instructionId = int.parse(match.group(1) ?? "-1");
+
+          text = text.replaceAll(
+            "{$instructionId:quantity}",
+            recipes.recipe(recipeId).ingredient(instructionId).name,
+          );
+        }
+
+        final names =
+            recipes.recipe(recipeId).ingredients.map((e) => e.name).toList();
+
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(0, 16, 22, 15),
+                child: GradientIcon(icon: Icons.panorama_fish_eye, size: 22),
+              ),
+              Expanded(
+                child: TextField(
+                  cursorHeight: 20,
+                  onSubmitted: (text) {
+                    String instruction = text;
+                    for (var i = 0; i < names.length; i++) {
+                      instruction.replaceAll(names[i], '{$i:quantity}');
+                    }
+
+                    recipes.editInstruction(recipeId, index, instruction);
+                  },
+                  controller: MultiStyleTextEditingController(
+                    ingredientNames: names,
+                  )..text = text,
+                  decoration: const InputDecoration(border: InputBorder.none),
+                  keyboardType: TextInputType.text,
+                  textAlign: TextAlign.justify,
+                  maxLines: null,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+  );
+
   final limelight = limelightGradient.map((e) => e.withOpacity(0.8)).toList();
   final surface = toLighterSurfaceGradient(limelightGradient);
   final text = toTextGradient(limelightGradient);
@@ -205,7 +266,7 @@ List<Widget> recipeEditor(
               child: [
                 ingredientsPage,
                 variationsPage,
-                const CustomText(text: '3'),
+                instructionsPage,
               ][page],
             ),
             Container(
@@ -380,5 +441,60 @@ class IngredientItem extends StatelessWidget {
       recipes.editVarIngredient(
           recipeId, variationGroupId!, variationId!, ingredientId, ing);
     }
+  }
+}
+
+class MultiStyleTextEditingController extends TextEditingController {
+  final List<String> ingredientNames;
+
+  MultiStyleTextEditingController({
+    required this.ingredientNames,
+  });
+
+  @override
+  TextSpan buildTextSpan(
+      {required BuildContext context,
+      TextStyle? style,
+      required bool withComposing}) {
+    List<String> sections = [text];
+    for (var name in ingredientNames) {
+      List<String> newSections = [];
+
+      for (var section in sections) {
+        List<String> list = section.split(name);
+        if (list.length != 1) {
+          for (var i = list.length - 1; i > 0; i--) {
+            list.insert(i, name);
+          }
+        }
+
+        newSections.addAll(list);
+      }
+
+      sections = newSections;
+    }
+
+    final textSpanChildren = <TextSpan>[];
+    for (final section in sections) {
+      const s = 17.0;
+
+      TextStyle sectionStyle = GoogleFonts.openSans(
+        textStyle: TextStyle(color: textColor(), fontSize: s),
+      );
+      if (ingredientNames.contains(section)) {
+        sectionStyle = GoogleFonts.openSans(
+          textStyle: TextStyle(
+            color: textColor(),
+            fontSize: s,
+            fontStyle: FontStyle.italic,
+          ),
+        );
+      }
+
+      final child = TextSpan(text: section, style: sectionStyle);
+      textSpanChildren.add(child);
+    }
+
+    return TextSpan(children: textSpanChildren);
   }
 }

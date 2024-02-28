@@ -28,6 +28,7 @@ class _CookbookPageState extends State<CookbookPage> {
   int _recipe = 0;
 
   final _controller = TextEditingController();
+  final _node = FocusNode();
   final _pageController = PageController();
 
   @override
@@ -37,6 +38,13 @@ class _CookbookPageState extends State<CookbookPage> {
 
     return PageView(
       controller: _pageController,
+      onPageChanged: (page) {
+        if (page == 0) {
+          _node.requestFocus();
+        } else {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
       children: [
         EmptyPage(
           appBar: GradientAppBar(
@@ -53,6 +61,7 @@ class _CookbookPageState extends State<CookbookPage> {
                 Expanded(
                   child: AppbarSearchBar(
                     controller: _controller,
+                    node: _node,
                     searchHint: 'Search for recipes',
                     onChanged: (query) => setState(() => _query = query),
                     onSubmitted: () {

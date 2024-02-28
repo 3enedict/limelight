@@ -12,6 +12,7 @@ class AppbarSearchBar extends StatefulWidget {
   final String searchHint;
   final void Function(String) onChanged;
   final VoidCallback onSubmitted;
+  final FocusNode? node;
   final VoidCallback? popContext;
 
   AppbarSearchBar({
@@ -20,6 +21,7 @@ class AppbarSearchBar extends StatefulWidget {
     required this.searchHint,
     required this.onChanged,
     required this.onSubmitted,
+    this.node,
     this.popContext,
   });
 
@@ -32,7 +34,7 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.controller.value.toString == '') _query = '';
+    if (widget.controller.value.toString() == '') _query = '';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -54,6 +56,7 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
               Expanded(
                 child: TextField(
                   autofocus: true,
+                  focusNode: widget.node,
                   controller: widget.controller,
                   keyboardAppearance: Brightness.dark,
                   decoration: InputDecoration.collapsed(
