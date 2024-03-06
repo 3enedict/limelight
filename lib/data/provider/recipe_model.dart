@@ -56,6 +56,22 @@ class RecipeModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addEmptyInstruction(int recipeId, int instructionId) {
+    _recipes[recipeId].instructions.insert(instructionId, '');
+    notifyListeners();
+  }
+
+  void addEmptyVarInstruction(int recipeId, int variationGroupId,
+      int variationId, int instructionGroupId, int instructionId) {
+    _recipes[recipeId]
+        .variationGroups[variationGroupId]
+        .variations[variationId]
+        .instructionGroups[instructionGroupId]
+        .insert(instructionId, '');
+
+    notifyListeners();
+  }
+
   void editName(int recipeId, String name) {
     _recipes[recipeId].name = name;
     notify();
