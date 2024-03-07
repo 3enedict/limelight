@@ -73,20 +73,31 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                               variationId: variationId,
                               instructionGroupId: instructionGroupId,
                               instructionId: id,
-                              enableTextField: !adding,
+                              enableTextField: !(adding || removing),
                             );
 
-                            if (adding == true) {
+                            if (adding == true || removing == true) {
                               return GestureDetector(
                                 onTap: () {
-                                  recipes.addEmptyVarInstruction(
-                                      widget.recipeId,
-                                      variationGroupId,
-                                      variationId,
-                                      instructionGroupId,
-                                      id);
+                                  if (adding == true) {
+                                    recipes.addEmptyVarInstruction(
+                                        widget.recipeId,
+                                        variationGroupId,
+                                        variationId,
+                                        instructionGroupId,
+                                        id + 1);
 
-                                  setState(() => adding = false);
+                                    setState(() => adding = false);
+                                  } else {
+                                    recipes.removeVarInstruction(
+                                        widget.recipeId,
+                                        variationGroupId,
+                                        variationId,
+                                        instructionGroupId,
+                                        id);
+
+                                    setState(() => removing = false);
+                                  }
                                 },
                                 child: item,
                               );
@@ -103,14 +114,20 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                   final item = InstructionItem(
                     recipeId: widget.recipeId,
                     instructionId: index,
-                    enableTextField: !adding,
+                    enableTextField: !(adding || removing),
                   );
 
-                  if (adding == true) {
+                  if (adding == true || removing == true) {
                     return GestureDetector(
                       onTap: () {
-                        recipes.addEmptyInstruction(widget.recipeId, index);
-                        setState(() => adding = false);
+                        if (adding == true) {
+                          recipes.addEmptyInstruction(
+                              widget.recipeId, index + 1);
+                          setState(() => adding = false);
+                        } else {
+                          recipes.removeInstruction(widget.recipeId, index);
+                          setState(() => removing = false);
+                        }
                       },
                       child: item,
                     );
@@ -152,7 +169,9 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                         icon: UniconsLine.plus,
                       ),
                       GradientIcon(
-                        gradient: redGradient,
+                        gradient: removing
+                            ? toTextGradient(redGradient)
+                            : redGradient,
                         onPressed: () => setState(() => removing = true),
                         size: 20,
                         icon: UniconsLine.minus,

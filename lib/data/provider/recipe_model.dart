@@ -72,6 +72,22 @@ class RecipeModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeInstruction(int recipeId, int instructionId) {
+    _recipes[recipeId].instructions.removeAt(instructionId);
+    notifyListeners();
+  }
+
+  void removeVarInstruction(int recipeId, int variationGroupId, int variationId,
+      int instructionGroupId, int instructionId) {
+    _recipes[recipeId]
+        .variationGroups[variationGroupId]
+        .variations[variationId]
+        .instructionGroups[instructionGroupId]
+        .removeAt(instructionId);
+
+    notifyListeners();
+  }
+
   void editName(int recipeId, String name) {
     _recipes[recipeId].name = name;
     notify();
