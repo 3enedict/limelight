@@ -10,6 +10,7 @@ class EmptyPage extends StatelessWidget {
   final List<Color> gradient;
   final PreferredSizeWidget? appBar;
   final String? appBarText;
+  final Widget? bottomSheet;
   final bool resizeToAvoidBottomInset;
   final bool backButton;
   final Widget? child;
@@ -19,6 +20,7 @@ class EmptyPage extends StatelessWidget {
     this.gradient = limelightGradient,
     this.appBar,
     this.appBarText,
+    this.bottomSheet,
     this.resizeToAvoidBottomInset = false,
     this.backButton = false,
     this.child,
@@ -43,6 +45,7 @@ class EmptyPage extends StatelessWidget {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+            bottomSheet: bottomSheet,
             appBar: appBarText == null
                 ? appBar
                 : backButton

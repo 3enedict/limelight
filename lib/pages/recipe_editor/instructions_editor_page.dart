@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/pages/recipe_editor_page.dart';
+import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/widgets/section.dart';
 import 'package:limelight/utils/page.dart';
@@ -28,12 +30,29 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
   bool adding = false;
   bool removing = false;
 
+  bool editing = false;
+
+  late ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = ScrollController();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _controller.jumpTo(_controller.position.maxScrollExtent);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<RecipeModel>(
       builder: (context, recipes, child) {
         final instructionsPage = ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          controller: _controller,
+          reverse: true,
+          shrinkWrap: true,
           children: [
             const SizedBox(height: 8),
             ...List.generate(
@@ -87,7 +106,9 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                                         instructionGroupId,
                                         id + 1);
 
-                                    setState(() => adding = false);
+                                    setState(() {
+                                      adding = false;
+                                    });
                                   } else {
                                     recipes.removeVarInstruction(
                                         widget.recipeId,
@@ -137,50 +158,70 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                 }
               },
             ),
-          ],
+            const SizedBox(height: 10),
+          ].reversed.toList(),
         );
 
         return EmptyPage(
           resizeToAvoidBottomInset: false,
           appBarText: 'Instructions',
-          child: Column(
-            children: [
-              Expanded(
-                child: Scaffold(
-                  resizeToAvoidBottomInset: true,
-                  backgroundColor: Colors.transparent,
-                  body: instructionsPage,
-                ),
-              ),
-              Container(
-                color: toBackgroundGradient(limelightGradient)[1],
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ...generateNavigationButtons(widget.controller, 2),
-                      GradientIcon(
-                        gradient: adding
-                            ? toTextGradient(limelightGradient)
-                            : limelightGradient,
-                        onPressed: () => setState(() => adding = true),
-                        size: 20,
-                        icon: UniconsLine.plus,
-                      ),
-                      GradientIcon(
-                        gradient: removing
-                            ? toTextGradient(redGradient)
-                            : redGradient,
-                        onPressed: () => setState(() => removing = true),
-                        size: 20,
+          bottomSheet: Container(
+            color: toBackgroundGradient(limelightGradient)[1],
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GradientButton(
+                    diameter: 53,
+                    gradient: toLighterSurfaceGradient(redGradient),
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    onPressed: () => setState(() => removing = true),
+                    child: const Center(
+                      child: GradientIcon(
+                        gradient: redGradient,
                         icon: UniconsLine.minus,
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                  const SizedBox(width: 53 / 3),
+                  GradientButton(
+                    diameter: 53,
+                    gradient: toLighterSurfaceGradient(limelightGradient),
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    onPressed: () {},
+                    child: Center(
+                      child: GradientIcon(
+                        gradient: toTextGradient(limelightGradient),
+                        icon: Icons.layers,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 53 / 3),
+                  GradientButton(
+                    diameter: 53,
+                    gradient: toLighterSurfaceGradient(limelightGradient),
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    onPressed: () => setState(() => adding = true),
+                    child: const Center(
+                      child: GradientIcon(
+                        gradient: limelightGradient,
+                        icon: UniconsLine.plus,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: instructionsPage,
           ),
         );
       },
@@ -274,35 +315,38 @@ class InstructionItem extends StatelessWidget {
                 child: GradientIcon(icon: Icons.panorama_fish_eye, size: 22),
               ),
               Expanded(
-                child: TextField(
-                  enabled: enableTextField,
-                  autofocus: text == '',
-                  cursorHeight: 20,
-                  onSubmitted: (text) {
-                    String instruction = text;
-                    for (var i = 0; i < names.length; i++) {
-                      instruction.replaceAll(names[i], '{$i:quantity}');
-                    }
-
-                    if (!variations()) {
+                child: Focus(
+                  child: TextField(
+                    enabled: enableTextField,
+                    autofocus: text == '',
+                    cursorHeight: 20,
+                    scrollPadding: const EdgeInsets.only(bottom: 200),
+                    onSubmitted: (text) {
+                      String instruction = text;
                       for (var i = 0; i < names.length; i++) {
-                        instruction.replaceAll(names[i],
-                            '{$variationGroupId:$variationId:$i:quantity}');
+                        instruction.replaceAll(names[i], '{$i:quantity}');
                       }
-                    }
 
-                    edit(recipes, instruction);
-                  },
-                  controller: MultiStyleTextEditingController(
-                    ingredientNames: names,
-                  )..text = text,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    isDense: true,
+                      if (!variations()) {
+                        for (var i = 0; i < names.length; i++) {
+                          instruction.replaceAll(names[i],
+                              '{$variationGroupId:$variationId:$i:quantity}');
+                        }
+                      }
+
+                      edit(recipes, instruction);
+                    },
+                    controller: MultiStyleTextEditingController(
+                      ingredientNames: names,
+                    )..text = text,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                    ),
+                    keyboardType: TextInputType.text,
+                    textAlign: TextAlign.justify,
+                    maxLines: null,
                   ),
-                  keyboardType: TextInputType.text,
-                  textAlign: TextAlign.justify,
-                  maxLines: null,
                 ),
               ),
             ],

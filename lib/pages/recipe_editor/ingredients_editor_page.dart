@@ -6,7 +6,7 @@ import 'package:unicons/unicons.dart';
 
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/data/json/ingredient_data.dart';
-import 'package:limelight/pages/recipe_editor_page.dart';
+import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/widgets/section.dart';
 import 'package:limelight/utils/page.dart';
@@ -100,20 +100,32 @@ class IngredientsEditorPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ...generateNavigationButtons(controller, 0),
-                      GradientIcon(
-                        onPressed: () {
-                          recipes.addIngredient(
-                              recipeId, IngredientData.empty());
-                        },
-                        size: 20,
-                        icon: UniconsLine.plus,
-                      ),
-                      GradientIcon(
-                        gradient: redGradient,
+                      GradientButton(
+                        diameter: 53,
+                        gradient: toLighterSurfaceGradient(redGradient),
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                         onPressed: () {},
-                        size: 20,
-                        icon: UniconsLine.minus,
+                        child: const Center(
+                          child: GradientIcon(
+                            gradient: redGradient,
+                            icon: UniconsLine.minus,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 53 / 3),
+                      GradientButton(
+                        diameter: 53,
+                        gradient: toLighterSurfaceGradient(limelightGradient),
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        onPressed: () {},
+                        child: const Center(
+                          child: GradientIcon(
+                            gradient: limelightGradient,
+                            icon: UniconsLine.plus,
+                          ),
+                        ),
                       ),
                     ],
                   ),

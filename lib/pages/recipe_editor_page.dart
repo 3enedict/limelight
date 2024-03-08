@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:unicons/unicons.dart';
 
 import 'package:limelight/pages/recipe_editor/ingredients_editor_page.dart';
 import 'package:limelight/pages/recipe_editor/variations_editor_page.dart';
 import 'package:limelight/pages/recipe_editor/instructions_editor_page.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/utils/gradient_button.dart';
-import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/gradients.dart';
 
 List<Widget> recipeEditor(
@@ -29,75 +26,6 @@ List<Widget> recipeEditor(
       recipeId: recipeId,
       controller: controller,
     ),
-  ];
-}
-
-List<Widget> generateNavigationButtons(PageController controller, int page) {
-  final limelight = limelightGradient.map((e) => e.withOpacity(0.8)).toList();
-  final surface = toLighterSurfaceGradient(limelightGradient);
-  final text = toTextGradient(limelightGradient);
-
-  return [
-    const SizedBox(width: 4 * 20),
-    GradientButton(
-      diameter: 53,
-      gradient: page == 0 ? limelight : surface,
-      splashColor: limelightGradient[0],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      onPressed: () => controller.animateToPage(
-        1,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.ease,
-      ),
-      child: Center(
-        child: GradientIcon(
-          gradient: page == 0 ? surface : text,
-          icon: UniconsLine.notes,
-        ),
-      ),
-    ),
-    const SizedBox(width: 53 / 3),
-    GradientButton(
-      diameter: 53,
-      gradient: page == 1 ? limelight : surface,
-      splashColor: limelightGradient[0],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      onPressed: () => controller.animateToPage(
-        2,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.ease,
-      ),
-      child: Center(
-        child: GradientIcon(
-          gradient: page == 1 ? surface : text,
-          icon: Icons.layers,
-          size: 26,
-        ),
-      ),
-    ),
-    const SizedBox(width: 53 / 3),
-    GradientButton(
-      diameter: 53,
-      gradient: page == 2 ? limelight : surface,
-      splashColor: limelightGradient[0],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      onPressed: () => controller.animateToPage(
-        3,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.ease,
-      ),
-      child: Center(
-        child: GradientIcon(
-          gradient: page == 2 ? surface : text,
-          icon: UniconsLine.fire,
-          size: 24,
-        ),
-      ),
-    ),
-    const SizedBox(width: 10),
   ];
 }
 
