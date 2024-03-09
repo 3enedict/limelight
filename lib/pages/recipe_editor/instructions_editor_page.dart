@@ -40,7 +40,7 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
 
     _controller = ScrollController();
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _controller.jumpTo(_controller.position.maxScrollExtent);
+      _controller.jumpTo(_controller.position.maxScrollExtent + 500);
     });
   }
 
@@ -48,180 +48,191 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
   Widget build(BuildContext context) {
     return Consumer<RecipeModel>(
       builder: (context, recipes, child) {
-        final instructionsPage = ListView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          controller: _controller,
-          reverse: true,
-          shrinkWrap: true,
-          children: [
-            const SizedBox(height: 8),
-            ...List.generate(
-              recipes.recipe(widget.recipeId).instructions.length,
-              (index) {
-                String text =
-                    recipes.recipe(widget.recipeId).instructions[index];
-
-                final variationRegex = RegExp(
-                  r'\{([0-9]+):([0-9]+):([0-9]+):instruction\}',
-                );
-
-                if (variationRegex.hasMatch(text)) {
-                  final match = variationRegex.firstMatch(text)!;
-                  final variationGroupId = int.parse(match.group(1) ?? "-1");
-                  final variationId = int.parse(match.group(2) ?? "-1");
-                  final instructionGroupId = int.parse(match.group(3) ?? "-1");
-
-                  return Section(
-                    padding: const EdgeInsets.fromLTRB(22, 4, 22, 4),
-                    label: recipes.variationName(
-                        widget.recipeId, variationGroupId, variationId),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 5),
-                        ...List.generate(
-                          recipes
-                              .recipe(widget.recipeId)
-                              .variationGroups[variationGroupId]
-                              .variations[variationId]
-                              .instructionGroups[instructionGroupId]
-                              .length,
-                          (id) {
-                            final item = InstructionItem(
-                              recipeId: widget.recipeId,
-                              variationGroupId: variationGroupId,
-                              variationId: variationId,
-                              instructionGroupId: instructionGroupId,
-                              instructionId: id,
-                              enableTextField: !(adding || removing),
-                            );
-
-                            if (adding == true || removing == true) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (adding == true) {
-                                    recipes.addEmptyVarInstruction(
-                                        widget.recipeId,
-                                        variationGroupId,
-                                        variationId,
-                                        instructionGroupId,
-                                        id + 1);
-
-                                    setState(() {
-                                      adding = false;
-                                    });
-                                  } else {
-                                    recipes.removeVarInstruction(
-                                        widget.recipeId,
-                                        variationGroupId,
-                                        variationId,
-                                        instructionGroupId,
-                                        id);
-
-                                    setState(() => removing = false);
-                                  }
-                                },
-                                child: item,
-                              );
-                            } else {
-                              return item;
-                            }
-                          },
-                        ),
-                        const SizedBox(height: 5),
-                      ],
-                    ),
-                  );
-                } else {
-                  final item = InstructionItem(
-                    recipeId: widget.recipeId,
-                    instructionId: index,
-                    enableTextField: !(adding || removing),
-                  );
-
-                  if (adding == true || removing == true) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (adding == true) {
-                          recipes.addEmptyInstruction(
-                              widget.recipeId, index + 1);
-                          setState(() => adding = false);
-                        } else {
-                          recipes.removeInstruction(widget.recipeId, index);
-                          setState(() => removing = false);
-                        }
-                      },
-                      child: item,
-                    );
-                  } else {
-                    return item;
-                  }
-                }
-              },
-            ),
-            const SizedBox(height: 10),
-          ].reversed.toList(),
-        );
-
         return EmptyPage(
           resizeToAvoidBottomInset: false,
           appBarText: 'Instructions',
-          bottomSheet: Container(
-            color: toBackgroundGradient(limelightGradient)[1],
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GradientButton(
-                    diameter: 53,
-                    gradient: toLighterSurfaceGradient(redGradient),
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    onPressed: () => setState(() => removing = true),
-                    child: const Center(
-                      child: GradientIcon(
-                        gradient: redGradient,
-                        icon: UniconsLine.minus,
-                      ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom == 0
+                      ? 2 * 20 + 53
+                      : MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: ListView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  controller: _controller,
+                  reverse: true,
+                  shrinkWrap: true,
+                  children: [
+                    const SizedBox(height: 8),
+                    ...List.generate(
+                      recipes.recipe(widget.recipeId).instructions.length,
+                      (index) {
+                        String text =
+                            recipes.recipe(widget.recipeId).instructions[index];
+
+                        final variationRegex = RegExp(
+                          r'\{([0-9]+):([0-9]+):([0-9]+):instruction\}',
+                        );
+
+                        if (variationRegex.hasMatch(text)) {
+                          final match = variationRegex.firstMatch(text)!;
+                          final variationGroupId =
+                              int.parse(match.group(1) ?? "-1");
+                          final variationId = int.parse(match.group(2) ?? "-1");
+                          final instructionGroupId =
+                              int.parse(match.group(3) ?? "-1");
+
+                          return Section(
+                            padding: const EdgeInsets.fromLTRB(22, 4, 22, 4),
+                            label: recipes.variationName(
+                                widget.recipeId, variationGroupId, variationId),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 5),
+                                ...List.generate(
+                                  recipes
+                                      .recipe(widget.recipeId)
+                                      .variationGroups[variationGroupId]
+                                      .variations[variationId]
+                                      .instructionGroups[instructionGroupId]
+                                      .length,
+                                  (id) {
+                                    final item = InstructionItem(
+                                      recipeId: widget.recipeId,
+                                      variationGroupId: variationGroupId,
+                                      variationId: variationId,
+                                      instructionGroupId: instructionGroupId,
+                                      instructionId: id,
+                                      enableTextField: !(adding || removing),
+                                    );
+
+                                    if (adding == true || removing == true) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if (adding == true) {
+                                            recipes.addEmptyVarInstruction(
+                                                widget.recipeId,
+                                                variationGroupId,
+                                                variationId,
+                                                instructionGroupId,
+                                                id + 1);
+
+                                            setState(() {
+                                              adding = false;
+                                            });
+                                          } else {
+                                            recipes.removeVarInstruction(
+                                                widget.recipeId,
+                                                variationGroupId,
+                                                variationId,
+                                                instructionGroupId,
+                                                id);
+
+                                            setState(() => removing = false);
+                                          }
+                                        },
+                                        child: item,
+                                      );
+                                    } else {
+                                      return item;
+                                    }
+                                  },
+                                ),
+                                const SizedBox(height: 5),
+                              ],
+                            ),
+                          );
+                        } else {
+                          final item = InstructionItem(
+                            recipeId: widget.recipeId,
+                            instructionId: index,
+                            enableTextField: !(adding || removing),
+                          );
+
+                          if (adding == true || removing == true) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (adding == true) {
+                                  recipes.addEmptyInstruction(
+                                      widget.recipeId, index + 1);
+                                  setState(() => adding = false);
+                                } else {
+                                  recipes.removeInstruction(
+                                      widget.recipeId, index);
+                                  setState(() => removing = false);
+                                }
+                              },
+                              child: item,
+                            );
+                          } else {
+                            return item;
+                          }
+                        }
+                      },
                     ),
-                  ),
-                  const SizedBox(width: 53 / 3),
-                  GradientButton(
-                    diameter: 53,
-                    gradient: toLighterSurfaceGradient(limelightGradient),
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    onPressed: () {},
-                    child: Center(
-                      child: GradientIcon(
-                        gradient: toTextGradient(limelightGradient),
-                        icon: Icons.layers,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 53 / 3),
-                  GradientButton(
-                    diameter: 53,
-                    gradient: toLighterSurfaceGradient(limelightGradient),
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    onPressed: () => setState(() => adding = true),
-                    child: const Center(
-                      child: GradientIcon(
-                        gradient: limelightGradient,
-                        icon: UniconsLine.plus,
-                      ),
-                    ),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                  ].reversed.toList(),
+                ),
               ),
-            ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: instructionsPage,
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  color: toBackgroundGradient(limelightGradient)[1],
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GradientButton(
+                          diameter: 53,
+                          gradient: toLighterSurfaceGradient(redGradient),
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          onPressed: () => setState(() => removing = true),
+                          child: const Center(
+                            child: GradientIcon(
+                              gradient: redGradient,
+                              icon: UniconsLine.minus,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 53 / 3),
+                        GradientButton(
+                          diameter: 53,
+                          gradient: toLighterSurfaceGradient(limelightGradient),
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          onPressed: () {},
+                          child: Center(
+                            child: GradientIcon(
+                              gradient: toTextGradient(limelightGradient),
+                              icon: Icons.layers,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 53 / 3),
+                        GradientButton(
+                          diameter: 53,
+                          gradient: toLighterSurfaceGradient(limelightGradient),
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          onPressed: () => setState(() => adding = true),
+                          child: const Center(
+                            child: GradientIcon(
+                              gradient: limelightGradient,
+                              icon: UniconsLine.plus,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },

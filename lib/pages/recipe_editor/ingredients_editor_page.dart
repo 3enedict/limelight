@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,7 @@ import 'package:limelight/widgets/section.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
-class IngredientsEditorPage extends StatelessWidget {
+class IngredientsEditorPage extends StatefulWidget {
   final int recipeId;
   final PageController controller;
 
@@ -23,24 +24,48 @@ class IngredientsEditorPage extends StatelessWidget {
   });
 
   @override
+  State<IngredientsEditorPage> createState() => _IngredientsEditorPageState();
+}
+
+class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
+  bool adding = false;
+  bool removing = false;
+
+  bool editing = false;
+
+  late ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = ScrollController();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _controller.jumpTo(_controller.position.maxScrollExtent + 500);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<RecipeModel>(
       builder: (context, recipes, child) {
         List<Widget> items = [];
 
-        for (var i = 0; i < recipes.recipe(recipeId).ingredients.length; i++) {
+        for (var i = 0;
+            i < recipes.recipe(widget.recipeId).ingredients.length;
+            i++) {
           items.add(Padding(
               padding: const EdgeInsets.fromLTRB(42, 10, 42, 0),
               child: IngredientItem(
-                recipeId: recipeId,
+                recipeId: widget.recipeId,
                 ingredientId: i,
               )));
         }
 
-        for (var i = 0; i < recipes.nbVarGroups(recipeId); i++) {
-          for (var j = 0; j < recipes.nbVariations(recipeId, i); j++) {
+        for (var i = 0; i < recipes.nbVarGroups(widget.recipeId); i++) {
+          for (var j = 0; j < recipes.nbVariations(widget.recipeId, i); j++) {
             final num = recipes
-                .recipe(recipeId)
+                .recipe(widget.recipeId)
                 .variationGroups[i]
                 .variations[j]
                 .ingredients
@@ -49,7 +74,7 @@ class IngredientsEditorPage extends StatelessWidget {
             items.add(
               Section(
                 padding: const EdgeInsets.fromLTRB(22, 10, 22, 0),
-                label: recipes.variationName(recipeId, i, j),
+                label: recipes.variationName(widget.recipeId, i, j),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Column(
@@ -58,7 +83,7 @@ class IngredientsEditorPage extends StatelessWidget {
                       ...List.generate(
                         num,
                         (index) => IngredientItem(
-                          recipeId: recipeId,
+                          recipeId: widget.recipeId,
                           variationGroupId: i,
                           variationId: j,
                           ingredientId: index,
@@ -73,64 +98,70 @@ class IngredientsEditorPage extends StatelessWidget {
           }
         }
 
-        final ingredientsPage = ListView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          children: [
-            ...items,
-            const SizedBox(height: 10),
-          ],
-        );
-
         return EmptyPage(
           resizeToAvoidBottomInset: false,
-          appBarText: 'Ingredients',
-          child: Column(
+          appBarText: 'Instructions',
+          child: Stack(
             children: [
-              Expanded(
-                child: Scaffold(
-                  resizeToAvoidBottomInset: true,
-                  backgroundColor: Colors.transparent,
-                  body: ingredientsPage,
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom == 0
+                      ? 2 * 20 + 53
+                      : MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: ListView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  controller: _controller,
+                  reverse: true,
+                  shrinkWrap: true,
+                  children: [
+                    ...items,
+                    const SizedBox(height: 10),
+                  ].reversed.toList(),
                 ),
               ),
-              Container(
-                color: toBackgroundGradient(limelightGradient)[1],
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GradientButton(
-                        diameter: 53,
-                        gradient: toLighterSurfaceGradient(redGradient),
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        onPressed: () {},
-                        child: const Center(
-                          child: GradientIcon(
-                            gradient: redGradient,
-                            icon: UniconsLine.minus,
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  color: toBackgroundGradient(limelightGradient)[1],
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GradientButton(
+                          diameter: 53,
+                          gradient: toLighterSurfaceGradient(redGradient),
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          onPressed: () => setState(() => removing = true),
+                          child: const Center(
+                            child: GradientIcon(
+                              gradient: redGradient,
+                              icon: UniconsLine.minus,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 53 / 3),
-                      GradientButton(
-                        diameter: 53,
-                        gradient: toLighterSurfaceGradient(limelightGradient),
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        onPressed: () {},
-                        child: const Center(
-                          child: GradientIcon(
-                            gradient: limelightGradient,
-                            icon: UniconsLine.plus,
+                        const SizedBox(width: 53 / 3),
+                        GradientButton(
+                          diameter: 53,
+                          gradient: toLighterSurfaceGradient(limelightGradient),
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          onPressed: () => setState(() => adding = true),
+                          child: const Center(
+                            child: GradientIcon(
+                              gradient: limelightGradient,
+                              icon: UniconsLine.plus,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         );
