@@ -37,7 +37,7 @@ class RecipeModel extends ChangeNotifier {
 
   void add(RecipeData recipe) {
     _recipes.add(recipe);
-    notifyListeners();
+    notify();
   }
 
   void removeIngredient(int recipeId, IngredientData ingredient) {
@@ -45,7 +45,7 @@ class RecipeModel extends ChangeNotifier {
     if (recipe == null) return;
 
     recipe.ingredients.remove(ingredient);
-    notifyListeners();
+    notify();
   }
 
   void addIngredient(int recipeId, IngredientData ingredient) {
@@ -53,12 +53,12 @@ class RecipeModel extends ChangeNotifier {
     if (recipe == null) return;
 
     recipe.ingredients.add(ingredient);
-    notifyListeners();
+    notify();
   }
 
   void addEmptyInstruction(int recipeId, int instructionId) {
     _recipes[recipeId].instructions.insert(instructionId, '');
-    notifyListeners();
+    notify();
   }
 
   void addEmptyVarInstruction(int recipeId, int variationGroupId,
@@ -69,12 +69,12 @@ class RecipeModel extends ChangeNotifier {
         .instructionGroups[instructionGroupId]
         .insert(instructionId, '');
 
-    notifyListeners();
+    notify();
   }
 
   void removeInstruction(int recipeId, int instructionId) {
     _recipes[recipeId].instructions.removeAt(instructionId);
-    notifyListeners();
+    notify();
   }
 
   void removeVarInstruction(int recipeId, int variationGroupId, int variationId,
@@ -85,7 +85,28 @@ class RecipeModel extends ChangeNotifier {
         .instructionGroups[instructionGroupId]
         .removeAt(instructionId);
 
-    notifyListeners();
+    notify();
+  }
+
+  void addEmptyInstructionGroup(
+      int recipeId, int instructionId, int groupId, int varId) {
+    final nbGroups = _recipes[recipeId]
+        .variationGroups[groupId]
+        .variations[varId]
+        .instructionGroups
+        .length;
+
+    _recipes[recipeId]
+        .instructions
+        .insert(instructionId, '{$groupId:$varId:$nbGroups:instruction}');
+
+    _recipes[recipeId]
+        .variationGroups[groupId]
+        .variations[varId]
+        .instructionGroups
+        .add(['']);
+
+    notify();
   }
 
   void editName(int recipeId, String name) {

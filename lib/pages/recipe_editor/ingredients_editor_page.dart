@@ -41,7 +41,7 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
 
     _controller = ScrollController();
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _controller.jumpTo(_controller.position.maxScrollExtent + 500);
+      _controller.jumpTo(_controller.position.maxScrollExtent + 300);
     });
   }
 

@@ -4,10 +4,14 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
+import 'package:limelight/widgets/recipe_description_items.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/pages/recipe_editor_page.dart';
+import 'package:limelight/utils/gradient_container.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
+import 'package:limelight/utils/custom_text.dart';
+import 'package:limelight/utils/flat_button.dart';
 import 'package:limelight/widgets/section.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
@@ -30,7 +34,8 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
   bool adding = false;
   bool removing = false;
 
-  bool editing = false;
+  int? groupId;
+  int? varId;
 
   late ScrollController _controller;
 
@@ -40,18 +45,23 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
 
     _controller = ScrollController();
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _controller.jumpTo(_controller.position.maxScrollExtent + 500);
+      _controller.jumpTo(_controller.position.maxScrollExtent + 300);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RecipeModel>(
-      builder: (context, recipes, child) {
-        return EmptyPage(
-          resizeToAvoidBottomInset: false,
-          appBarText: 'Instructions',
-          child: Stack(
+    return EmptyPage(
+      resizeToAvoidBottomInset: false,
+      appBarText: 'Instructions',
+      child: Consumer<RecipeModel>(
+        builder: (context, recipes, child) {
+          int nbTotVars = 0;
+          for (var i = 0; i < recipes.nbVarGroups(widget.recipeId); i++) {
+            nbTotVars = nbTotVars + recipes.nbVariations(widget.recipeId, i);
+          }
+
+          return Stack(
             children: [
               Padding(
                 padding: EdgeInsets.only(
@@ -106,10 +116,16 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                                       variationId: variationId,
                                       instructionGroupId: instructionGroupId,
                                       instructionId: id,
-                                      enableTextField: !(adding || removing),
+                                      enableTextField: !(adding ||
+                                          removing ||
+                                          groupId != null ||
+                                          varId != null),
                                     );
 
-                                    if (adding == true || removing == true) {
+                                    if (adding == true ||
+                                        removing == true ||
+                                        groupId != null ||
+                                        varId != null) {
                                       return GestureDetector(
                                         onTap: () {
                                           if (adding == true) {
@@ -123,7 +139,7 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                                             setState(() {
                                               adding = false;
                                             });
-                                          } else {
+                                          } else if (removing == true) {
                                             recipes.removeVarInstruction(
                                                 widget.recipeId,
                                                 variationGroupId,
@@ -132,6 +148,17 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                                                 id);
 
                                             setState(() => removing = false);
+                                          } else {
+                                            recipes.addEmptyInstructionGroup(
+                                                widget.recipeId,
+                                                index + 1,
+                                                groupId!,
+                                                varId!);
+
+                                            setState(() {
+                                              groupId = null;
+                                              varId = null;
+                                            });
                                           }
                                         },
                                         child: item,
@@ -149,20 +176,39 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                           final item = InstructionItem(
                             recipeId: widget.recipeId,
                             instructionId: index,
-                            enableTextField: !(adding || removing),
+                            enableTextField: !(adding ||
+                                removing ||
+                                groupId != null ||
+                                varId != null),
                           );
 
-                          if (adding == true || removing == true) {
+                          if (adding == true ||
+                              removing == true ||
+                              groupId != null ||
+                              varId != null) {
                             return GestureDetector(
                               onTap: () {
                                 if (adding == true) {
                                   recipes.addEmptyInstruction(
                                       widget.recipeId, index + 1);
+
                                   setState(() => adding = false);
-                                } else {
+                                } else if (removing == true) {
                                   recipes.removeInstruction(
                                       widget.recipeId, index);
+
                                   setState(() => removing = false);
+                                } else {
+                                  recipes.addEmptyInstructionGroup(
+                                      widget.recipeId,
+                                      index + 1,
+                                      groupId!,
+                                      varId!);
+
+                                  setState(() {
+                                    groupId = null;
+                                    varId = null;
+                                  });
                                 }
                               },
                               child: item,
@@ -205,7 +251,91 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                           gradient: toLighterSurfaceGradient(limelightGradient),
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          onPressed: () {},
+                          onPressed: () {
+                            Scaffold.of(context).showBottomSheet(
+                              (BuildContext context) {
+                                return Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      30, 0, 30, 20 + 53 + 10),
+                                  child: GradientContainer(
+                                    gradient:
+                                        toSurfaceGradient(limelightGradient),
+                                    borderRadius: 15,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const SizedBox(height: 5),
+                                        ...List.generate(
+                                          nbTotVars,
+                                          (index) {
+                                            int i = index;
+                                            int gId = 0;
+                                            int vId = 0;
+
+                                            // If ever you're refactoring around here, clean this up :
+                                            while (i > 0) {
+                                              if (vId <
+                                                  recipes.nbVariations(
+                                                          widget.recipeId,
+                                                          gId) -
+                                                      1) {
+                                                vId++;
+                                              } else {
+                                                vId = 0;
+                                                gId++;
+                                              }
+
+                                              i--;
+                                            }
+
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                              child: FlatButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    groupId = gId;
+                                                    varId = vId;
+                                                  });
+
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    const Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 12, 20, 12),
+                                                      child: GradientIcon(
+                                                          icon: Icons
+                                                              .panorama_fish_eye,
+                                                          size: 22),
+                                                    ),
+                                                    CustomText(
+                                                      text:
+                                                          recipes.variationName(
+                                                              widget.recipeId,
+                                                              gId,
+                                                              vId),
+                                                      size: 16,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const SizedBox(height: 5),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              backgroundColor: Colors.transparent,
+                              elevation: 0,
+                            );
+                          },
                           child: Center(
                             child: GradientIcon(
                               gradient: toTextGradient(limelightGradient),
@@ -233,9 +363,9 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
                 ),
               ),
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
