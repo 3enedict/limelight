@@ -17,6 +17,7 @@ class GradientButton extends StatelessWidget {
   final VoidCallback? onLongPress;
   final bool ink;
   final Color? splashColor;
+  final bool disabled;
   final Widget child;
 
   const GradientButton({
@@ -34,6 +35,7 @@ class GradientButton extends StatelessWidget {
     this.onLongPress,
     this.ink = true,
     this.splashColor,
+    this.disabled = false,
     required this.child,
   });
 
@@ -75,7 +77,7 @@ class GradientButton extends StatelessWidget {
       width: width,
       borderRadius: borderRadius,
       diameter: diameter,
-      child: button,
+      child: disabled ? child : button,
     );
   }
 }

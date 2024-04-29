@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:limelight/utils/custom_text.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
@@ -9,7 +9,6 @@ import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/data/json/ingredient_data.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
-import 'package:limelight/widgets/section.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
@@ -28,79 +27,98 @@ class IngredientsEditorPage extends StatefulWidget {
 }
 
 class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
-  bool adding = false;
   bool removing = false;
-
-  bool editing = false;
-
-  late ScrollController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = ScrollController();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _controller.jumpTo(_controller.position.maxScrollExtent + 300);
-    });
-  }
+  bool variations = false;
+  int? varGroupId;
+  int? varId;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<RecipeModel>(
       builder: (context, recipes, child) {
         List<Widget> items = [];
+        final ingNb = recipes.recipe(widget.recipeId).ingredients.length;
 
-        for (var i = 0;
-            i < recipes.recipe(widget.recipeId).ingredients.length;
-            i++) {
-          items.add(Padding(
-              padding: const EdgeInsets.fromLTRB(42, 10, 42, 0),
-              child: IngredientItem(
-                recipeId: widget.recipeId,
-                ingredientId: i,
-              )));
-        }
+        if (!variations) {
+          for (var i = 0; i < ingNb; i++) {
+            items.add(IngredientItem(
+              recipeId: widget.recipeId,
+              ingredientId: i,
+              enableTextField: !removing,
+            ));
+          }
+        } else if (varGroupId == null && varId == null) {
+          for (var i = 0; i < recipes.nbVarGroups(widget.recipeId); i++) {
+            for (var j = 0; j < recipes.nbVariations(widget.recipeId, i); j++) {
+              final names = recipes
+                  .recipe(widget.recipeId)
+                  .variationGroups[i]
+                  .variations[j]
+                  .ingredients
+                  .map((e) => e.getName(2));
 
-        for (var i = 0; i < recipes.nbVarGroups(widget.recipeId); i++) {
-          for (var j = 0; j < recipes.nbVariations(widget.recipeId, i); j++) {
-            final num = recipes
-                .recipe(widget.recipeId)
-                .variationGroups[i]
-                .variations[j]
-                .ingredients
-                .length;
-
-            items.add(
-              Section(
-                padding: const EdgeInsets.fromLTRB(22, 10, 22, 0),
-                label: recipes.variationName(widget.recipeId, i, j),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 5),
-                      ...List.generate(
-                        num,
-                        (index) => IngredientItem(
-                          recipeId: widget.recipeId,
-                          variationGroupId: i,
-                          variationId: j,
-                          ingredientId: index,
-                        ),
+              items.add(
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                  child: GradientButton(
+                    gradient: toSurfaceGradient(limelightGradient),
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    onPressed: () => setState(() {
+                      varGroupId = i;
+                      varId = j;
+                    }),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(0, 15, 22, 15),
+                            child: GradientIcon(
+                                icon: Icons.panorama_fish_eye, size: 22),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomText(
+                                  text: recipes.variationName(
+                                      widget.recipeId, i, j),
+                                  weight: FontWeight.w600,
+                                ),
+                                const SizedBox(height: 4),
+                                CustomText(
+                                    text: names.join(', '), opacity: 0.6),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 5),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            );
+              );
+            }
+          }
+        } else {
+          final nb = recipes
+              .variation(widget.recipeId, varGroupId!, varId!)
+              .ingredients
+              .length;
+
+          for (var i = 0; i < nb; i++) {
+            items.add(IngredientItem(
+              recipeId: widget.recipeId,
+              variationGroupId: varGroupId,
+              variationId: varId,
+              ingredientId: i,
+              enableTextField: !removing,
+            ));
           }
         }
 
         return EmptyPage(
-          resizeToAvoidBottomInset: false,
-          appBarText: 'Instructions',
+          appBarText: variations ? 'Ingredients in variations' : 'Ingredients',
           child: Stack(
             children: [
               Padding(
@@ -110,15 +128,7 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
                       : MediaQuery.of(context).viewInsets.bottom,
                 ),
                 child: ListView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  controller: _controller,
-                  reverse: true,
-                  shrinkWrap: true,
-                  children: [
-                    ...items,
-                    const SizedBox(height: 10),
-                  ].reversed.toList(),
+                  children: items,
                 ),
               ),
               Align(
@@ -130,33 +140,89 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        !variations || (varGroupId != null && varId != null)
+                            ? GradientButton(
+                                diameter: 53,
+                                gradient: removing
+                                    ? redGradient
+                                    : toLighterSurfaceGradient(redGradient),
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                onPressed: () =>
+                                    setState(() => removing = !removing),
+                                child: Center(
+                                  child: GradientIcon(
+                                    gradient: removing
+                                        ? toLighterSurfaceGradient(redGradient)
+                                        : redGradient,
+                                    icon: UniconsLine.minus,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                        const SizedBox(width: 53 / 3),
                         GradientButton(
                           diameter: 53,
-                          gradient: toLighterSurfaceGradient(redGradient),
+                          gradient:
+                              variations && varGroupId == null && varId == null
+                                  ? greenGradient
+                                  : toLighterSurfaceGradient(greenGradient),
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          onPressed: () => setState(() => removing = true),
-                          child: const Center(
+                          onPressed: () {
+                            if (varGroupId == null && varId == null) {
+                              setState(() => variations = !variations);
+                            } else {
+                              setState(() {
+                                varGroupId = null;
+                                varId = null;
+                              });
+                            }
+                          },
+                          child: Center(
                             child: GradientIcon(
-                              gradient: redGradient,
-                              icon: UniconsLine.minus,
+                              gradient: variations &&
+                                      varGroupId == null &&
+                                      varId == null
+                                  ? toLighterSurfaceGradient(greenGradient)
+                                  : greenGradient,
+                              icon: Icons.layers,
                             ),
                           ),
                         ),
                         const SizedBox(width: 53 / 3),
-                        GradientButton(
-                          diameter: 53,
-                          gradient: toLighterSurfaceGradient(limelightGradient),
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          onPressed: () => setState(() => adding = true),
-                          child: const Center(
-                            child: GradientIcon(
-                              gradient: limelightGradient,
-                              icon: UniconsLine.plus,
-                            ),
-                          ),
-                        ),
+                        !variations || (varGroupId != null && varId != null)
+                            ? GradientButton(
+                                diameter: 53,
+                                gradient:
+                                    toLighterSurfaceGradient(limelightGradient),
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                onPressed: () {
+                                  if (removing == true) {
+                                    setState(() => removing = false);
+                                  }
+
+                                  if (varGroupId == null && varId == null) {
+                                    recipes.addIngredient(widget.recipeId,
+                                        IngredientData.empty());
+                                  } else {
+                                    recipes.addVarIngredient(
+                                        widget.recipeId,
+                                        varGroupId!,
+                                        varId!,
+                                        IngredientData.empty());
+                                  }
+                                },
+                                child: const Center(
+                                  child: GradientIcon(
+                                    gradient: limelightGradient,
+                                    icon: Icons.add,
+                                    size: 26,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                   ),
@@ -170,11 +236,12 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
   }
 }
 
-class IngredientItem extends StatelessWidget {
+class IngredientItem extends StatefulWidget {
   final int recipeId;
   final int? variationGroupId;
   final int? variationId;
   final int ingredientId;
+  final bool enableTextField;
 
   const IngredientItem({
     super.key,
@@ -182,89 +249,147 @@ class IngredientItem extends StatelessWidget {
     this.variationGroupId,
     this.variationId,
     required this.ingredientId,
+    required this.enableTextField,
   });
+
+  @override
+  State<IngredientItem> createState() => _IngredientItemState();
+}
+
+class _IngredientItemState extends State<IngredientItem> {
+  late FocusNode node;
+
+  @override
+  void initState() {
+    super.initState();
+    node = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    node.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<RecipeModel>(
       builder: (context, recipes, child) {
         IngredientData ingredient = IngredientData.empty();
-        if (variationGroupId == null || variationId == null) {
-          ingredient = recipes.recipe(recipeId).ingredient(ingredientId);
+        if (widget.variationGroupId == null || widget.variationId == null) {
+          ingredient =
+              recipes.recipe(widget.recipeId).ingredient(widget.ingredientId);
         } else {
           ingredient = recipes
-              .recipe(recipeId)
-              .variationGroups[variationGroupId!]
-              .variation(variationId!)
-              .ingredient(ingredientId);
+              .recipe(widget.recipeId)
+              .variationGroups[widget.variationGroupId!]
+              .variation(widget.variationId!)
+              .ingredient(widget.ingredientId);
         }
 
-        return Row(
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(0, 15, 22, 15),
-              child: GradientIcon(icon: Icons.panorama_fish_eye, size: 22),
-            ),
-            Expanded(
-              child: TextField(
-                onSubmitted: (text) {
-                  IngredientData ing = IngredientData.from(ingredient);
-                  ing.name = text;
-                  edit(recipes, ing);
-                },
-                controller: TextEditingController(text: ingredient.name),
-                style: GoogleFonts.openSans(color: textColor()),
-                decoration: const InputDecoration(border: InputBorder.none),
-              ),
-            ),
-            const SizedBox(width: 10),
-            IntrinsicWidth(
-              child: TextField(
-                textAlign: TextAlign.right,
-                onSubmitted: (text) {
-                  IngredientData ing = IngredientData.from(ingredient);
-
-                  if (text == 'some') {
-                    ing.quantity = 1;
-                    ing.unit = 'some';
-                  } else {
-                    var reg = RegExp(r"-?(?:\d*\.)?\d+(?:[eE][+-]?\d+)?");
-                    ing.quantity = reg
-                        .allMatches(text)
-                        .map((e) => e[0] == null ? 0.0 : double.parse(e[0]!))
-                        .toList()[0];
-
-                    ing.unit = text.replaceAll(reg, '');
-                  }
-
-                  edit(recipes, ing);
-                },
-                controller: TextEditingController(
-                  text: ingredient.unit == 'some'
-                      ? 'some'
-                      : '${ingredient.quantity}${ingredient.unit}',
-                ),
-                style: GoogleFonts.openSans(
-                  color: textColor().withOpacity(0.6),
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w400,
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+          child: GradientButton(
+            gradient: toSurfaceGradient(limelightGradient),
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            disabled: widget.enableTextField,
+            onPressed: () {
+              if (!widget.enableTextField) {
+                if (widget.variationGroupId == null ||
+                    widget.variationId == null) {
+                  recipes.removeIngredient(
+                      widget.recipeId, widget.ingredientId);
+                } else {
+                  recipes.removeVarIngredient(
+                      widget.recipeId,
+                      widget.variationGroupId!,
+                      widget.variationId!,
+                      widget.ingredientId);
+                }
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 15, 22, 15),
+                    child:
+                        GradientIcon(icon: Icons.panorama_fish_eye, size: 22),
                   ),
-                ),
-                decoration: const InputDecoration(border: InputBorder.none),
+                  Expanded(
+                    child: TextFormField(
+                      onChanged: (text) {
+                        ingredient.name = text;
+                        edit(recipes, ingredient);
+                      },
+                      onFieldSubmitted: (_) {
+                        recipes.notify();
+                        if (ingredient.quantity == 0.0) {
+                          node.requestFocus();
+                        }
+                      },
+                      initialValue: ingredient.name,
+                      style: GoogleFonts.openSans(color: textColor()),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
+                      enabled: widget.enableTextField,
+                      autofocus: ingredient.name == '',
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  IntrinsicWidth(
+                    child: TextFormField(
+                      focusNode: node,
+                      textAlign: TextAlign.right,
+                      onChanged: (text) {
+                        if (text == 'some') {
+                          ingredient.quantity = 1;
+                          ingredient.unit = 'some';
+                        } else {
+                          var reg = RegExp(r"-?(?:\d*\.)?\d+(?:[eE][+-]?\d+)?");
+                          ingredient.quantity = reg
+                              .allMatches(text)
+                              .map((e) =>
+                                  e[0] == null ? 0.0 : double.parse(e[0]!))
+                              .toList()[0];
+
+                          ingredient.unit = text.replaceAll(reg, '');
+                        }
+
+                        edit(recipes, ingredient);
+                      },
+                      onFieldSubmitted: (_) => recipes.notify(),
+                      initialValue: ingredient.unit == 'some'
+                          ? 'some'
+                          : '${ingredient.quantity}${ingredient.unit}',
+                      style: GoogleFonts.openSans(
+                        color: textColor().withOpacity(0.6),
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
+                      enabled: widget.enableTextField,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         );
       },
     );
   }
 
   void edit(RecipeModel recipes, IngredientData ing) {
-    if (variationGroupId == null || variationId == null) {
-      recipes.editIngredient(recipeId, ingredientId, ing);
+    if (widget.variationGroupId == null && widget.variationId == null) {
+      recipes.editIngredient(widget.recipeId, widget.ingredientId, ing);
     } else {
-      recipes.editVarIngredient(
-          recipeId, variationGroupId!, variationId!, ingredientId, ing);
+      recipes.editVarIngredient(widget.recipeId, widget.variationGroupId!,
+          widget.variationId!, widget.ingredientId, ing);
     }
   }
 }

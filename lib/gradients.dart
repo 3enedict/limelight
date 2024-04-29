@@ -25,6 +25,11 @@ const redGradient = [
   Color(0xFFDD2476),
 ];
 
+const greenGradient = [
+  Color(0xFF38ef7d),
+  Color(0xFF11998e),
+];
+
 List<Color> toBackgroundGradient(List<Color> gradient) {
   return List.generate(
     2,

@@ -40,11 +40,11 @@ class RecipeModel extends ChangeNotifier {
     notify();
   }
 
-  void removeIngredient(int recipeId, IngredientData ingredient) {
+  void removeIngredient(int recipeId, int ingredientId) {
     final recipe = _recipes.elementAtOrNull(recipeId);
     if (recipe == null) return;
 
-    recipe.ingredients.remove(ingredient);
+    recipe.ingredients.removeAt(ingredientId);
     notify();
   }
 
@@ -53,6 +53,26 @@ class RecipeModel extends ChangeNotifier {
     if (recipe == null) return;
 
     recipe.ingredients.add(ingredient);
+    notify();
+  }
+
+  void removeVarIngredient(
+      int recipeId, int varGroupId, int varId, int ingredientId) {
+    final recipe = _recipes.elementAtOrNull(recipeId);
+    if (recipe == null) return;
+
+    recipe.variationGroups[varGroupId].variations[varId].ingredients
+        .removeAt(ingredientId);
+    notify();
+  }
+
+  void addVarIngredient(
+      int recipeId, int varGroupId, int varId, IngredientData ingredient) {
+    final recipe = _recipes.elementAtOrNull(recipeId);
+    if (recipe == null) return;
+
+    recipe.variationGroups[varGroupId].variations[varId].ingredients
+        .add(ingredient);
     notify();
   }
 
@@ -126,7 +146,8 @@ class RecipeModel extends ChangeNotifier {
   ) {
     _recipes[recipeId].ingredients[ingredientId] = ingredient;
 
-    notify();
+    //notify();
+    save();
   }
 
   void editVarIngredient(
@@ -141,7 +162,8 @@ class RecipeModel extends ChangeNotifier {
         .variations[variationId]
         .ingredients[ingredientId] = ingredient;
 
-    notify();
+    //notify();
+    save();
   }
 
   void editVarGroupName(int recipeId, int variationGroupId, String name) {
@@ -189,7 +211,7 @@ class RecipeModel extends ChangeNotifier {
     notify();
   }
 
-  void notify() {
+  void save() {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       final data = _recipes.map((e) => e.toJson()).toList();
 
@@ -203,7 +225,10 @@ class RecipeModel extends ChangeNotifier {
         },
       );
     }
+  }
 
+  void notify() {
+    save();
     notifyListeners();
   }
 
