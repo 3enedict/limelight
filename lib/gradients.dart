@@ -54,7 +54,7 @@ List<Color> toLighterSurfaceGradient(List<Color> gradient) {
 List<Color> toTextGradient(List<Color> gradient) {
   return List.generate(
     2,
-    (int index) => modifyColor(gradient[index], 0.85, 0.1),
+    (int index) => modifyColor(gradient[index], 0.95, 0.05),
   );
 }
 

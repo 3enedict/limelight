@@ -96,6 +96,8 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const size = 30.0;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(40),
@@ -107,51 +109,46 @@ class SearchBar extends StatelessWidget {
             IngredientSearchPage(pageController: pageController),
           ),
           ink: false,
-          child: const Padding(
-            padding: EdgeInsets.fromLTRB(30, 12, 18, 12),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
             child: Row(
               children: [
-                CustomText(
+                const CustomText(
                   text: "Search...",
                   style: FontStyle.italic,
                   size: 24,
                 ),
-                Expanded(child: SizedBox()),
-                SearchBarIcons(),
+                const Expanded(child: SizedBox()),
+                Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 50),
+                      child: GradientIcon(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const AddToShoppingListPage(),
+                          ),
+                        ),
+                        size: size,
+                        icon: UniconsLine.notes,
+                        buttonPadding: 22,
+                      ),
+                    ),
+                    GradientIcon(
+                      onPressed: () => goto(context, const CookbookPage()),
+                      size: size,
+                      gradient: redGradient,
+                      icon: UniconsLine.fire,
+                      buttonPadding: 22,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class SearchBarIcons extends StatelessWidget {
-  const SearchBarIcons({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 30.0;
-
-    return Row(
-      children: [
-        GradientIcon(
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const AddToShoppingListPage(),
-            ),
-          ),
-          size: size,
-          icon: UniconsLine.notes,
-        ),
-        GradientIcon(
-          onPressed: () => goto(context, const CookbookPage()),
-          size: size,
-          gradient: redGradient,
-          icon: UniconsLine.fire,
-        ),
-      ],
     );
   }
 }

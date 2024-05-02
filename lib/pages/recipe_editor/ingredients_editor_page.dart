@@ -61,7 +61,7 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                   child: GradientButton(
-                    gradient: toSurfaceGradient(limelightGradient),
+                    gradient: toSurfaceGradient(greenGradient),
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     onPressed: () => setState(() {
@@ -75,7 +75,10 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
                           const Padding(
                             padding: EdgeInsets.fromLTRB(0, 15, 22, 15),
                             child: GradientIcon(
-                                icon: Icons.panorama_fish_eye, size: 22),
+                              gradient: greenGradient,
+                              icon: Icons.panorama_fish_eye,
+                              size: 22,
+                            ),
                           ),
                           Expanded(
                             child: Column(
@@ -85,6 +88,7 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
                                   text: recipes.variationName(
                                       widget.recipeId, i, j),
                                   weight: FontWeight.w600,
+                                  color: toTextGradient(greenGradient)[1],
                                 ),
                                 const SizedBox(height: 4),
                                 CustomText(

@@ -131,12 +131,14 @@ class RecipeModel extends ChangeNotifier {
 
   void editName(int recipeId, String name) {
     _recipes[recipeId].name = name;
-    notify();
+    save();
+    //notify();
   }
 
   void editDifficulty(int recipeId, String diff) {
     _recipes[recipeId].difficulty = diff;
-    notify();
+    save();
+    //notify();
   }
 
   void editIngredient(
@@ -166,9 +168,32 @@ class RecipeModel extends ChangeNotifier {
     save();
   }
 
+  void addVarGroup(int recipeId) {
+    _recipes[recipeId].variationGroups.add(VariationGroup.empty());
+    notify();
+  }
+
+  void removeVarGroup(int recipeId, int varGroupId) {
+    _recipes[recipeId].variationGroups.removeAt(varGroupId);
+    notify();
+  }
+
+  void addVariation(int recipeId, int varGroupId) {
+    _recipes[recipeId]
+        .variationGroups[varGroupId]
+        .variations
+        .add(Variation.empty());
+    notify();
+  }
+
+  void removeVariation(int recipeId, int varGroupId, int varId) {
+    _recipes[recipeId].variationGroups[varGroupId].variations.removeAt(varId);
+    notify();
+  }
+
   void editVarGroupName(int recipeId, int variationGroupId, String name) {
     _recipes[recipeId].variationGroups[variationGroupId].groupName = name;
-    notify();
+    save();
   }
 
   void editVarName(
