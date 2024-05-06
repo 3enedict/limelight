@@ -42,7 +42,7 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom == 0
                       ? 2 * 20 + 53
-                      : MediaQuery.of(context).viewInsets.bottom,
+                      : MediaQuery.of(context).viewInsets.bottom + 10,
                 ),
                 child: ListView(
                   children: groupId == null
@@ -94,6 +94,8 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
                                                   widget.recipeId, index) ==
                                               '',
                                           enabled: !removing,
+                                          textCapitalization:
+                                              TextCapitalization.sentences,
                                         ),
                                       ),
                                       Padding(
@@ -160,6 +162,8 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
                                                   index) ==
                                               '',
                                           enabled: !removing,
+                                          textCapitalization:
+                                              TextCapitalization.sentences,
                                         ),
                                       ),
                                     ],

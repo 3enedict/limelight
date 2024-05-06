@@ -129,7 +129,7 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom == 0
                       ? 2 * 20 + 53
-                      : MediaQuery.of(context).viewInsets.bottom,
+                      : MediaQuery.of(context).viewInsets.bottom + 10,
                 ),
                 child: ListView(
                   children: items,
@@ -325,8 +325,18 @@ class _IngredientItemState extends State<IngredientItem> {
                   Expanded(
                     child: TextFormField(
                       onChanged: (text) {
-                        ingredient.name = text;
-                        edit(recipes, ingredient);
+                        if (widget.variationGroupId == null &&
+                            widget.variationId == null) {
+                          recipes.editIngredientName(
+                              widget.recipeId, widget.ingredientId, text);
+                        } else {
+                          recipes.editVarIngredientName(
+                              widget.recipeId,
+                              widget.variationGroupId!,
+                              widget.variationId!,
+                              widget.ingredientId,
+                              text);
+                        }
                       },
                       onFieldSubmitted: (_) {
                         recipes.notify();
@@ -339,6 +349,7 @@ class _IngredientItemState extends State<IngredientItem> {
                       decoration:
                           const InputDecoration(border: InputBorder.none),
                       enabled: widget.enableTextField,
+                      textCapitalization: TextCapitalization.sentences,
                       autofocus: ingredient.name == '',
                     ),
                   ),
@@ -347,7 +358,7 @@ class _IngredientItemState extends State<IngredientItem> {
                     child: TextFormField(
                       focusNode: node,
                       textAlign: TextAlign.right,
-                      onChanged: (text) {
+                      onFieldSubmitted: (text) {
                         if (text == 'some') {
                           ingredient.quantity = 1;
                           ingredient.unit = 'some';
@@ -362,20 +373,43 @@ class _IngredientItemState extends State<IngredientItem> {
                           ingredient.unit = text.replaceAll(reg, '');
                         }
 
-                        edit(recipes, ingredient);
+                        if (widget.variationGroupId == null &&
+                            widget.variationId == null) {
+                          recipes.editIngredient(
+                              widget.recipeId, widget.ingredientId, ingredient);
+                        } else {
+                          recipes.editVarIngredient(
+                              widget.recipeId,
+                              widget.variationGroupId!,
+                              widget.variationId!,
+                              widget.ingredientId,
+                              ingredient);
+                        }
                       },
-                      onFieldSubmitted: (_) => recipes.notify(),
                       initialValue: ingredient.unit == 'some'
                           ? 'some'
-                          : '${ingredient.quantity}${ingredient.unit}',
+                          : ingredient.quantity == 0.0 && ingredient.unit == ''
+                              ? ''
+                              : '${ingredient.quantity}${ingredient.unit}',
                       style: GoogleFonts.openSans(
                         color: textColor().withOpacity(0.6),
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText:
+                            ingredient.quantity == 0.0 && ingredient.unit == ''
+                                ? '0.0'
+                                : null,
+                        hintStyle: GoogleFonts.openSans(
+                          color: textColor().withOpacity(0.4),
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
                       enabled: widget.enableTextField,
                     ),
                   ),
@@ -386,14 +420,5 @@ class _IngredientItemState extends State<IngredientItem> {
         );
       },
     );
-  }
-
-  void edit(RecipeModel recipes, IngredientData ing) {
-    if (widget.variationGroupId == null && widget.variationId == null) {
-      recipes.editIngredient(widget.recipeId, widget.ingredientId, ing);
-    } else {
-      recipes.editVarIngredient(widget.recipeId, widget.variationGroupId!,
-          widget.variationId!, widget.ingredientId, ing);
-    }
   }
 }

@@ -5,11 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:limelight/pages/recipe_editor/ingredients_editor_page.dart';
 import 'package:limelight/pages/recipe_editor/variations_editor_page.dart';
 import 'package:limelight/pages/recipe_editor/instructions_editor_page.dart';
-import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/gradients.dart';
 
 List<Widget> recipeEditor(
-  RecipeModel recipes,
   int recipeId,
   PageController controller,
 ) {

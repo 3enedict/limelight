@@ -40,6 +40,11 @@ class RecipeModel extends ChangeNotifier {
     notify();
   }
 
+  void remove(int recipeId) {
+    _recipes.removeAt(recipeId);
+    notify();
+  }
+
   void removeIngredient(int recipeId, int ingredientId) {
     final recipe = _recipes.elementAtOrNull(recipeId);
     if (recipe == null) return;
@@ -108,6 +113,48 @@ class RecipeModel extends ChangeNotifier {
     notify();
   }
 
+  void moveInstruction(int recipeId, int oldId, int newId) {
+    if (oldId < newId) newId -= 1;
+
+    final String item = _recipes[recipeId].instructions.removeAt(oldId);
+    _recipes[recipeId].instructions.insert(newId, item);
+
+    notify();
+  }
+
+  void moveVarInstruction(int recipeId, int variationGroupId, int variationId,
+      int instructionGroupId, int oldId, int newId) {
+    if (oldId < newId) newId -= 1;
+
+    final String item = _recipes[recipeId]
+        .variationGroups[variationGroupId]
+        .variations[variationId]
+        .instructionGroups[instructionGroupId]
+        .removeAt(oldId);
+
+    _recipes[recipeId]
+        .variationGroups[variationGroupId]
+        .variations[variationId]
+        .instructionGroups[instructionGroupId]
+        .insert(newId, item);
+
+    notify();
+  }
+
+  void removeVarInstructionGroup(int recipeId, int variationGroupId,
+      int variationId, int instructionGroupId) {
+    _recipes[recipeId].instructions.remove(
+        '{$variationGroupId:$variationId:$instructionGroupId:instruction}');
+
+    _recipes[recipeId]
+        .variationGroups[variationGroupId]
+        .variations[variationId]
+        .instructionGroups
+        .removeAt(instructionGroupId);
+
+    notify();
+  }
+
   void addEmptyInstructionGroup(
       int recipeId, int instructionId, int groupId, int varId) {
     final nbGroups = _recipes[recipeId]
@@ -148,8 +195,7 @@ class RecipeModel extends ChangeNotifier {
   ) {
     _recipes[recipeId].ingredients[ingredientId] = ingredient;
 
-    //notify();
-    save();
+    notify();
   }
 
   void editVarIngredient(
@@ -164,7 +210,32 @@ class RecipeModel extends ChangeNotifier {
         .variations[variationId]
         .ingredients[ingredientId] = ingredient;
 
-    //notify();
+    notify();
+  }
+
+  void editIngredientName(
+    int recipeId,
+    int ingredientId,
+    String name,
+  ) {
+    _recipes[recipeId].ingredients[ingredientId].name = name;
+
+    save();
+  }
+
+  void editVarIngredientName(
+    int recipeId,
+    int variationGroupId,
+    int variationId,
+    int ingredientId,
+    String name,
+  ) {
+    _recipes[recipeId]
+        .variationGroups[variationGroupId]
+        .variations[variationId]
+        .ingredients[ingredientId]
+        .name = name;
+
     save();
   }
 
@@ -217,7 +288,8 @@ class RecipeModel extends ChangeNotifier {
   ) {
     _recipes[recipeId].instructions[instructionId] = instruction;
 
-    notify();
+    save();
+    //notify();
   }
 
   void editVarInstruction(
@@ -233,7 +305,8 @@ class RecipeModel extends ChangeNotifier {
         .variations[variationId]
         .instructionGroups[instructionGroupId][instructionId] = instruction;
 
-    notify();
+    save();
+    //notify();
   }
 
   void save() {
@@ -254,6 +327,11 @@ class RecipeModel extends ChangeNotifier {
 
   void notify() {
     save();
+    notifyListeners();
+  }
+
+  // Probably not a good idea...
+  void notifyList() {
     notifyListeners();
   }
 
@@ -412,5 +490,16 @@ class RecipeModel extends ChangeNotifier {
 
   int nbVariations(int recipeId, int variationGroupId) {
     return variationGroup(recipeId, variationGroupId).variations.length;
+  }
+
+  int nbInstructions(int recipeId) {
+    return recipe(recipeId).instructions.length;
+  }
+
+  int nbInstructionsInVar(int recipeId, int variationGroupId, int variationId,
+      int instructionGroupId) {
+    return variation(recipeId, variationGroupId, variationId)
+        .instructionGroup(instructionGroupId)
+        .length;
   }
 }
