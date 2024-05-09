@@ -92,7 +92,12 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 CustomText(
-                                    text: names.join(', '), opacity: 0.6),
+                                  text: names.isEmpty
+                                      ? 'No ingredients yet'
+                                      : names.join(', '),
+                                  color: toTextGradient(greenGradient)[1],
+                                  opacity: 0.6,
+                                ),
                               ],
                             ),
                           ),

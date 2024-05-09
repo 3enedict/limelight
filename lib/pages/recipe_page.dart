@@ -131,68 +131,71 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recipes = Provider.of<RecipeModel>(context, listen: false);
-    final width = MediaQuery.of(context).size.width;
+    return Consumer<RecipeModel>(
+      builder: (context, recipes, child) {
+        final width = MediaQuery.of(context).size.width;
 
-    final ingredients = recipes.ingredientList(id);
-    final instructions = recipes.instructionSet(id);
+        final ingredients = recipes.ingredientList(id);
+        final instructions = recipes.instructionSet(id);
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: CustomScrollView(
-        slivers: [
-          SliverList.list(
-            children: const [
-              SizedBox(height: 14),
-              CustomText(
-                text: ' Ingredients',
-                opacity: 0.5,
-                weight: FontWeight.w300,
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: CustomScrollView(
+            slivers: [
+              SliverList.list(
+                children: const [
+                  SizedBox(height: 14),
+                  CustomText(
+                    text: ' Ingredients',
+                    opacity: 0.5,
+                    weight: FontWeight.w300,
+                  ),
+                ],
+              ),
+              SliverPersistentHeader(
+                delegate: _SliverBoxDelegate(
+                  minHeight: 0.0,
+                  maxHeight: ingredients.length * (12 * 2 + 20.0) + 10 + 14,
+                  child: RecipeDescriptionBox(
+                    reverse: true,
+                    items: generateIngredients(ingredients),
+                  ),
+                ),
+              ),
+              SliverList.list(
+                children: const [
+                  SizedBox(height: 7),
+                  CustomText(
+                    text: ' Instructions',
+                    opacity: 0.5,
+                    weight: FontWeight.w300,
+                  ),
+                ],
+              ),
+              SliverPersistentHeader(
+                delegate: _SliverBoxDelegate(
+                  minHeight: 0.0,
+                  maxHeight: 20 +
+                      instructions
+                          .map((e) {
+                            return 10 * 2 +
+                                calculateTextHeight(
+                                  e,
+                                  width - 6 * 20, // 20 | 20 40(o) text 20 | 20
+                                );
+                          })
+                          .toList()
+                          .reduce((a, b) => a + b),
+                  child: RecipeDescriptionBox(
+                    items: generateInstructions(instructions, width - 6 * 20),
+                    reverse: true,
+                  ),
+                ),
               ),
             ],
           ),
-          SliverPersistentHeader(
-            delegate: _SliverBoxDelegate(
-              minHeight: 0.0,
-              maxHeight: ingredients.length * (12 * 2 + 20.0) + 10 + 14,
-              child: RecipeDescriptionBox(
-                reverse: true,
-                items: generateIngredients(ingredients),
-              ),
-            ),
-          ),
-          SliverList.list(
-            children: const [
-              SizedBox(height: 7),
-              CustomText(
-                text: ' Instructions',
-                opacity: 0.5,
-                weight: FontWeight.w300,
-              ),
-            ],
-          ),
-          SliverPersistentHeader(
-            delegate: _SliverBoxDelegate(
-              minHeight: 0.0,
-              maxHeight: 20 +
-                  instructions
-                      .map((e) {
-                        return 10 * 2 +
-                            calculateTextHeight(
-                              e,
-                              width - 6 * 20, // 20 | 20 40(o) text 20 | 20
-                            );
-                      })
-                      .toList()
-                      .reduce((a, b) => a + b),
-              child: RecipeDescriptionBox(
-                items: generateInstructions(instructions, width - 6 * 20),
-                reverse: true,
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

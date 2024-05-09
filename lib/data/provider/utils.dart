@@ -36,6 +36,9 @@ String replaceVariationInstructions(
       localInstructions = localInstructions.replaceAll(old, newInstructions);
     } else {
       localInstructions = localInstructions.replaceAll("$old(Enter)", "");
+
+      // Just in case it was last
+      localInstructions = localInstructions.replaceAll("(Enter)$old", "");
     }
   }
 

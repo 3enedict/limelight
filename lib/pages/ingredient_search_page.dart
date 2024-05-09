@@ -68,7 +68,7 @@ class _SearchPageState extends State<IngredientSearchPage> {
                     searchHint: 'Select ingredients to cook with',
                     onChanged: (query) => setState(() => _query = query),
                     onSubmitted: () {
-                      if (_query != '') {
+                      if (_query != '' && matches.isNotEmpty) {
                         ingredients.select(matches[0].name);
                       }
                     },

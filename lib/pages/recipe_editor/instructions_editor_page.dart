@@ -591,20 +591,20 @@ class _InstructionTextFieldState extends State<InstructionTextField> {
       autofocus: widget.text == '',
       onChanged: (newText) {
         String instruction = newText;
-        for (var i = 0; i < widget.names.length; i++) {
-          instruction =
-              instruction.replaceAll(widget.names[i], '{$i:quantity}');
-        }
-
         if (widget.gId == null || widget.vId == null || widget.igId == null) {
           for (var i = 0; i < widget.names.length; i++) {
-            instruction = instruction.replaceAll(
-                widget.names[i], '{${widget.gId}:${widget.vId}:$i:quantity}');
+            instruction =
+                instruction.replaceAll(widget.names[i], '{$i:quantity}');
           }
 
           widget.recipes
               .editInstruction(widget.recipeId, widget.iId, instruction);
         } else {
+          for (var i = 0; i < widget.names.length; i++) {
+            instruction = instruction.replaceAll(
+                widget.names[i], '{${widget.gId}:${widget.vId}:$i:quantity}');
+          }
+
           widget.recipes.editVarInstruction(widget.recipeId, widget.gId!,
               widget.vId!, widget.igId!, widget.iId, instruction);
         }

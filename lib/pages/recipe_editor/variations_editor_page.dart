@@ -85,8 +85,7 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
                                               recipes.variationGroupName(
                                                   widget.recipeId, index),
                                           style: GoogleFonts.openSans(
-                                            color: toTextGradient(
-                                                greenGradient)[1],
+                                            color: textColor(),
                                           ),
                                           decoration: const InputDecoration(
                                               border: InputBorder.none),
