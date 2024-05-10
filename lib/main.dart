@@ -145,12 +145,7 @@ class LimelightState extends State<Limelight> {
                       ),
                     )
                   ]
-                : matches
-                    .map((e) => RecipePage(
-                          id: e,
-                          horizontalPageController: _controller,
-                        ))
-                    .toList();
+                : matches.map((e) => RecipePage(id: e)).toList();
 
             pages = proposals;
           }

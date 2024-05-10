@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:limelight/data/json/recipe.dart';
-import 'package:limelight/data/provider/calendar_model.dart';
-import 'package:limelight/utils/custom_popup_menu.dart';
-import 'package:limelight/utils/gradient_container.dart';
 import 'package:provider/provider.dart';
 
-import 'package:limelight/pages/ingredient_editor_page.dart';
+import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/widgets/appbar_search_bar.dart';
+import 'package:limelight/pages/recipe_editor_page.dart';
+import 'package:limelight/utils/gradient_container.dart';
+import 'package:limelight/utils/custom_popup_menu.dart';
 import 'package:limelight/utils/gradient_appbar.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
-import 'package:limelight/pages/recipe_editor_page.dart';
 import 'package:limelight/utils/custom_text.dart';
-import 'package:limelight/utils/utils.dart';
+import 'package:limelight/data/json/recipe.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
@@ -241,7 +239,6 @@ class _CookbookPageState extends State<CookbookPage> {
                                     children: styledName,
                                     style: GoogleFonts.workSans(
                                       color: textColor(),
-                                      fontSize: 16,
                                     ),
                                   ),
                                 ),

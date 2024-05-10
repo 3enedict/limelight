@@ -18,14 +18,7 @@ import 'package:limelight/gradients.dart';
 // https://github.com/flutter/flutter/issues/31476
 
 class ShoppingListPage extends StatefulWidget {
-  final PageController verticalPageController;
-  final PageController horizontalPageController;
-
-  const ShoppingListPage({
-    super.key,
-    required this.verticalPageController,
-    required this.horizontalPageController,
-  });
+  const ShoppingListPage({super.key});
 
   @override
   State<ShoppingListPage> createState() => _ShoppingListPageState();
@@ -47,8 +40,6 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
       children: List.generate(
         2,
         (i) => ShoppingListSubPage(
-          verticalPageController: widget.verticalPageController,
-          horizontalPageController: widget.horizontalPageController,
           shoppingListPageController: _pageController,
           cart: i == 1,
         ),
@@ -57,33 +48,22 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
   }
 }
 
-class ShoppingListSubPage extends StatefulWidget {
-  final PageController verticalPageController;
-  final PageController horizontalPageController;
+class ShoppingListSubPage extends StatelessWidget {
   final PageController shoppingListPageController;
   final bool cart;
 
   const ShoppingListSubPage({
     super.key,
-    required this.verticalPageController,
-    required this.horizontalPageController,
     required this.shoppingListPageController,
     required this.cart,
   });
-
-  @override
-  State<ShoppingListSubPage> createState() => _ShoppingListSubPageState();
-}
-
-class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
-  bool _start = false;
 
   @override
   Widget build(BuildContext context) {
     return Consumer4<IngredientModel, RecipeModel, CalendarModel,
         ShoppingListModel>(
       builder: (context, ingredients, recipes, calendar, shoppingList, child) {
-        final gradient = widget.cart ? redGradient : limelightGradient;
+        final gradient = cart ? redGradient : limelightGradient;
 
         List<IngredientData> listFromRecipes = [];
 
@@ -100,7 +80,7 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
           }
         }
 
-        if (!widget.cart) {
+        if (!cart) {
           for (var item in shoppingList.recipesCart) {
             int? index = find(listFromRecipes, item);
             if (index != null) {
@@ -113,13 +93,11 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
           }
         }
 
-        final list = widget.cart
+        final list = cart
             ? [...shoppingList.shoppingCart, ...shoppingList.recipesCart]
             : [...shoppingList.shoppingList, ...listFromRecipes];
 
-        if (!widget.cart &&
-            list.isEmpty &&
-            shoppingList.recipesCart.isNotEmpty) {
+        if (!cart && list.isEmpty && shoppingList.recipesCart.isNotEmpty) {
           return EmptyPage(
             appBarText: 'Ingredients to buy',
             gradient: gradient,
@@ -128,114 +106,88 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
                 onPressed: () {
                   ingredients.clear();
                   shoppingList.clear();
-                  widget.verticalPageController.jumpToPage(1);
-                  widget.horizontalPageController.jumpToPage(1);
+                  Navigator.of(context).pop();
                 },
                 gradient: toSurfaceGradient(limelightGradient),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: CustomText(text: 'Done'),
-                ),
+                padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+                child: const CustomText(text: 'Done'),
               ),
             ),
           );
         }
 
         return EmptyPage(
-          appBarText: widget.cart ? 'Shopping cart' : 'Ingredients to buy',
+          appBarText: cart ? 'Shopping cart' : 'Ingredients to buy',
+          backButton: true,
           gradient: gradient,
           child: Column(
             children: [
               Expanded(
-                child: NotificationListener(
-                  onNotification: (notification) {
-                    if (notification is ScrollStartNotification) {
-                      _start = true;
-                    }
+                child: ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Dismissible(
+                      key: UniqueKey(),
+                      direction: cart
+                          ? DismissDirection.endToStart
+                          : DismissDirection.startToEnd,
+                      onDismissed: cart
+                          ? (_) {
+                              final len = shoppingList.shoppingCart.length;
+                              final isFromRecipes = !(index < len);
 
-                    if (notification is ScrollUpdateNotification) {
-                      _start = false;
-                    }
-
-                    if (notification is OverscrollNotification &&
-                        _start == true) {
-                      if (notification.overscroll < 0) {
-                        widget.verticalPageController.animateToPage(
-                          1,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      }
-                    }
-
-                    return false;
-                  },
-                  child: ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Dismissible(
-                        key: UniqueKey(),
-                        direction: widget.cart
-                            ? DismissDirection.endToStart
-                            : DismissDirection.startToEnd,
-                        onDismissed: widget.cart
-                            ? (_) {
-                                final len = shoppingList.shoppingCart.length;
-                                final isFromRecipes = !(index < len);
-
-                                if (isFromRecipes) {
-                                  shoppingList.remove(list[index]);
-                                } else {
-                                  shoppingList.unbuy(list[index]);
-                                }
+                              if (isFromRecipes) {
+                                shoppingList.remove(list[index]);
+                              } else {
+                                shoppingList.unbuy(list[index]);
                               }
-                            : (_) {
-                                final len = shoppingList.shoppingList.length;
-                                final isFromRecipes = !(index < len);
+                            }
+                          : (_) {
+                              final len = shoppingList.shoppingList.length;
+                              final isFromRecipes = !(index < len);
 
-                                if (isFromRecipes) {
-                                  shoppingList.add(list[index]);
-                                } else {
-                                  shoppingList.buy(list[index]);
-                                }
-                              },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
-                          child: GradientContainer(
-                            borderRadius: 20,
-                            gradient: toSurfaceGradient(gradient),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                                  child: GradientIcon(
-                                    gradient: gradient,
-                                    icon: Icons.panorama_fish_eye,
-                                    size: 20,
-                                  ),
+                              if (isFromRecipes) {
+                                shoppingList.add(list[index]);
+                              } else {
+                                shoppingList.buy(list[index]);
+                              }
+                            },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+                        child: GradientContainer(
+                          borderRadius: 20,
+                          gradient: toSurfaceGradient(gradient),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                                child: GradientIcon(
+                                  gradient: gradient,
+                                  icon: Icons.panorama_fish_eye,
+                                  size: 20,
                                 ),
-                                CustomText(
-                                  color: toTextGradient(gradient)[0],
-                                  text: list[index].getName(
-                                    list[index].quantity.round(),
-                                  ),
+                              ),
+                              CustomText(
+                                color: toTextGradient(gradient)[0],
+                                text: list[index].getName(
+                                  list[index].quantity.round(),
                                 ),
-                                const Expanded(child: SizedBox()),
-                                CustomText(
-                                  color: toTextGradient(gradient)[1],
-                                  text: list[index].getQuantity(),
-                                  opacity: 0.6,
-                                  weight: FontWeight.w400,
-                                ),
-                                const SizedBox(width: 16)
-                              ],
-                            ),
+                              ),
+                              const Expanded(child: SizedBox()),
+                              CustomText(
+                                color: toTextGradient(gradient)[1],
+                                text: list[index].getQuantity(),
+                                opacity: 0.6,
+                                weight: FontWeight.w400,
+                              ),
+                              const SizedBox(width: 16)
+                            ],
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
               Container(
@@ -248,20 +200,17 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
                       GradientButton(
                         diameter: 54,
                         gradient: toLighterSurfaceGradient(limelightGradient),
-                        onPressed: widget.cart
-                            ? () =>
-                                widget.shoppingListPageController.animateToPage(
+                        onPressed: cart
+                            ? () => shoppingListPageController.animateToPage(
                                   0,
                                   duration: const Duration(milliseconds: 500),
                                   curve: Curves.ease,
                                 )
-                            : () {},
+                            : () => Navigator.of(context).pop(),
                         child: Center(
                           child: GradientIcon(
                             gradient: limelightGradient,
-                            icon: widget.cart
-                                ? Icons.arrow_back
-                                : Icons.panorama_fish_eye,
+                            icon: cart ? Icons.arrow_back : Icons.close,
                           ),
                         ),
                       ),
@@ -269,20 +218,17 @@ class _ShoppingListSubPageState extends State<ShoppingListSubPage> {
                       GradientButton(
                         diameter: 54,
                         gradient: toLighterSurfaceGradient(redGradient),
-                        onPressed: widget.cart
-                            ? () {}
-                            : () =>
-                                widget.shoppingListPageController.animateToPage(
-                                  0,
+                        onPressed: cart
+                            ? () => Navigator.of(context).pop()
+                            : () => shoppingListPageController.animateToPage(
+                                  1,
                                   duration: const Duration(milliseconds: 500),
                                   curve: Curves.ease,
                                 ),
                         child: Center(
                           child: GradientIcon(
                             gradient: redGradient,
-                            icon: widget.cart
-                                ? Icons.panorama_fish_eye
-                                : Icons.arrow_forward,
+                            icon: cart ? Icons.close : Icons.arrow_forward,
                           ),
                         ),
                       ),

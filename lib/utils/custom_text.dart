@@ -24,7 +24,7 @@ class CustomText extends StatelessWidget {
     this.weight,
     this.style,
     this.decoration,
-    this.size,
+    this.size = 14,
     this.padding = const EdgeInsets.all(0),
   });
 

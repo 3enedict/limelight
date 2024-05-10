@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:limelight/utils/utils.dart';
 
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
@@ -20,12 +21,10 @@ import 'package:limelight/gradients.dart';
 
 class RecipePage extends StatefulWidget {
   final RecipeId id;
-  final PageController horizontalPageController;
 
   const RecipePage({
     super.key,
     required this.id,
-    required this.horizontalPageController,
   });
 
   @override
@@ -34,20 +33,12 @@ class RecipePage extends StatefulWidget {
 
 class _RecipePageState extends State<RecipePage>
     with AutomaticKeepAliveClientMixin {
-  late PageController _controller;
   late RecipeId _localId;
-  double _currentPage = 1;
 
   @override
   void initState() {
     super.initState();
     _localId = widget.id;
-    _controller = PageController(initialPage: 1);
-    _controller.addListener(() {
-      setState(() {
-        _currentPage = _controller.page ?? _currentPage;
-      });
-    });
   }
 
   @override
@@ -55,39 +46,18 @@ class _RecipePageState extends State<RecipePage>
     super.build(context);
     final recipes = Provider.of<RecipeModel>(context, listen: false);
 
-    return PageView(
-      controller: _controller,
-      physics: _currentPage == 1
-          ? const NeverScrollableScrollPhysics()
-          : const PageScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      children: [
-        CalendarPage(recipe: _localId),
-        EmptyPage(
-          appBarText: recipes.name(_localId.recipeId),
-          child: Column(
-            children: [
-              Expanded(child: Content(id: _localId)),
-              ActionButtons(
-                id: _localId,
-                controller: _controller,
-                onVariationChange: (newId) => setState(() => _localId = newId),
-              ),
-            ],
+    return EmptyPage(
+      appBarText: recipes.name(_localId.recipeId),
+      child: Column(
+        children: [
+          Expanded(child: Content(id: _localId)),
+          ActionButtons(
+            id: _localId,
+            onVariationChange: (newId) => setState(() => _localId = newId),
           ),
-        ),
-        ShoppingListPage(
-          verticalPageController: _controller,
-          horizontalPageController: widget.horizontalPageController,
-        ),
-      ],
+        ],
+      ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -202,13 +172,11 @@ class Content extends StatelessWidget {
 
 class ActionButtons extends StatelessWidget {
   final RecipeId id;
-  final PageController controller;
   final void Function(RecipeId) onVariationChange;
 
   const ActionButtons({
     super.key,
     required this.id,
-    required this.controller,
     required this.onVariationChange,
   });
 
@@ -247,11 +215,7 @@ class ActionButtons extends StatelessWidget {
                   limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              onPressed: () => controller.animateToPage(
-                0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.ease,
-              ),
+              onPressed: () => goto(context, CalendarPage(recipe: id)),
               child: Center(
                 child: GradientIcon(
                   gradient: toSurfaceGradient(limelightGradient),
@@ -264,11 +228,7 @@ class ActionButtons extends StatelessWidget {
             GradientButton(
               diameter: 54,
               gradient: toLighterSurfaceGradient(limelightGradient),
-              onPressed: () => controller.animateToPage(
-                2,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.ease,
-              ),
+              onPressed: () => goto(context, const ShoppingListPage()),
               child: Center(
                 child: GradientIcon(
                   gradient: toTextGradient(limelightGradient),

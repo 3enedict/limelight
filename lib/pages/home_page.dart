@@ -14,78 +14,48 @@ import 'package:limelight/utils/utils.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   final PageController pageController;
   const HomePage({super.key, required this.pageController});
 
   @override
-  HomePageState createState() => HomePageState();
-}
-
-class HomePageState extends State<HomePage> {
-  late PageController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = PageController(initialPage: 1);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return PageView(
-      controller: _controller,
-      scrollDirection: Axis.vertical,
-      children: [
-        const CalendarPage(),
-        EmptyPage(
-          child: Circles(
-            child: Stack(
-              children: [
-                SearchBar(pageController: widget.pageController),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      GradientIcon(
-                        onPressed: () => widget.pageController.animateToPage(
-                          0,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        ),
-                        gradient: toTextGradient(limelightGradient)
-                            .map((e) => e.withOpacity(0.5))
-                            .toList(),
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        icon: UniconsLine.setting,
-                      ),
-                      GradientIcon(
-                        onPressed: () => _controller.animateToPage(
-                          0,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        ),
-                        gradient: toTextGradient(limelightGradient)
-                            .map((e) => e.withOpacity(0.5))
-                            .toList(),
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                        icon: UniconsLine.calender,
-                      ),
-                    ],
+    return EmptyPage(
+      child: Circles(
+        child: Stack(
+          children: [
+            SearchBar(pageController: pageController),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GradientIcon(
+                    onPressed: () => pageController.animateToPage(
+                      0,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    ),
+                    gradient: toTextGradient(limelightGradient)
+                        .map((e) => e.withOpacity(0.5))
+                        .toList(),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    icon: UniconsLine.setting,
                   ),
-                ),
-              ],
+                  GradientIcon(
+                    onPressed: () => goto(context, const CalendarPage()),
+                    gradient: toTextGradient(limelightGradient)
+                        .map((e) => e.withOpacity(0.5))
+                        .toList(),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    icon: UniconsLine.calender,
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
