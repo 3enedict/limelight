@@ -2,26 +2,22 @@ import 'package:limelight/data/json/ingredient_data.dart';
 
 class Variation {
   String name;
-  String time;
   List<IngredientData> ingredients;
   List<List<String>> instructionGroups;
 
   Variation({
     required this.name,
-    required this.time,
     required this.ingredients,
     required this.instructionGroups,
   });
 
   Variation.empty({
     this.name = '',
-    this.time = '',
   })  : ingredients = [],
         instructionGroups = [];
 
   factory Variation.fromJson(Map<String, dynamic> data) {
     final name = data['name'] as String;
-    final time = data['time'] as String;
 
     final ingredientsData = data['ingredients'] as List<dynamic>?;
     final ingredients = ingredientsData != null
@@ -40,7 +36,6 @@ class Variation {
 
     return Variation(
       name: name,
-      time: time,
       ingredients: ingredients,
       instructionGroups: instructionGroups,
     );
@@ -49,7 +44,6 @@ class Variation {
   Map<String, dynamic> toJson() {
     return {
       "name": name,
-      "time": time,
       "ingredients": ingredients.map((data) => data.toJson()).toList(),
       "instructionGroups": instructionGroups,
     };

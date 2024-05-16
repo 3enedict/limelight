@@ -71,7 +71,7 @@ class EmptyPage extends StatelessWidget {
                             ),
                             CustomText(
                               text: appBarText ?? '',
-                              size: 20,
+                              size: 18,
                               weight: FontWeight.w700,
                             ),
                           ],
@@ -82,7 +82,7 @@ class EmptyPage extends StatelessWidget {
                         text: CustomText(
                           text: appBarText ?? '',
                           alignement: TextAlign.center,
-                          size: 20,
+                          size: 18,
                           weight: FontWeight.w700,
                         ),
                       ),

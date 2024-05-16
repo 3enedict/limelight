@@ -47,6 +47,17 @@ class IngredientModel extends ChangeNotifier {
     notify();
   }
 
+  void edit(String oldName, String newName) {
+    _ingredients.removeWhere((e) => e.name == oldName);
+    _ingredients.add(IngredientDescription(name: newName));
+
+    if (_selected.contains(oldName)) {
+      _selected[_selected.indexOf(oldName)] = newName;
+    }
+
+    notify();
+  }
+
   List<IngredientDescription> search(String rawQuery) {
     List<IngredientDescription> results = [];
     List<List<IngredientDescription>> secondaryResults = [];

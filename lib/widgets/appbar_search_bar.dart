@@ -49,8 +49,8 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
                 gradient: toTextGradient(limelightGradient)
                     .map((e) => e.withOpacity(0.6))
                     .toList(),
-                padding: const EdgeInsets.fromLTRB(15, 0, 13, 0),
-                size: 19,
+                padding: const EdgeInsets.fromLTRB(14, 0, 12, 0),
+                size: 18,
                 icon: FeatherIcons.search,
               ),
               Expanded(
@@ -64,11 +64,13 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
                     hintStyle: GoogleFonts.workSans(
                       textStyle: TextStyle(
                         color: textColor().withOpacity(0.8),
+                        fontSize: 14,
                       ),
                     ),
                   ),
                   style: GoogleFonts.workSans(
                     textStyle: TextStyle(color: textColor()),
+                    fontSize: 14,
                   ),
                   onChanged: (query) => setState(() {
                     _query = query;
@@ -98,7 +100,7 @@ class _AppbarSearchBarState extends State<AppbarSearchBar> {
                           .toList(),
                       onPressed: () => clear(),
                       buttonPadding: 0,
-                      size: 19,
+                      size: 18,
                       icon: FeatherIcons.x,
                     )
                   : const SizedBox(width: 12),

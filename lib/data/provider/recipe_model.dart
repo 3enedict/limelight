@@ -182,12 +182,6 @@ class RecipeModel extends ChangeNotifier {
     //notify();
   }
 
-  void editDifficulty(int recipeId, String diff) {
-    _recipes[recipeId].difficulty = diff;
-    save();
-    //notify();
-  }
-
   void editIngredient(
     int recipeId,
     int ingredientId,
@@ -462,24 +456,12 @@ class RecipeModel extends ChangeNotifier {
     return recipe(recipeId).name;
   }
 
-  String difficulty(int recipeId) {
-    return recipe(recipeId).difficulty;
-  }
-
-  String price(int recipeId) {
-    return recipe(recipeId).price;
-  }
-
   String variationGroupName(int recipeId, int variationGroupId) {
     return variationGroup(recipeId, variationGroupId).groupName;
   }
 
   String variationName(int recipeId, int variationGroupId, int variationId) {
     return variation(recipeId, variationGroupId, variationId).name;
-  }
-
-  String variationTime(int recipeId, int variationGroupId, int variationId) {
-    return variation(recipeId, variationGroupId, variationId).time;
   }
 
   int get number => _recipes.length;

@@ -86,7 +86,7 @@ class SearchBar extends StatelessWidget {
                 const CustomText(
                   text: "Search...",
                   style: FontStyle.italic,
-                  size: 24,
+                  size: 22,
                 ),
                 const Expanded(child: SizedBox()),
                 Stack(

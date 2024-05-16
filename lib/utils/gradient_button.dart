@@ -23,8 +23,8 @@ class GradientButton extends StatelessWidget {
   const GradientButton({
     super.key,
     this.gradient = limelightGradient,
-    this.begin = Alignment.topCenter,
-    this.end = Alignment.bottomCenter,
+    this.begin = Alignment.topLeft,
+    this.end = Alignment.bottomRight,
     this.height,
     this.width,
     this.borderRadius = 20,

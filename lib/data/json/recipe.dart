@@ -6,8 +6,6 @@ import 'package:limelight/gradients.dart';
 
 class RecipeData {
   String name;
-  String difficulty;
-  String price;
   List<IngredientData> ingredients;
   List<String> instructions;
   List<VariationGroup> variationGroups;
@@ -15,8 +13,6 @@ class RecipeData {
 
   RecipeData({
     required this.name,
-    required this.difficulty,
-    required this.price,
     required this.ingredients,
     required this.instructions,
     required this.variationGroups,
@@ -25,8 +21,6 @@ class RecipeData {
 
   RecipeData.empty({
     this.name = '',
-    this.difficulty = '',
-    this.price = '',
   })  : ingredients = [],
         instructions = [],
         variationGroups = [],
@@ -35,8 +29,6 @@ class RecipeData {
   factory RecipeData.from(RecipeData data) {
     return RecipeData(
       name: data.name,
-      difficulty: data.difficulty,
-      price: data.price,
       ingredients: data.ingredients,
       instructions: data.instructions,
       variationGroups: data.variationGroups,
@@ -46,8 +38,6 @@ class RecipeData {
 
   factory RecipeData.fromJson(Map<String, dynamic> data) {
     final name = data['name'] as String;
-    final difficulty = data['difficulty'] as String;
-    final price = data['price'] as String;
 
     final ingredientsData = data['ingredients'] as List<dynamic>?;
     final ingredients = ingredientsData != null
@@ -67,8 +57,6 @@ class RecipeData {
 
     return RecipeData(
       name: name,
-      difficulty: difficulty,
-      price: price,
       ingredients: ingredients,
       instructions: instructions,
       variationGroups: variationGroups,
@@ -79,8 +67,6 @@ class RecipeData {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'difficulty': difficulty,
-      'price': price,
       'ingredients': ingredients.map((data) => data.toJson()).toList(),
       'instructions': instructions,
       'variationGroups': variationGroups.map((data) => data.toJson()).toList(),
