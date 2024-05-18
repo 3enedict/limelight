@@ -36,7 +36,7 @@ class RecipeDescriptionBox extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             reverse: reverse,
-            children: addDividers(localItems),
+            children: addDividers(40, 0, localItems),
           ),
         ),
       ),

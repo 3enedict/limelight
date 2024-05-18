@@ -14,13 +14,14 @@ final instructionStyle = GoogleFonts.openSans(
   ),
 );
 
-List<Widget> addDividers(List<Widget> items) {
+List<Widget> addDividers(double beg, double end, List<Widget> items) {
   for (var i = items.length - 1; i > 0; i--) {
     items.insert(
       i,
       Divider(
         color: textColor().withOpacity(0.2),
-        indent: 40,
+        indent: beg,
+        endIndent: end,
         height: 0,
       ),
     );

@@ -24,12 +24,14 @@ class PreferencesModel extends ChangeNotifier {
   String _unitSystem = unitSystems[0];
   String _currency = currencies[0];
   int _nbServings = 3;
+  int _planner = 0;
 
   void load() {
     SharedPreferences.getInstance().then((instance) {
       _unitSystem = instance.getString("Unit system") ?? _unitSystem;
       _currency = instance.getString("Currency") ?? _currency;
       _nbServings = instance.getInt("Servings") ?? _nbServings;
+      _planner = instance.getInt("Planner") ?? _planner;
     });
   }
 
@@ -49,6 +51,12 @@ class PreferencesModel extends ChangeNotifier {
   void setNbServings(int nbServings) {
     _nbServings = nbServings;
     _setInt("Servings", nbServings);
+  }
+
+  int get planner => _planner;
+  void setPlanner(int planner) {
+    _planner = planner;
+    _setInt("Planner", planner);
   }
 
   void _set(String key, String value) {

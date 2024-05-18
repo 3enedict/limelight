@@ -45,7 +45,14 @@ class CalendarModel extends ChangeNotifier {
 
     if (id == -1) {
       recipe.times = 1;
-      _mealList.add(recipe);
+      final index =
+          _mealList.indexWhere((e) => e.servings == recipe.servings + 1);
+
+      if (index == -1) {
+        _mealList.add(recipe);
+      } else {
+        _mealList.insert(index, recipe);
+      }
     } else {
       _mealList[id].times = _mealList[id].times + 1;
     }

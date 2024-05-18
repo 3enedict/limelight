@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/utils/utils.dart';
 
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ import 'package:limelight/widgets/recipe_description_box.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
 import 'package:limelight/pages/shopping_list_page.dart';
 import 'package:limelight/utils/gradient_button.dart';
+import 'package:limelight/pages/meal_list_page.dart';
 import 'package:limelight/pages/calendar_page.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
@@ -182,64 +184,72 @@ class ActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: toBackgroundGradient(limelightGradient)[1],
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GradientButton(
-              diameter: 54,
-              gradient: toLighterSurfaceGradient(limelightGradient),
-              onPressed: () => showDialog<String>(
-                context: context,
-                builder: (BuildContext context) {
-                  return VariationPickerDialog(
-                    id: id,
-                    onVariationChange: onVariationChange,
-                  );
-                },
-              ),
-              child: Center(
-                child: GradientIcon(
-                  gradient: toTextGradient(limelightGradient),
-                  icon: Icons.layers,
+    return Consumer<PreferencesModel>(
+      builder: (context, prefs, child) {
+        return Container(
+          color: toBackgroundGradient(limelightGradient)[1],
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GradientButton(
+                  diameter: 54,
+                  gradient: toLighterSurfaceGradient(limelightGradient),
+                  onPressed: () => showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return VariationPickerDialog(
+                        id: id,
+                        onVariationChange: onVariationChange,
+                      );
+                    },
+                  ),
+                  child: Center(
+                    child: GradientIcon(
+                      gradient: toTextGradient(limelightGradient),
+                      icon: Icons.layers,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(width: 53 / 3),
-            GradientButton(
-              diameter: 53,
-              gradient:
-                  limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              onPressed: () => goto(context, CalendarPage(recipe: id)),
-              child: Center(
-                child: GradientIcon(
-                  gradient: toSurfaceGradient(limelightGradient),
-                  icon: UniconsLine.calender,
-                  size: 26,
+                const SizedBox(width: 53 / 3),
+                GradientButton(
+                  diameter: 53,
+                  gradient:
+                      limelightGradient.map((e) => e.withOpacity(0.8)).toList(),
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  onPressed: prefs.planner == 0
+                      ? () => goto(context, CalendarPage(recipe: id))
+                      : () => goto(context, MealListPage(recipe: id)),
+                  child: Center(
+                    child: GradientIcon(
+                      gradient: toSurfaceGradient(limelightGradient),
+                      icon: prefs.planner == 0
+                          ? UniconsLine.calender
+                          : UniconsLine.clipboard_notes,
+                      size: 26,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(width: 53 / 3),
-            GradientButton(
-              diameter: 54,
-              gradient: toLighterSurfaceGradient(limelightGradient),
-              onPressed: () => goto(context, const ShoppingListPage()),
-              child: Center(
-                child: GradientIcon(
-                  gradient: toTextGradient(limelightGradient),
-                  icon: UniconsLine.shopping_basket,
-                  size: 24,
+                const SizedBox(width: 53 / 3),
+                GradientButton(
+                  diameter: 54,
+                  gradient: toLighterSurfaceGradient(limelightGradient),
+                  onPressed: () => goto(context, const ShoppingListPage()),
+                  child: Center(
+                    child: GradientIcon(
+                      gradient: toTextGradient(limelightGradient),
+                      icon: UniconsLine.shopping_basket,
+                      size: 24,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
