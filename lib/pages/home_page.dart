@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
+import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/pages/add_to_shopping_list_page.dart';
 import 'package:limelight/pages/ingredient_search_page.dart';
 import 'package:limelight/utils/gradient_button.dart';
@@ -42,13 +44,20 @@ class HomePage extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     icon: UniconsLine.setting,
                   ),
-                  GradientIcon(
-                    onPressed: () => goto(context, const CalendarPage()),
-                    gradient: toTextGradient(limelightGradient)
-                        .map((e) => e.withOpacity(0.5))
-                        .toList(),
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                    icon: UniconsLine.calender,
+                  Consumer<PreferencesModel>(
+                    builder: (context, prefs, child) {
+                      return prefs.planner == 0
+                          ? GradientIcon(
+                              onPressed: () =>
+                                  goto(context, const CalendarPage()),
+                              gradient: toTextGradient(limelightGradient)
+                                  .map((e) => e.withOpacity(0.5))
+                                  .toList(),
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                              icon: UniconsLine.calender,
+                            )
+                          : const SizedBox(height: 10);
+                    },
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limelight/pages/meal_list_page.dart';
 
 import 'package:provider/provider.dart';
 
@@ -77,7 +78,7 @@ class LimelightState extends State<Limelight> {
         builder: (context, ingredients, recipes, calendar, preferences, child) {
           List<Widget> pages = [];
 
-          if (ingredients.selected.isEmpty) {
+          if (ingredients.selected.isEmpty && preferences.planner == 0) {
             final meals = calendar.getFutureMeals();
             final scheduledRecipes = meals.values.isEmpty
                 ? [
@@ -131,6 +132,8 @@ class LimelightState extends State<Limelight> {
                   ).toList();
 
             pages = scheduledRecipes;
+          } else if (ingredients.selected.isEmpty && preferences.planner == 1) {
+            pages = [const MealListPage()];
           } else {
             final matches = recipes.search(
               ingredients.namesOfSelected,

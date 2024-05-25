@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:limelight/pages/recipe_page.dart';
+import 'package:limelight/utils/utils.dart';
 
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
-import 'package:limelight/widgets/variation_picker_dialog.dart';
 import 'package:limelight/data/provider/calendar_model.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
-import 'package:limelight/utils/gradient_container.dart';
-import 'package:limelight/utils/custom_popup_menu.dart';
 import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
-import 'package:limelight/utils/flat_button.dart';
 import 'package:limelight/data/recipe_id.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
@@ -33,7 +30,7 @@ class _MealListPageState extends State<MealListPage> {
   Widget build(BuildContext context) {
     return EmptyPage(
       appBarText: 'Meal list',
-      backButton: true,
+      backButton: widget.recipe != null,
       child: Consumer2<RecipeModel, CalendarModel>(
         builder: (context, recipes, calendar, child) {
           List<Widget> children = [];
@@ -65,6 +62,67 @@ class _MealListPageState extends State<MealListPage> {
                   onPressed: () {
                     if (_removed) {
                       calendar.removeFromList(meal);
+                    } else if (widget.recipe == null) {
+                      goto(
+                        context,
+                        EmptyPage(
+                          appBarText: name,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: Content(id: meal),
+                              ),
+                              Container(
+                                color:
+                                    toBackgroundGradient(limelightGradient)[1],
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GradientButton(
+                                        diameter: 54,
+                                        gradient: toLighterSurfaceGradient(
+                                            limelightGradient),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Center(
+                                          child: GradientIcon(
+                                            gradient: toTextGradient(
+                                                limelightGradient),
+                                            icon: Icons.chevron_left,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 53 / 3),
+                                      GradientButton(
+                                        diameter: 53,
+                                        gradient: limelightGradient
+                                            .map((e) => e.withOpacity(0.8))
+                                            .toList(),
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        onPressed: () {
+                                          calendar.removeFromList(meal);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Center(
+                                          child: GradientIcon(
+                                            gradient: toSurfaceGradient(
+                                                limelightGradient),
+                                            icon: Icons.done,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     }
                   },
                   child: Row(
@@ -120,21 +178,24 @@ class _MealListPageState extends State<MealListPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 53 / 3),
-                      GradientButton(
-                        diameter: 53,
-                        gradient: toLighterSurfaceGradient(limelightGradient),
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Center(
-                          child: GradientIcon(
-                            gradient: toTextGradient(limelightGradient),
-                            icon: Icons.close,
-                            size: 26,
-                          ),
-                        ),
-                      ),
+                      SizedBox(width: widget.recipe == null ? 0 : 53 / 3),
+                      widget.recipe == null
+                          ? const SizedBox()
+                          : GradientButton(
+                              diameter: 53,
+                              gradient:
+                                  toLighterSurfaceGradient(limelightGradient),
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Center(
+                                child: GradientIcon(
+                                  gradient: toTextGradient(limelightGradient),
+                                  icon: Icons.close,
+                                  size: 26,
+                                ),
+                              ),
+                            ),
                       SizedBox(width: widget.recipe == null ? 0 : 53 / 3),
                       widget.recipe == null
                           ? const SizedBox()
