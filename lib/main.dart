@@ -15,16 +15,7 @@ import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/pages/home_page.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
-
-List<String> daysOfTheWeek = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday'
-];
+import 'package:limelight/languages.dart';
 
 void main() async {
   runApp(
@@ -82,11 +73,13 @@ class LimelightState extends State<Limelight> {
             final meals = calendar.getFutureMeals();
             final scheduledRecipes = meals.values.isEmpty
                 ? [
-                    const EmptyPage(
-                      child: Center(
-                        child: CustomText(
-                          text:
-                              'No recipes scheduled nor any ingredients selected...',
+                    EmptyPage(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Center(
+                          child: CustomText(
+                            text: words['noIngredientSelected']![0],
+                          ),
                         ),
                       ),
                     )
@@ -97,7 +90,7 @@ class LimelightState extends State<Limelight> {
                           e.key.split(':').map((e) => int.parse(e)).toList();
 
                       final date = DateTime.utc(ids[0], ids[1], ids[2]);
-                      final meal = ids[3] == 0 ? 'lunch' : 'dinner';
+                      final meal = ids[3] == 0 ? 'déjeuner' : 'diner';
 
                       return EmptyPage(
                         appBar: GradientAppBar(
@@ -116,7 +109,7 @@ class LimelightState extends State<Limelight> {
                                 const SizedBox(height: 1),
                                 CustomText(
                                   text:
-                                      '${daysOfTheWeek[date.weekday - 1]} $meal',
+                                      '${words["${date.weekday - 1}"]![0]} $meal',
                                   alignement: TextAlign.center,
                                   size: 16,
                                   weight: FontWeight.w500,
@@ -142,9 +135,11 @@ class LimelightState extends State<Limelight> {
 
             final proposals = matches.isEmpty
                 ? [
-                    const EmptyPage(
+                    EmptyPage(
                       child: Center(
-                        child: CustomText(text: 'No recipes found...'),
+                        child: CustomText(
+                          text: words['noIngredientsFound']![0],
+                        ),
                       ),
                     )
                   ]

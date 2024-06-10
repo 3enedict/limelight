@@ -12,6 +12,7 @@ import 'package:limelight/utils/gradient_appbar.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 const int recipePage = 2;
 
@@ -78,7 +79,7 @@ class _SearchPageState extends State<IngredientSearchPage> {
                   child: AppbarSearchBar(
                     controller: _controller,
                     node: _focusNode,
-                    searchHint: 'Select ingredients to cook with',
+                    searchHint: words['selectIngredients']![0],
                     onChanged: (query) => setState(() => _query = query),
                     onSubmitted: () {
                       if (_query != '' && matches.isNotEmpty) {

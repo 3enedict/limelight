@@ -16,6 +16,7 @@ import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/data/json/recipe.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class CookbookPage extends StatefulWidget {
   const CookbookPage({super.key});
@@ -66,7 +67,7 @@ class _CookbookPageState extends State<CookbookPage> {
                       child: AppbarSearchBar(
                         controller: _controller,
                         node: _node,
-                        searchHint: 'Search for recipes',
+                        searchHint: words['searchRecipe']![0],
                         onChanged: (query) => setState(() => _query = query),
                         onSubmitted: () {
                           if (matches.isNotEmpty) {
@@ -196,13 +197,13 @@ class _CookbookPageState extends State<CookbookPage> {
                               List<PopupMenuItem<int>> list = [
                                 PopupMenuItem<int>(
                                   onTap: () => recipes.remove(e),
-                                  child: const ListTile(
-                                    leading: GradientIcon(
+                                  child: ListTile(
+                                    leading: const GradientIcon(
                                       gradient: redGradient,
                                       icon: Icons.remove,
                                     ),
                                     title: CustomText(
-                                      text: 'Remove',
+                                      text: words['remove']![0],
                                     ),
                                   ),
                                 ),

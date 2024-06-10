@@ -1,13 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:limelight/data/provider/preferences_model.dart';
-import 'package:limelight/utils/utils.dart';
 
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 import 'package:limelight/widgets/recipe_description_items.dart';
+import 'package:limelight/data/provider/preferences_model.dart';
 import 'package:limelight/widgets/variation_picker_dialog.dart';
 import 'package:limelight/widgets/recipe_description_box.dart';
 import 'package:limelight/data/provider/recipe_model.dart';
@@ -18,8 +17,10 @@ import 'package:limelight/pages/calendar_page.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/data/recipe_id.dart';
+import 'package:limelight/utils/utils.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class RecipePage extends StatefulWidget {
   final RecipeId id;
@@ -115,10 +116,10 @@ class Content extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               SliverList.list(
-                children: const [
-                  SizedBox(height: 14),
+                children: [
+                  const SizedBox(height: 14),
                   CustomText(
-                    text: ' Ingredients',
+                    text: " ${words['ingredients']![0]}",
                     opacity: 0.5,
                     weight: FontWeight.w300,
                   ),
@@ -135,10 +136,10 @@ class Content extends StatelessWidget {
                 ),
               ),
               SliverList.list(
-                children: const [
-                  SizedBox(height: 7),
+                children: [
+                  const SizedBox(height: 7),
                   CustomText(
-                    text: ' Instructions',
+                    text: " ${words['instructions']![0]}",
                     opacity: 0.5,
                     weight: FontWeight.w300,
                   ),

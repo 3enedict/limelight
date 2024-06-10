@@ -10,6 +10,7 @@ import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class InstructionsEditorPage extends StatefulWidget {
   final int recipeId;
@@ -56,7 +57,7 @@ class _InstructionsEditorPageState extends State<InstructionsEditorPage> {
 
     return EmptyPage(
       appBarText: checkId()
-          ? 'Instructions'
+          ? words['instructions']![0]
           : recipeModel.variationName(widget.recipeId, groupId!, varId!),
       child: Consumer<RecipeModel>(
         builder: (context, recipes, child) {

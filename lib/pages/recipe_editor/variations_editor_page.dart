@@ -9,6 +9,7 @@ import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class VariationsEditorPage extends StatefulWidget {
   final int recipeId;
@@ -34,7 +35,7 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
       builder: (context, recipes, child) {
         return EmptyPage(
           appBarText: groupId == null
-              ? 'Variations'
+              ? words['variations']![0]
               : recipes.variationGroupName(widget.recipeId, groupId!),
           child: Stack(
             children: [

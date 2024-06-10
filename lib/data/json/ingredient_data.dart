@@ -1,3 +1,5 @@
+import 'package:limelight/languages.dart';
+
 class IngredientData {
   String name;
   double quantity;
@@ -77,27 +79,33 @@ class IngredientData {
 
   String getQuantity() {
     final q = quantity.round();
-    return unit == 'some' ? '' : '$q$unit';
+    final isSubjective =
+        unit == words['toTaste']![0] || unit == words['asNeeded']![0];
+
+    return isSubjective ? '' : '$q$unit';
   }
 
   String toEnglish(int nbServings) {
     final num = [
-      'one',
-      'two',
-      'three',
-      'four',
-      'five',
-      'six',
-      'seven',
-      'eight',
-      'nine',
-      'ten'
+      words['one']![0],
+      words['two']![0],
+      words['three']![0],
+      words['four']![0],
+      words['five']![0],
+      words['six']![0],
+      words['seven']![0],
+      words['eight']![0],
+      words['nine']![0],
+      words['ten']![0]
     ];
+
+    final isSubjective =
+        unit == words['toTaste']![0] || unit == words['asNeeded']![0];
 
     final number = (quantity * nbServings).round();
     final actualName = getName(number).toLowerCase();
 
-    if (unit == 'some') return 'some $actualName'; // some butter
+    if (isSubjective) return actualName;
     if (unit == '' && number > 10) return '$number $actualName';
     if (unit == '' && !(number > 10)) return '${num[number - 1]} $actualName';
     return '$number$unit of $actualName';

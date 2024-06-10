@@ -12,6 +12,7 @@ import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class AddToShoppingListPage extends StatefulWidget {
   final String? name;
@@ -45,7 +46,7 @@ class _AddToShoppingListPageState extends State<AddToShoppingListPage> {
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
               children: [
                 Text(
-                  "Add to shopping list",
+                  words['addToShoppingList']![0],
                   textAlign: TextAlign.center,
                   style: GoogleFonts.workSans(
                     color: textColor(),
@@ -57,9 +58,9 @@ class _AddToShoppingListPageState extends State<AddToShoppingListPage> {
                 Divider(color: textColor().withOpacity(0.2)),
                 const SizedBox(height: 8),
                 CustomTextField(
-                  label: "Name",
+                  label: words['name']![0],
                   icon: UniconsLine.tag_alt,
-                  hint: "Tomato sauce",
+                  hint: words['nameExample']![0],
                   text: ingredient.name,
                   autofocus: true,
                   onSubmitted: (_) => quantityFocusNode.requestFocus(),
@@ -67,9 +68,9 @@ class _AddToShoppingListPageState extends State<AddToShoppingListPage> {
                 ),
                 const SizedBox(height: 8),
                 CustomTextField(
-                  label: "Quantity",
+                  label: words['quantity']![0],
                   icon: UniconsLine.weight,
-                  hint: "2 cans",
+                  hint: words['quantityExample']![0],
                   text: int.tryParse(ingredient.getQuantity()) == 0
                       ? null
                       : ingredient.getQuantity(),
@@ -98,7 +99,7 @@ class _AddToShoppingListPageState extends State<AddToShoppingListPage> {
                             onPressed: () => Navigator.of(context).pop(),
                             child: Center(
                               child: Text(
-                                'Back',
+                                words['back']![0],
                                 style: GoogleFonts.workSans(
                                   color: textColor(),
                                   fontWeight: FontWeight.w500,

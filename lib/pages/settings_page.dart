@@ -10,6 +10,7 @@ import 'package:limelight/utils/flat_button.dart';
 import 'package:limelight/widgets/section.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -17,12 +18,12 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
-      appBarText: "Settings",
+      appBarText: words['settings']![0],
       child: ListView(
         children: [
           Section(
             gradient: toSurfaceGradient(limelightGradient),
-            label: "General",
+            label: words['general']![0],
             child: Column(
               children: addDividers(
                 58,
@@ -76,8 +77,8 @@ class SettingsPage extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CustomText(
-                                    text: "Number of servings",
+                                  CustomText(
+                                    text: words['nbServings']![0],
                                   ),
                                   CustomText(
                                     text: "$servings",
@@ -96,7 +97,10 @@ class SettingsPage extends StatelessWidget {
                   Consumer<PreferencesModel>(
                     builder: (context, preferences, child) {
                       final planner = preferences.planner;
-                      const planners = ['Calendar', 'Meal list'];
+                      final planners = [
+                        words['calendar']![0],
+                        words['mealList']![0]
+                      ];
 
                       return FlatButton(
                         borderRadius: 20,
@@ -117,8 +121,8 @@ class SettingsPage extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const CustomText(
-                                  text: "Type of planner",
+                                CustomText(
+                                  text: words['typeOfPlanner']![0],
                                 ),
                                 CustomText(
                                   text: planners[planner],

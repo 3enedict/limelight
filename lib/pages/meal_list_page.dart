@@ -13,6 +13,7 @@ import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/data/recipe_id.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class MealListPage extends StatefulWidget {
   final RecipeId? recipe;
@@ -29,7 +30,7 @@ class _MealListPageState extends State<MealListPage> {
   @override
   Widget build(BuildContext context) {
     return EmptyPage(
-      appBarText: 'Meal list',
+      appBarText: words['mealList']![0],
       backButton: widget.recipe != null,
       child: Consumer2<RecipeModel, CalendarModel>(
         builder: (context, recipes, calendar, child) {
@@ -43,7 +44,9 @@ class _MealListPageState extends State<MealListPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 8, 0, 0),
                   child: CustomText(
-                    text: " For ${meal.servings} people",
+                    text: meal.servings == 1
+                        ? " Pour 1 personne"
+                        : " Pour ${meal.servings} personnes",
                     opacity: 0.5,
                     weight: FontWeight.w300,
                   ),

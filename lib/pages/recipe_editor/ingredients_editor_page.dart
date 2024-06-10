@@ -11,6 +11,7 @@ import 'package:limelight/utils/gradient_button.dart';
 import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class IngredientsEditorPage extends StatefulWidget {
   final int recipeId;
@@ -93,7 +94,7 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
                                 const SizedBox(height: 4),
                                 CustomText(
                                   text: names.isEmpty
-                                      ? 'No ingredients yet'
+                                      ? words['noIngredientsYet']![0]
                                       : names.join(', '),
                                   color: toTextGradient(greenGradient)[1],
                                   opacity: 0.6,
@@ -127,7 +128,8 @@ class _IngredientsEditorPageState extends State<IngredientsEditorPage> {
         }
 
         return EmptyPage(
-          appBarText: variations ? 'Ingredients in variations' : 'Ingredients',
+          appBarText:
+              variations ? words['variations']![0] : words['ingredients']![0],
           child: Stack(
             children: [
               Padding(
@@ -364,9 +366,12 @@ class _IngredientItemState extends State<IngredientItem> {
                       focusNode: node,
                       textAlign: TextAlign.right,
                       onFieldSubmitted: (text) {
-                        if (text == 'some') {
+                        final isSubjective = text == words['toTaste']![0] ||
+                            text == words['asNeeded']![0];
+
+                        if (isSubjective) {
                           ingredient.quantity = 1;
-                          ingredient.unit = 'some';
+                          ingredient.unit = text;
                         } else {
                           var reg = RegExp(r"-?(?:\d*\.)?\d+(?:[eE][+-]?\d+)?");
                           ingredient.quantity = reg
@@ -391,8 +396,9 @@ class _IngredientItemState extends State<IngredientItem> {
                               ingredient);
                         }
                       },
-                      initialValue: ingredient.unit == 'some'
-                          ? 'some'
+                      initialValue: ingredient.unit == words['asNeeded']![0] ||
+                              ingredient.unit == words['toTaste']![0]
+                          ? ingredient.unit
                           : ingredient.quantity == 0.0 && ingredient.unit == ''
                               ? ''
                               : '${ingredient.quantity}${ingredient.unit}',

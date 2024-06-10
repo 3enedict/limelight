@@ -13,6 +13,7 @@ import 'package:limelight/utils/gradient_icon.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 // Hmphh...
 // https://github.com/flutter/flutter/issues/31476
@@ -99,7 +100,7 @@ class ShoppingListSubPage extends StatelessWidget {
 
         if (!cart && list.isEmpty && shoppingList.recipesCart.isNotEmpty) {
           return EmptyPage(
-            appBarText: 'Ingredients to buy',
+            appBarText: words['ingredientsToBuy']![0],
             gradient: gradient,
             child: Center(
               child: GradientButton(
@@ -110,14 +111,15 @@ class ShoppingListSubPage extends StatelessWidget {
                 },
                 gradient: toSurfaceGradient(limelightGradient),
                 padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-                child: const CustomText(text: 'Done'),
+                child: CustomText(text: words['done']![0]),
               ),
             ),
           );
         }
 
         return EmptyPage(
-          appBarText: cart ? 'Shopping cart' : 'Ingredients to buy',
+          appBarText:
+              cart ? words['shoppingCart']![0] : words['ingredientsToBuy']![0],
           backButton: true,
           gradient: gradient,
           child: Column(

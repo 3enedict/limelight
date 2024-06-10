@@ -15,6 +15,7 @@ import 'package:limelight/widgets/circles.dart';
 import 'package:limelight/utils/utils.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class HomePage extends StatelessWidget {
   final PageController pageController;
@@ -92,8 +93,8 @@ class SearchBar extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
             child: Row(
               children: [
-                const CustomText(
-                  text: "Search...",
+                CustomText(
+                  text: words['search']![0],
                   style: FontStyle.italic,
                   size: 22,
                 ),

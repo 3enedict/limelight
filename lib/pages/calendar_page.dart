@@ -15,19 +15,10 @@ import 'package:limelight/utils/flat_button.dart';
 import 'package:limelight/data/recipe_id.dart';
 import 'package:limelight/utils/page.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 final date = DateTime.now();
 final aMonthAgo = date.subtract(const Duration(days: 31));
-
-const weekdays = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
 
 class CalendarPage extends StatefulWidget {
   final RecipeId? recipe;
@@ -94,10 +85,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       children: [
                         CustomText(
                           text: index == 31
-                              ? 'Today'
-                              : weekdays[
-                                  aMonthAgo.add(Duration(days: index)).weekday -
-                                      1],
+                              ? words['today']![0]
+                              : words[
+                                  '${aMonthAgo.add(Duration(days: index)).weekday - 1}']![0],
                           alignement: TextAlign.center,
                           size: 20,
                           weight: FontWeight.w600,
@@ -202,14 +192,15 @@ class _CalendarPageState extends State<CalendarPage> {
                                                               2 * index + meal;
                                                         });
                                                       },
-                                                      child: const ListTile(
-                                                        leading: GradientIcon(
+                                                      child: ListTile(
+                                                        leading:
+                                                            const GradientIcon(
                                                           icon: UniconsLine
                                                               .arrow_circle_up,
                                                         ),
                                                         title: CustomText(
                                                           text:
-                                                              'Move to a new location',
+                                                              words['move']![0],
                                                         ),
                                                       ),
                                                     ));
@@ -237,13 +228,14 @@ class _CalendarPageState extends State<CalendarPage> {
                                                           );
                                                         },
                                                       ),
-                                                      child: const ListTile(
-                                                        leading: GradientIcon(
+                                                      child: ListTile(
+                                                        leading:
+                                                            const GradientIcon(
                                                           icon: Icons.layers,
                                                         ),
                                                         title: CustomText(
-                                                          text:
-                                                              'Change variations',
+                                                          text: words[
+                                                              'changeVariations']![0],
                                                         ),
                                                       ),
                                                     ),
@@ -252,13 +244,15 @@ class _CalendarPageState extends State<CalendarPage> {
                                                   list.add(
                                                     PopupMenuItem<int>(
                                                       onTap: () {},
-                                                      child: const ListTile(
-                                                        leading: GradientIcon(
+                                                      child: ListTile(
+                                                        leading:
+                                                            const GradientIcon(
                                                           icon:
                                                               UniconsLine.fire,
                                                         ),
                                                         title: CustomText(
-                                                          text: 'View recipe',
+                                                          text: words[
+                                                              'viewRecipe']![0],
                                                         ),
                                                       ),
                                                     ),
@@ -343,7 +337,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     itemCount: 61,
                     itemBuilder: (BuildContext context, int index) {
                       final day = aMonthAgo.add(Duration(days: index));
-                      final weekday = weekdays[day.weekday - 1];
+                      final weekday = words['${day.weekday - 1}']![0];
 
                       final widget = Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -387,9 +381,9 @@ class _CalendarPageState extends State<CalendarPage> {
                             child: Padding(
                               padding: const EdgeInsets.all(15),
                               child: index == _pageId
-                                  ? const Center(
+                                  ? Center(
                                       child: CustomText(
-                                        text: 'Back',
+                                        text: words['back']![0],
                                         size: 17,
                                       ),
                                     )
@@ -414,7 +408,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                       );
 
-                      if (weekday == weekdays.last) {
+                      if (weekday == words['6']![0]) {
                         return IntrinsicHeight(
                           child: Row(
                             children: [
