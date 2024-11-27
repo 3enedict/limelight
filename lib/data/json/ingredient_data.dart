@@ -72,22 +72,37 @@ class IngredientData {
     if (quantity < 0) quantity = 0;
   }
 
+  String getUnit(int nb) {
+    if (nb == 1) return unit.replaceAll(RegExp(r'\(.*\)'), '');
+    return unit.replaceAll('(', '').replaceAll(')', '');
+  }
+
   String getName(int nb) {
+    if (unit != '') return name;
     if (nb == 1) return name.replaceAll(RegExp(r'\(.*\)'), '');
     return name.replaceAll('(', '').replaceAll(')', '');
   }
 
   String getQuantity() {
-    final q = quantity.round();
     final isSubjective =
         unit == words['toTaste']![0] || unit == words['asNeeded']![0];
 
-    return isSubjective ? '' : '$q$unit';
+    if (isSubjective) {
+      return '';
+    } else if (unit != '') {
+      return '$quantity$unit';
+    } else if (quantity > 0.3 && quantity < 0.7) {
+      return '0.5';
+    } else if (quantity <= 0.3) {
+      return '0.25';
+    } else {
+      return '${quantity.round()}';
+    }
   }
 
   String toEnglish(int nbServings) {
     final num = [
-      words['one']![0],
+      '1', // Que choisir entre un et une...
       words['two']![0],
       words['three']![0],
       words['four']![0],
@@ -102,13 +117,40 @@ class IngredientData {
     final isSubjective =
         unit == words['toTaste']![0] || unit == words['asNeeded']![0];
 
-    final number = (quantity * nbServings).round();
+    int number = (quantity * nbServings).round();
+    if (number == 0) number = 1;
     final actualName = getName(number).toLowerCase();
+    final actualUnit = getUnit(number);
 
     if (isSubjective) return actualName;
-    if (unit == '' && number > 10) return '$number $actualName';
-    if (unit == '' && !(number > 10)) return '${num[number - 1]} $actualName';
-    return '$number$unit of $actualName';
+    if (actualUnit == '' && number > 10) return '$number $actualName';
+
+    double q = quantity * nbServings;
+    if (actualUnit == '' && q > 0.3 && q < 0.7) {
+      return '0.5 $actualName'; // Ça devrait être la moitié (d'une botte de radis)
+    }
+
+    if (actualUnit == '' && q <= 0.3) {
+      return '0.25 $actualName'; // Ça devrait être le quart (d'un chou)
+    }
+
+    if (actualUnit == '' && !(number > 10)) {
+      return '${num[number - 1]} $actualName';
+    }
+
+    // Only in french
+    if (actualName.startsWith('a') ||
+        actualName.startsWith('e') ||
+        actualName.startsWith('é') ||
+        actualName.startsWith('y') ||
+        actualName.startsWith('oe') ||
+        actualName.startsWith('o') ||
+        actualName.startsWith('u') ||
+        actualName.startsWith('i')) {
+      return "$number$actualUnit d'$actualName";
+    }
+
+    return '$number$actualUnit ${words['of']![0]} $actualName';
   }
 
   @override

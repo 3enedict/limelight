@@ -105,6 +105,8 @@ class CalendarModel extends ChangeNotifier {
     return newIds;
   }
 
+  Map<String, RecipeId> get mealIds => _mealIds;
+
   void _saveCalendar() {
     SharedPreferences.getInstance().then(
       (instance) {

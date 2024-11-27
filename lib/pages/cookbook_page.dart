@@ -121,6 +121,7 @@ class _CookbookPageState extends State<CookbookPage> {
                                     style: GoogleFonts.openSans(
                                       color:
                                           toTextGradient(limelightGradient)[1],
+                                      fontSize: 14,
                                     ),
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
@@ -144,113 +145,23 @@ class _CookbookPageState extends State<CookbookPage> {
               child: ListView(
                 children: [
                   newRecipe,
-                  ...matches.map((e) {
-                    final runes = recipes.name(e).runes;
-                    List<TextSpan> styledName = List.generate(
-                      runes.length,
-                      (int index) {
-                        String character =
-                            String.fromCharCode(runes.elementAtOrNull(index)!);
-                        bool match = _query
-                            .toLowerCase()
-                            .contains(character.toLowerCase());
+                  ...matches.map(
+                    (e) => RecipeSearchItem(
+                      query: _query,
+                      recipeId: e,
+                      node: _node,
+                      changeRecipe: (id) {
+                        setState(() => _recipe = e);
 
-                        return TextSpan(
-                          text: character,
-                          style: TextStyle(
-                            color: match
-                                ? modifyColor(textColor(), 0.95, 0.1)
-                                : textColor(),
-                            fontWeight:
-                                match ? FontWeight.w900 : FontWeight.w100,
-                          ),
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        _pageController.animateToPage(
+                          1,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
                         );
                       },
-                    );
-
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                      // I'm so sorry, this is just to create a context
-                      // so that the menu knows where it needs to be.
-                      child: Consumer<CalendarModel>(
-                        builder: (context, calendar, child) {
-                          return GradientButton(
-                            gradient: toSurfaceGradient(limelightGradient),
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
-                            borderRadius: 15,
-                            onPressed: () {
-                              setState(() => _recipe = e);
-
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              _pageController.animateToPage(
-                                1,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.ease,
-                              );
-                            },
-                            onLongPress: () {
-                              final RelativeRect position =
-                                  buttonMenuPosition(context);
-
-                              List<PopupMenuItem<int>> list = [
-                                PopupMenuItem<int>(
-                                  onTap: () => recipes.remove(e),
-                                  child: ListTile(
-                                    leading: const GradientIcon(
-                                      gradient: redGradient,
-                                      icon: Icons.remove,
-                                    ),
-                                    title: CustomText(
-                                      text: words['remove']![0],
-                                    ),
-                                  ),
-                                ),
-                              ];
-
-                              showMenu(
-                                context: context,
-                                position: position,
-                                elevation: 0,
-                                color: toSurfaceGradient(limelightGradient)[1],
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20.0),
-                                  ),
-                                ),
-                                constraints: BoxConstraints(
-                                  minWidth: MediaQuery.of(context).size.width -
-                                      2 * 15,
-                                ),
-                                items: list,
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const GradientIcon(
-                                  gradient: limelightGradient,
-                                  padding: EdgeInsets.all(20),
-                                  size: 26,
-                                  icon: Icons.panorama_fish_eye,
-                                ),
-                                Text.rich(
-                                  TextSpan(
-                                    children: styledName,
-                                    style: GoogleFonts.workSans(
-                                      color: textColor(),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }),
+                    ),
+                  ),
                 ],
               ),
             );
@@ -315,5 +226,139 @@ class _CookbookPageState extends State<CookbookPage> {
     for (var resultList in secondaryResults.reversed) {
       results.addAll(resultList);
     }
+  }
+}
+
+class RecipeSearchItem extends StatefulWidget {
+  final String query;
+  final int recipeId;
+  final FocusNode node;
+  final void Function(int) changeRecipe;
+
+  const RecipeSearchItem({
+    super.key,
+    required this.query,
+    required this.recipeId,
+    required this.node,
+    required this.changeRecipe,
+  });
+
+  @override
+  State<RecipeSearchItem> createState() => _SearchItemState();
+}
+
+class _SearchItemState extends State<RecipeSearchItem> {
+  bool _more = false;
+  bool _editing = false;
+
+  final _node = FocusNode();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+      // I'm so sorry, this is just to create a context
+      // so that the menu knows where it needs to be.
+      child: Consumer<RecipeModel>(
+        builder: (context, recipes, child) {
+          final runes = recipes.name(widget.recipeId).runes;
+          List<TextSpan> styledName = List.generate(
+            runes.length,
+            (int index) {
+              String character =
+                  String.fromCharCode(runes.elementAtOrNull(index)!);
+              bool match =
+                  widget.query.toLowerCase().contains(character.toLowerCase());
+
+              return TextSpan(
+                text: character,
+                style: TextStyle(
+                  color:
+                      match ? modifyColor(textColor(), 0.95, 0.1) : textColor(),
+                  fontWeight: match ? FontWeight.w900 : FontWeight.w100,
+                  fontSize: 14,
+                ),
+              );
+            },
+          );
+
+          return GradientButton(
+            gradient: toSurfaceGradient(limelightGradient),
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
+            borderRadius: 15,
+            onPressed: () {
+              if (_more == false) widget.changeRecipe(widget.recipeId);
+              setState(() => _more = false);
+            },
+            onLongPress: () => setState(() => _more = true),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const GradientIcon(
+                  gradient: limelightGradient,
+                  padding: EdgeInsets.all(20),
+                  size: 26,
+                  icon: Icons.panorama_fish_eye,
+                ),
+                Expanded(
+                  child: !_editing
+                      ? Text.rich(
+                          TextSpan(
+                            children: styledName,
+                            style: GoogleFonts.workSans(
+                              color: textColor(),
+                              fontSize: 14,
+                            ),
+                          ),
+                        )
+                      : TextFormField(
+                          focusNode: _node,
+                          onFieldSubmitted: (text) {
+                            recipes.editName(widget.recipeId, text);
+                            widget.node.requestFocus();
+
+                            setState(() {
+                              _editing = false;
+                              _more = false;
+                            });
+                          },
+                          initialValue: recipes.name(widget.recipeId),
+                          style: GoogleFonts.openSans(
+                            color: textColor(),
+                            fontSize: 14,
+                          ),
+                          decoration:
+                              const InputDecoration(border: InputBorder.none),
+                          textCapitalization: TextCapitalization.sentences,
+                        ),
+                ),
+                _more
+                    ? GradientIcon(
+                        gradient: redGradient,
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        onPressed: () => recipes.remove(widget.recipeId),
+                        icon: Icons.remove,
+                      )
+                    : const SizedBox(),
+                _more
+                    ? GradientIcon(
+                        gradient: limelightGradient,
+                        onPressed: () {
+                          setState(() => _editing = true);
+                          widget.node.unfocus();
+                          _node.requestFocus();
+                        },
+                        icon: Icons.edit,
+                      )
+                    : const SizedBox(),
+                const SizedBox(width: 20),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }

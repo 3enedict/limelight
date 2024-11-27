@@ -49,6 +49,41 @@ class RecipeModel extends ChangeNotifier {
     final recipe = _recipes.elementAtOrNull(recipeId);
     if (recipe == null) return;
 
+    final name = recipe.ingredient(ingredientId).getName(1);
+
+    recipe.instructions = recipe.instructions
+        .map((e) => e.replaceAll('{$ingredientId:quantity}', name))
+        .toList();
+
+    for (var i = ingredientId + 1; i < recipe.ingredients.length; i++) {
+      recipe.instructions = recipe.instructions
+          .map((e) => e.replaceAll('{$i:quantity}', '{${i - 1}:quantity}'))
+          .toList();
+    }
+
+    for (var i = 0; i < recipe.variationGroups.length; i++) {
+      final numVars = recipe.variationGroups[i].variations.length;
+      for (var j = 0; j < numVars; j++) {
+        final numIGroups =
+            recipe.variationGroups[i].variations[j].instructionGroups.length;
+
+        for (var k = 0; k < numIGroups; k++) {
+          recipe.variationGroups[i].variations[j].instructionGroups[k] = recipe
+              .variationGroups[i].variations[j].instructionGroups[k]
+              .map((e) => e.replaceAll('{$ingredientId:quantity}', name))
+              .toList();
+
+          for (var l = ingredientId + 1; l < recipe.ingredients.length; l++) {
+            recipe.variationGroups[i].variations[j].instructionGroups[k] =
+                recipe.variationGroups[i].variations[j].instructionGroups[k]
+                    .map((e) =>
+                        e.replaceAll('{$l:quantity}', '{${l - 1}:quantity}'))
+                    .toList();
+          }
+        }
+      }
+    }
+
     recipe.ingredients.removeAt(ingredientId);
     notify();
   }
@@ -65,6 +100,31 @@ class RecipeModel extends ChangeNotifier {
       int recipeId, int varGroupId, int varId, int ingredientId) {
     final recipe = _recipes.elementAtOrNull(recipeId);
     if (recipe == null) return;
+
+    final name = recipe
+        .variationGroups[varGroupId].variations[varId].ingredients[ingredientId]
+        .getName(1);
+
+    final ingNb =
+        recipe.variationGroups[varGroupId].variations[varId].ingredients.length;
+    final len = recipe
+        .variationGroups[varGroupId].variations[varId].instructionGroups.length;
+    for (var i = 0; i < len; i++) {
+      recipe.variationGroups[varGroupId].variations[varId]
+              .instructionGroups[i] =
+          recipe.variationGroups[varGroupId].variations[varId]
+              .instructionGroups[i]
+              .map((e) => e.replaceAll(
+                  '{$varGroupId:$varId:$ingredientId:quantity}', name))
+              .toList();
+
+      for (var j = ingredientId + 1; j < ingNb; j++) {
+        recipe.instructions = recipe.instructions
+            .map((e) => e.replaceAll('{$varGroupId:$varId:$j:quantity}',
+                '{$varGroupId:$varId:${j - 1}:quantity}'))
+            .toList();
+      }
+    }
 
     recipe.variationGroups[varGroupId].variations[varId].ingredients
         .removeAt(ingredientId);
@@ -272,7 +332,7 @@ class RecipeModel extends ChangeNotifier {
         .variations[variationId]
         .name = name;
 
-    notify();
+    save();
   }
 
   void editInstruction(
@@ -348,11 +408,21 @@ class RecipeModel extends ChangeNotifier {
         (i) => IngredientData.from(varIngs[i]),
       );
 
-      list.addAll(l);
+      for (var ingredient in l) {
+        final id = list.indexWhere(
+            (e) => ingredient.name == e.name && ingredient.unit == e.unit);
+
+        if (id == -1) {
+          list.add(ingredient);
+        } else {
+          list[id].quantity = list[id].quantity + ingredient.quantity;
+        }
+      }
     }
 
     for (var ingredient in list) {
       ingredient.multiply(id.servings);
+      ingredient.unit = ingredient.getUnit(ingredient.quantity.round());
     }
 
     return list;
@@ -381,7 +451,7 @@ class RecipeModel extends ChangeNotifier {
     return id;
   }
 
-  List<RecipeId> search(List<String> ingredients, int servings) {
+  List<RecipeId?> search(List<String> ingredients, int servings) {
     List<RecipeId?> ids = [];
 
     for (var i = 0; i < number; i++) {
@@ -389,10 +459,14 @@ class RecipeModel extends ChangeNotifier {
 
       final gIngredients = removePlural(recipe(i).ingredients);
       for (var s in ingredients) {
-        if (gIngredients.contains(s)) {
-          ids[i] = RecipeId(recipeId: i, servings: servings);
-          break;
+        for (var ing in gIngredients) {
+          if (ing.contains(s)) {
+            ids[i] = RecipeId(recipeId: i, servings: servings);
+            break;
+          }
         }
+
+        if (ids[i] != null) break;
       }
 
       if (ids[i] == null) {
@@ -402,18 +476,22 @@ class RecipeModel extends ChangeNotifier {
                 removePlural(variation(i, groupId, varId).ingredients);
 
             for (var s in ingredients) {
-              if (vIngredients.contains(s)) {
-                List<int> vIds = List.filled(nbVarGroups(i), 0);
-                vIds[groupId] = varId;
+              for (var ing in vIngredients) {
+                if (ing.contains(s)) {
+                  List<int> vIds = List.filled(nbVarGroups(i), 0);
+                  vIds[groupId] = varId;
 
-                ids[i] = RecipeId(
-                  recipeId: i,
-                  servings: servings,
-                  variationIds: vIds,
-                );
+                  ids[i] = RecipeId(
+                    recipeId: i,
+                    servings: servings,
+                    variationIds: vIds,
+                  );
 
-                break;
+                  break;
+                }
               }
+
+              if (ids[i] != null) break;
             }
 
             if (ids[i] != null) break;
@@ -424,9 +502,7 @@ class RecipeModel extends ChangeNotifier {
       }
     }
 
-    ids.removeWhere((e) => e == null);
-
-    return List<RecipeId>.from(ids);
+    return ids;
   }
 
   List<String> removePlural(List<IngredientData> ingredients) {

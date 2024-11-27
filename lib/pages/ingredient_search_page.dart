@@ -43,7 +43,7 @@ class _SearchPageState extends State<IngredientSearchPage> {
 
         final items = matches
             .map((e) => IngredientSearchItem(
-                  key: Key(e.name),
+                  key: Key("Search item : ${e.name}"),
                   query: _query,
                   ingredient: e,
                   editIngredient: (name) => ingredients.edit(e.name, name),
@@ -105,52 +105,53 @@ class _SearchPageState extends State<IngredientSearchPage> {
             ),
           ),
           child: ListView(
-              children: !_new
-                  ? items
-                  : [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
-                        child: GradientContainer(
-                          gradient: toSurfaceGradient(limelightGradient),
-                          borderRadius: 15,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const GradientIcon(
-                                gradient: limelightGradient,
-                                padding: EdgeInsets.all(16),
-                                size: 22,
-                                icon: Icons.panorama_fish_eye,
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  autofocus: true,
-                                  onSubmitted: (text) {
-                                    ingredients.add(
-                                      IngredientDescription(name: text),
-                                    );
+            children: !_new
+                ? items
+                : [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+                      child: GradientContainer(
+                        gradient: toSurfaceGradient(limelightGradient),
+                        borderRadius: 15,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const GradientIcon(
+                              gradient: limelightGradient,
+                              padding: EdgeInsets.all(16),
+                              size: 22,
+                              icon: Icons.panorama_fish_eye,
+                            ),
+                            Expanded(
+                              child: TextField(
+                                autofocus: true,
+                                onSubmitted: (text) {
+                                  ingredients.add(
+                                    IngredientDescription(name: text),
+                                  );
 
-                                    ingredients.select(text);
-                                    setState(() => _new = false);
-                                    _focusNode.requestFocus();
-                                  },
-                                  style: GoogleFonts.openSans(
-                                    color: textColor(),
-                                    fontSize: 14,
-                                  ),
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none),
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
+                                  ingredients.select(text);
+                                  setState(() => _new = false);
+                                  _focusNode.requestFocus();
+                                },
+                                style: GoogleFonts.openSans(
+                                  color: textColor(),
+                                  fontSize: 14,
                                 ),
+                                decoration: const InputDecoration(
+                                    border: InputBorder.none),
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                               ),
-                              const SizedBox(width: 15),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 15),
+                          ],
                         ),
                       ),
-                      ...items
-                    ]),
+                    ),
+                    ...items
+                  ],
+          ),
         );
       },
     );

@@ -299,6 +299,7 @@ class _IngredientItemState extends State<IngredientItem> {
         }
 
         return Padding(
+          key: Key(ingredient.name),
           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
           child: GradientButton(
             gradient: toSurfaceGradient(limelightGradient),

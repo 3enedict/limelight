@@ -10,6 +10,7 @@ import 'package:limelight/utils/flat_button.dart';
 import 'package:limelight/utils/custom_text.dart';
 import 'package:limelight/data/recipe_id.dart';
 import 'package:limelight/gradients.dart';
+import 'package:limelight/languages.dart';
 
 class VariationPickerDialog extends StatefulWidget {
   final RecipeId id;
@@ -88,8 +89,8 @@ class _VariationPickerDialogState extends State<VariationPickerDialog> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomText(
-                    text: "Number of servings",
+                  CustomText(
+                    text: words["nbServings"]![0],
                   ),
                   CustomText(
                     text: "${_id.servings}",

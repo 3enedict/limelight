@@ -44,14 +44,18 @@ class MultiStyleTextEditingController extends TextEditingController {
       List<String> newSections = [];
 
       for (var section in sections) {
-        List<String> list = section.split(name);
-        if (list.length != 1) {
-          for (var i = list.length - 1; i > 0; i--) {
-            list.insert(i, name);
+        if (!ingredientNames.contains(section)) {
+          List<String> list = section.split(name);
+          if (list.length != 1) {
+            for (var i = list.length - 1; i > 0; i--) {
+              list.insert(i, name);
+            }
           }
-        }
 
-        newSections.addAll(list);
+          newSections.addAll(list);
+        } else {
+          newSections.add(section);
+        }
       }
 
       sections = newSections;

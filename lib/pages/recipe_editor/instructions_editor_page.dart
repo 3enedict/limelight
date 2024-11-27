@@ -465,6 +465,8 @@ class InstructionItem extends StatelessWidget {
               .ingredients
               .map((e) => e.name)
               .toList();
+
+          names.sort((a, b) => a.length.compareTo(b.length));
         }
 
         final ingredientsRegex = RegExp(
@@ -480,8 +482,10 @@ class InstructionItem extends StatelessWidget {
           );
         }
 
-        names.addAll(
-            recipes.recipe(recipeId).ingredients.map((e) => e.name).toList());
+        List<String> ings =
+            recipes.recipe(recipeId).ingredients.map((e) => e.name).toList();
+        ings.sort((a, b) => a.length.compareTo(b.length));
+        names.addAll(ings);
 
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
@@ -592,20 +596,41 @@ class _InstructionTextFieldState extends State<InstructionTextField> {
       autofocus: widget.text == '',
       onChanged: (newText) {
         String instruction = newText;
-        if (widget.gId == null || widget.vId == null || widget.igId == null) {
-          for (var i = 0; i < widget.names.length; i++) {
-            instruction =
-                instruction.replaceAll(widget.names[i], '{$i:quantity}');
+
+        if (widget.gId != null || widget.vId != null || widget.igId != null) {
+          final ing = widget.recipes
+              .variation(widget.recipeId, widget.gId!, widget.vId!)
+              .ingredients;
+
+          final nb = ing.length;
+
+          List<int> ids = List.generate(nb, (int index) => index);
+          ids.sort((a, b) => ing[b].name.length.compareTo(ing[a].name.length));
+
+          for (var i = 0; i < ing.length; i++) {
+            instruction = instruction.replaceAll(ing[ids[i]].name,
+                '{${widget.gId}:${widget.vId}:${ids[i]}:quantity}');
           }
 
+          widget.recipes.editVarInstruction(widget.recipeId, widget.gId!,
+              widget.vId!, widget.igId!, widget.iId, instruction);
+        }
+
+        final ing = widget.recipes.recipe(widget.recipeId).ingredients;
+        final nb = ing.length;
+
+        List<int> ids = List.generate(nb, (int index) => index);
+        ids.sort((a, b) => ing[b].name.length.compareTo(ing[a].name.length));
+
+        for (var i = 0; i < nb; i++) {
+          final name = ing[ids[i]].name;
+          instruction = instruction.replaceAll(name, '{${ids[i]}:quantity}');
+        }
+
+        if (widget.gId == null || widget.vId == null || widget.igId == null) {
           widget.recipes
               .editInstruction(widget.recipeId, widget.iId, instruction);
         } else {
-          for (var i = 0; i < widget.names.length; i++) {
-            instruction = instruction.replaceAll(
-                widget.names[i], '{${widget.gId}:${widget.vId}:$i:quantity}');
-          }
-
           widget.recipes.editVarInstruction(widget.recipeId, widget.gId!,
               widget.vId!, widget.igId!, widget.iId, instruction);
         }

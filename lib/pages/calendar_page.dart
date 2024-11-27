@@ -97,7 +97,20 @@ class _CalendarPageState extends State<CalendarPage> {
                           children: [
                             GradientIcon(
                               gradient: toTextGradient(limelightGradient),
-                              padding: const EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(5),
+                              onPressed: () => setState(() {
+                                _pageId = _pageId - 1;
+                                _pageController.animateToPage(
+                                  _pageId,
+                                  duration: const Duration(milliseconds: 250),
+                                  curve: Curves.easeOut,
+                                );
+                                _scrollController.animateTo(
+                                  calculateScrollOffset(_pageId),
+                                  duration: const Duration(milliseconds: 250),
+                                  curve: Curves.easeOut,
+                                );
+                              }),
                               icon: Icons.chevron_left,
                               size: 24,
                             ),
@@ -316,7 +329,20 @@ class _CalendarPageState extends State<CalendarPage> {
                             ),
                             GradientIcon(
                               gradient: toTextGradient(limelightGradient),
-                              padding: const EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(5),
+                              onPressed: () => setState(() {
+                                _pageId = _pageId + 1;
+                                _pageController.animateToPage(
+                                  _pageId,
+                                  duration: const Duration(milliseconds: 250),
+                                  curve: Curves.easeOut,
+                                );
+                                _scrollController.animateTo(
+                                  calculateScrollOffset(_pageId),
+                                  duration: const Duration(milliseconds: 250),
+                                  curve: Curves.easeOut,
+                                );
+                              }),
                               icon: Icons.chevron_right,
                               size: 24,
                             ),
@@ -382,9 +408,13 @@ class _CalendarPageState extends State<CalendarPage> {
                               padding: const EdgeInsets.all(15),
                               child: index == _pageId
                                   ? Center(
-                                      child: CustomText(
-                                        text: words['back']![0],
-                                        size: 17,
+                                      child: GradientIcon(
+                                        gradient:
+                                            toTextGradient(limelightGradient)
+                                                .map((e) => e.withOpacity(0.8))
+                                                .toList(),
+                                        icon: UniconsLine.calendar_slash,
+                                        size: 26,
                                       ),
                                     )
                                   : Column(

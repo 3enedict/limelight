@@ -18,6 +18,7 @@ const words = {
   'mealList': ['Liste de repas', 'Meal list'],
   'for1': ['Pour 1 personne', 'For 1 person'],
   'for': ['Pour', 'For'],
+  'of': ['de', 'of'],
   'people': ['personnes', 'people'],
   'calendar': ['Calendrier', 'Calendar'],
   'ingredientsToBuy': ['Ingrédients à acheter', 'Ingredients to buy'],
@@ -25,7 +26,7 @@ const words = {
   //
   'settings': ['Paramètres', 'Settings'],
   'general': ['Général', 'General'],
-  'nbServings': ['Nombre de portions par défaut', 'Number of servings'],
+  'nbServings': ['Nombre de portions', 'Number of servings'],
   // Actions
   'remove': ['Enlever', 'Remove'],
   'back': ['Retour', 'Back'],

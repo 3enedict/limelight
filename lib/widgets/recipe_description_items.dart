@@ -68,6 +68,7 @@ List<Widget> generateInstructions(List<String> instructionList, double width) {
   List<Widget> instructions = [];
   for (var instruction in instructionList) {
     instructions.add(Row(
+      key: Key(instruction),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(

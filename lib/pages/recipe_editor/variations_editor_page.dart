@@ -51,6 +51,8 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
                           recipes.nbVarGroups(widget.recipeId),
                           (index) {
                             return Padding(
+                              key: Key(recipes.variationGroupName(
+                                  widget.recipeId, index)),
                               padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                               child: GradientButton(
                                 gradient: toSurfaceGradient(greenGradient),
@@ -82,6 +84,9 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
                                             recipes.editVarGroupName(
                                                 widget.recipeId, index, text);
                                           },
+                                          onFieldSubmitted: (_) =>
+                                              recipes.notify(),
+                                          onTapOutside: (_) => recipes.notify(),
                                           initialValue:
                                               recipes.variationGroupName(
                                                   widget.recipeId, index),
@@ -119,6 +124,8 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
                           recipes.nbVariations(widget.recipeId, groupId!),
                           (index) {
                             return Padding(
+                              key: Key(
+                                  'var${recipes.variationName(widget.recipeId, groupId!, index)}'),
                               padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
                               child: GradientButton(
                                 gradient: toSurfaceGradient(limelightGradient),
@@ -144,11 +151,14 @@ class _VariationsEditorPageState extends State<VariationsEditorPage> {
                                       ),
                                       Expanded(
                                         child: TextFormField(
-                                          key: Key('$groupId:$index'),
+                                          key: Key('va$groupId:$index'),
                                           onChanged: (text) {
                                             recipes.editVarName(widget.recipeId,
                                                 groupId!, index, text);
                                           },
+                                          onFieldSubmitted: (_) =>
+                                              recipes.notify(),
+                                          onTapOutside: (_) => recipes.notify(),
                                           initialValue: recipes.variationName(
                                               widget.recipeId, groupId!, index),
                                           style: GoogleFonts.openSans(
